@@ -187,7 +187,7 @@ function initContactForm() {
     let isValid = true;
     const errorMsgs = form.querySelectorAll('.error-msg');
     const inputs = form.querySelectorAll('input, select, textarea');
-    
+
     errorMsgs.forEach(msg => msg.style.display = 'none');
     inputs.forEach(input => input.classList.remove('invalid'));
 
@@ -250,7 +250,7 @@ function initContactForm() {
       showToast('Please fill all required fields correctly 🌿');
       return;
     }
-    
+
     // WhatsApp format showing it's a Customer message / inquiry
     const waMsg = `*Customer Message / Inquiry (PranVeda)*\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nSubject: ${subjectText}\n\nMessage:\n${message}\n\nThank you.`;
     const encoded = encodeURIComponent(waMsg);
@@ -303,3 +303,64 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initActiveNavLinks();
 });
+
+.product-card{
+    overflow:hidden;
+    border-radius:18px;
+}
+
+.product-card-img{
+    position:relative;
+    display:block;
+}
+
+.product-card-img img{
+    width:100%;
+    display:block;
+}
+
+.image-overlay{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:12px 15px;
+
+    background:rgba(0,0,0,.60);
+    backdrop-filter:blur(6px);
+
+    opacity:0;
+    transition:.3s;
+}
+
+.product-card:hover .image-overlay{
+    opacity:1;
+}
+
+.overlay-price{
+    color:#fff;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.overlay-order{
+    background:#25D366;
+    color:#fff;
+
+    padding:8px 15px;
+    border-radius:30px;
+
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+}
+
+.product-card:hover img{
+    transform:scale(1.05);
+    transition:.4s;
+}

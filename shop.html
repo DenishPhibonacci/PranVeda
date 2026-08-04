@@ -8,12 +8,9 @@
   <meta name="keywords" content="Buy Ayurvedic Products Online, Herbal Hair Oil, Ayurvedic Skincare, Immunity Booster India, Natural Wellness Products" />
   <link rel="stylesheet" href="assets/style.css" />
   <style>
-    .shop-layout {
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 48px;
-      align-items: start;
-    }
+    .shop-layout{
+    display:block;
+}
 
     /* Sidebar Filters */
     .sidebar {
@@ -94,11 +91,11 @@
     .clear-filters-btn:hover { background: var(--forest-green); color: var(--white); }
 
     /* Products Header */
-    .products-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 32px;
+    .products-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:40px;
     }
 
     .products-count {
@@ -124,10 +121,11 @@
     .sort-select:focus { border-color: var(--forest-green); outline: none; }
 
     /* Shop Products Grid */
-    .shop-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+    .shop-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,320px));
+    justify-content:center;
+    gap:30px;
     }
 
     @media (max-width: 1100px) {
@@ -170,7 +168,6 @@
     <div class="mobile-menu" id="mobileMenu">
       <a href="index.html" class="nav-link">Home</a>
       <a href="shop.html" class="nav-link">Shop</a>
-      <a href="categories.html" class="nav-link">Categories</a>
       <a href="about.html" class="nav-link">About</a>
       <a href="contact.html" class="nav-link">Contact</a>
       <button class="btn btn-whatsapp" onclick="openWhatsApp()">Order on WhatsApp</button>
@@ -190,66 +187,7 @@
     <div class="container">
       <div class="shop-layout">
 
-        <!-- SIDEBAR -->
-        <aside class="sidebar" aria-label="Product filters">
-          <div class="filter-card">
-            <h2 class="filter-title">Categories</h2>
-            <div class="filter-option">
-              <input type="checkbox" id="f-hair" onchange="filterProducts()">
-              <label for="f-hair">Hair Care <span class="filter-count">8</span></label>
-            </div>
-            <div class="filter-option">
-              <input type="checkbox" id="f-skin" onchange="filterProducts()">
-              <label for="f-skin">Skin Care <span class="filter-count">10</span></label>
-            </div>
-            <div class="filter-option">
-              <input type="checkbox" id="f-oils" onchange="filterProducts()">
-              <label for="f-oils">Ayurvedic Oils <span class="filter-count">6</span></label>
-            </div>
-            <div class="filter-option">
-              <input type="checkbox" id="f-powder" onchange="filterProducts()">
-              <label for="f-powder">Herbal Powders <span class="filter-count">7</span></label>
-            </div>
-            <div class="filter-option">
-              <input type="checkbox" id="f-wellness" onchange="filterProducts()">
-              <label for="f-wellness">Wellness <span class="filter-count">9</span></label>
-            </div>
-            <div class="filter-option">
-              <input type="checkbox" id="f-immunity" onchange="filterProducts()">
-              <label for="f-immunity">Immunity <span class="filter-count">5</span></label>
-            </div>
-            <div class="filter-option">
-              <input type="checkbox" id="f-digestive" onchange="filterProducts()">
-              <label for="f-digestive">Digestive Care <span class="filter-count">6</span></label>
-            </div>
-            <div class="filter-option">
-              <input type="checkbox" id="f-personal" onchange="filterProducts()">
-              <label for="f-personal">Personal Care <span class="filter-count">8</span></label>
-            </div>
-          </div>
 
-          <div class="filter-card">
-            <h2 class="filter-title">Price Range</h2>
-            <div class="filter-option">
-              <input type="checkbox" id="p-under300" onchange="filterProducts()">
-              <label for="p-under300">Under ₹300</label>
-            </div>
-            <div class="filter-option">
-              <input type="checkbox" id="p-300-500" onchange="filterProducts()">
-              <label for="p-300-500">₹300 – ₹500</label>
-            </div>
-            <div class="filter-option">
-              <input type="checkbox" id="p-500-800" onchange="filterProducts()">
-              <label for="p-500-800">₹500 – ₹800</label>
-            </div>
-            <div class="filter-option">
-              <input type="checkbox" id="p-above800" onchange="filterProducts()">
-              <label for="p-above800">Above ₹800</label>
-            </div>
-          </div>
-
-          <button class="clear-filters-btn" onclick="clearFilters()" id="clearFiltersBtn">Clear All Filters</button>
-        </aside>
 
         <!-- PRODUCTS AREA -->
         <div>
@@ -551,18 +489,6 @@
 
   <div id="toast" class="toast"></div>
   <script src="assets/main.js"></script>
-  <script>
-    function filterProducts() {
-      // Simplified filter — in production this would filter the grid
-      showToast('Filters applied 🌿');
-    }
-    function clearFilters() {
-      document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-      document.querySelectorAll('.product-card').forEach(c => c.style.display = '');
-    }
-    function sortProducts() {
-      showToast('Products sorted ✓');
-    }
-  </script>
+
 </body>
 </html>

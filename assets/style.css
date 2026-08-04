@@ -713,12 +713,13 @@ h1, h2, h3, h4, h5 {
   border: 1px solid rgba(106, 153, 78, 0.2);
 }
 
-.product-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 16px;
-  border-top: 1px solid var(--border-light);
+.product-footer{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:16px;
+    align-items:center;
+    padding-top:18px;
+    border-top:1px solid var(--border-light);
 }
 
 .product-price {
@@ -1746,5 +1747,43 @@ h1, h2, h3, h4, h5 {
 
 .product-footer{
     margin-top:auto;
+}
+
+.product-price-wrap{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.product-price{
+    font-family:var(--font-heading);
+    font-size:2rem;
+    font-weight:700;
+    color:var(--forest-green);
+    line-height:1;
+}
+
+.product-size{
+    font-size:.85rem;
+    color:var(--text-light);
+}
+
+.discount-badge{
+    display:inline-flex;
+    align-items:center;
+    width:max-content;
+    padding:4px 10px;
+    border-radius:20px;
+    background:#E8F5E9;
+    color:#2E7D32;
+    font-size:.75rem;
+    font-weight:600;
+}
+
+.btn-wa-sm{
+    min-width:160px;
+    height:50px;
+    justify-content:center;
+    border-radius:30px;
 }
 

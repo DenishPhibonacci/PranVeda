@@ -187,7 +187,7 @@ function initContactForm() {
     let isValid = true;
     const errorMsgs = form.querySelectorAll('.error-msg');
     const inputs = form.querySelectorAll('input, select, textarea');
-    
+
     errorMsgs.forEach(msg => msg.style.display = 'none');
     inputs.forEach(input => input.classList.remove('invalid'));
 
@@ -250,7 +250,7 @@ function initContactForm() {
       showToast('Please fill all required fields correctly 🌿');
       return;
     }
-    
+
     // WhatsApp format showing it's a Customer message / inquiry
     const waMsg = `*Customer Message / Inquiry (PranVeda)*\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nSubject: ${subjectText}\n\nMessage:\n${message}\n\nThank you.`;
     const encoded = encodeURIComponent(waMsg);
@@ -288,6 +288,8 @@ function initActiveNavLinks() {
       link.classList.add('active');
     }
   });
+
+
 }
 
 /* =============================================
@@ -303,3 +305,88 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initActiveNavLinks();
 });
+
+@media (max-width:768px){
+
+.hero{
+    min-height:100vh;
+    padding-top:90px;
+    text-align:center;
+}
+
+.hero-content{
+    max-width:100%;
+}
+
+.hero h1{
+    font-size:2.3rem;
+    line-height:1.2;
+}
+
+.hero-sub{
+    font-size:16px;
+    margin:20px auto;
+}
+
+.hero-buttons{
+    flex-direction:column;
+}
+
+.hero-buttons .btn{
+    width:100%;
+    justify-content:center;
+}
+
+.hero-scroll{
+    display:none;
+}
+
+}
+
+
+@media (max-width:768px){
+
+.products-grid{
+    grid-template-columns:1fr !important;
+}
+
+.product-card{
+    width:100%;
+}
+
+.product-card-body{
+    padding:18px;
+}
+
+.product-footer{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:12px;
+}
+
+.btn-wa-sm{
+    width:100%;
+    justify-content:center;
+}
+
+}
+
+@media(max-width:768px){
+
+.stat-box .num{
+    font-size:2rem;
+}
+
+}
+
+@media(max-width:768px){
+
+.cta-buttons{
+    flex-direction:column;
+}
+
+.cta-buttons .btn{
+    width:100%;
+}
+
+}

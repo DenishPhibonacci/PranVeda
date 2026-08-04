@@ -1581,5 +1581,58 @@ h1, h2, h3, h4, h5 {
   .product-footer { flex-direction: column; gap: 12px; align-items: flex-start; }
   .btn-wa-sm { width: 100%; justify-content: center; }
 }
+.product-card{
+    overflow:hidden;
+    border-radius:18px;
+}
 
+.product-card-img{
+    position:relative;
+    display:block;
+}
+
+.product-card-img img{
+    width:100%;
+    display:block;
+}
+
+.image-overlay{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 15px;
+    background:rgba(0,0,0,.60);
+    backdrop-filter:blur(6px);
+    opacity:0;
+    transition:.3s;
+}
+
+.product-card:hover .image-overlay{
+    opacity:1;
+}
+
+.overlay-price{
+    color:#fff;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.overlay-order{
+    background:#25D366;
+    color:#fff;
+    padding:8px 15px;
+    border-radius:30px;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+}
+
+.product-card:hover img{
+    transform:scale(1.05);
+    transition:.4s;
+}
 

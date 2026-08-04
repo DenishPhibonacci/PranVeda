@@ -129,12 +129,7 @@
       flex-wrap: wrap;
     }
 
-    /* ---- Category Grid ---- */
-    .categories-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-    }
+
 
     /* ---- Testimonials Grid ---- */
     .testimonials-grid {
@@ -240,7 +235,6 @@
       <div class="nav-links" role="menubar">
         <a href="index.html" class="nav-link" role="menuitem">Home</a>
         <a href="shop.html" class="nav-link" role="menuitem">Shop</a>
-        <a href="categories.html" class="nav-link" role="menuitem">Categories</a>
         <a href="about.html" class="nav-link" role="menuitem">About</a>
         <a href="contact.html" class="nav-link" role="menuitem">Contact</a>
       </div>
@@ -261,7 +255,6 @@
     <div class="mobile-menu" id="mobileMenu" role="menu">
       <a href="index.html" class="nav-link" role="menuitem">Home</a>
       <a href="shop.html" class="nav-link" role="menuitem">Shop</a>
-      <a href="categories.html" class="nav-link" role="menuitem">Categories</a>
       <a href="about.html" class="nav-link" role="menuitem">About</a>
       <a href="contact.html" class="nav-link" role="menuitem">Contact</a>
       <button class="btn btn-whatsapp" onclick="openWhatsApp()" id="mobileWaBtn" aria-label="Order on WhatsApp">
@@ -375,7 +368,6 @@
             <span class="product-badge">Bestseller</span>
           </a>
           <div class="product-card-body">
-            <div class="product-category">Hair Care</div>
             <h3 class="product-name">Brahmi Bhringraj Hair Oil</h3>
             <p class="product-desc">A deeply nourishing hair oil infused with 21 Ayurvedic herbs for stronger, longer, shinier hair.</p>
             <div class="product-benefits">
@@ -403,7 +395,6 @@
             <span class="product-badge">New</span>
           </a>
           <div class="product-card-body">
-            <div class="product-category">Skin Care</div>
             <h3 class="product-name">Kumkumadi Glow Cream</h3>
             <p class="product-desc">A luxurious Ayurvedic face cream with saffron, sandalwood, and rose to reveal radiant, even-toned skin.</p>
             <div class="product-benefits">
@@ -532,60 +523,7 @@
     </div>
   </section>
 
-  <!-- ==================== CATEGORIES ==================== -->
-  <section class="section bg-cream" aria-labelledby="categoriesHeading">
-    <div class="container">
-      <div class="section-header reveal">
-        <span class="label-text">Browse by Category</span>
-        <h2 class="section-title" id="categoriesHeading">Our Wellness Range</h2>
-        <p class="section-subtitle">Explore our complete collection of Ayurvedic products across all wellness categories.</p>
-        <div class="gold-divider center-divider"></div>
-      </div>
 
-      <div class="categories-grid">
-        <a href="categories.html#hair-care" class="category-card reveal" id="cat-hair-care">
-          <div class="cat-icon">💆</div>
-          <div class="cat-name">Hair Care</div>
-          <div class="cat-count">8 Products</div>
-        </a>
-        <a href="categories.html#skin-care" class="category-card reveal reveal-delay-1" id="cat-skin-care">
-          <div class="cat-icon">✨</div>
-          <div class="cat-name">Skin Care</div>
-          <div class="cat-count">10 Products</div>
-        </a>
-        <a href="categories.html#ayurvedic-oils" class="category-card reveal reveal-delay-2" id="cat-ayurvedic-oils">
-          <div class="cat-icon">🫙</div>
-          <div class="cat-name">Ayurvedic Oils</div>
-          <div class="cat-count">6 Products</div>
-        </a>
-        <a href="categories.html#herbal-powders" class="category-card reveal reveal-delay-3" id="cat-herbal-powders">
-          <div class="cat-icon">🌾</div>
-          <div class="cat-name">Herbal Powders</div>
-          <div class="cat-count">7 Products</div>
-        </a>
-        <a href="categories.html#wellness" class="category-card reveal" id="cat-wellness">
-          <div class="cat-icon">🧘</div>
-          <div class="cat-name">Wellness</div>
-          <div class="cat-count">9 Products</div>
-        </a>
-        <a href="categories.html#immunity" class="category-card reveal reveal-delay-1" id="cat-immunity">
-          <div class="cat-icon">🛡️</div>
-          <div class="cat-name">Immunity</div>
-          <div class="cat-count">5 Products</div>
-        </a>
-        <a href="categories.html#digestive-care" class="category-card reveal reveal-delay-2" id="cat-digestive">
-          <div class="cat-icon">🌀</div>
-          <div class="cat-name">Digestive Care</div>
-          <div class="cat-count">6 Products</div>
-        </a>
-        <a href="categories.html#personal-care" class="category-card reveal reveal-delay-3" id="cat-personal-care">
-          <div class="cat-icon">🧴</div>
-          <div class="cat-name">Personal Care</div>
-          <div class="cat-count">8 Products</div>
-        </a>
-      </div>
-    </div>
-  </section>
 
   <!-- ==================== ABOUT PREVIEW ==================== -->
   <section class="section" aria-labelledby="aboutPreviewHeading">
@@ -772,7 +710,6 @@
           <nav class="footer-links" aria-label="Quick links">
             <a href="index.html" class="footer-link">Home</a>
             <a href="shop.html" class="footer-link">Shop All</a>
-            <a href="categories.html" class="footer-link">Categories</a>
             <a href="about.html" class="footer-link">About Us</a>
             <a href="contact.html" class="footer-link">Contact</a>
           </nav>

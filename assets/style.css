@@ -1691,3 +1691,60 @@ h1, h2, h3, h4, h5 {
     margin-top:15px;
 }
 
+.product-rating{
+    color:#F4B400;
+    font-size:13px;
+    font-weight:600;
+    margin:8px 0;
+}
+
+.product-rating span{
+    color:#777;
+}
+
+.product-trust{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:14px 0;
+}
+
+.product-trust span{
+    background:#F5FAF4;
+    color:#2E7D32;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.discount-badge{
+    display:inline-block;
+    margin-top:8px;
+    padding:4px 10px;
+    border-radius:20px;
+    background:#E8F5E9;
+    color:#2E7D32;
+    font-size:12px;
+    font-weight:700;
+}
+
+.product-price{
+    font-size:32px;
+    font-weight:700;
+    color:#1B5E20;
+}
+
+.product-desc{
+    min-height:72px;
+}
+
+.product-card{
+    display:flex;
+    flex-direction:column;
+}
+
+.product-footer{
+    margin-top:auto;
+}
+

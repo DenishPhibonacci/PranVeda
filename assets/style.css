@@ -1428,7 +1428,7 @@ h1, h2, h3, h4, h5 {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: 
+  background-image:
     radial-gradient(circle at 20% 50%, rgba(106, 153, 78, 0.05) 0%, transparent 50%),
     radial-gradient(circle at 80% 20%, rgba(27, 94, 32, 0.05) 0%, transparent 50%);
   pointer-events: none;
@@ -1555,9 +1555,9 @@ h1, h2, h3, h4, h5 {
   .hamburger { display: flex; }
 
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-  
+
   .hero { height: 100svh; }
-  
+
   .whatsapp-float .wa-label { display: none; }
   .whatsapp-float { padding: 14px; border-radius: 50%; }
 
@@ -1581,3 +1581,66 @@ h1, h2, h3, h4, h5 {
   .product-footer { flex-direction: column; gap: 12px; align-items: flex-start; }
   .btn-wa-sm { width: 100%; justify-content: center; }
 }
+
+
+.product-card{
+    overflow:hidden;
+    border-radius:18px;
+}
+
+.product-card-img{
+    position:relative;
+    display:block;
+}
+
+.product-card-img img{
+    width:100%;
+    display:block;
+}
+
+.image-overlay{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:12px 15px;
+
+    background:rgba(0,0,0,.60);
+    backdrop-filter:blur(6px);
+
+    opacity:0;
+    transition:.3s;
+}
+
+.product-card:hover .image-overlay{
+    opacity:1;
+}
+
+.overlay-price{
+    color:#fff;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.overlay-order{
+    background:#25D366;
+    color:#fff;
+
+    padding:8px 15px;
+    border-radius:30px;
+
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+}
+
+.product-card:hover img{
+    transform:scale(1.05);
+    transition:.4s;
+}
+

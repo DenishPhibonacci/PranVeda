@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop — Vedamrit Premium Ayurvedic Products</title>
+  <meta name="description" content="Shop Vedamrit's complete collection of premium Ayurvedic products — hair oils, herbal powders, immunity boosters, skincare and more. Order on WhatsApp." />
+  <meta name="keywords" content="Buy Ayurvedic Products Online, Herbal Hair Oil, Ayurvedic Skincare, Immunity Booster India, Natural Wellness Products" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    .shop-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* Sidebar Filters */
+    .sidebar {
+      position: sticky;
+      top: 100px;
+    }
+
+    .filter-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border-light);
+      margin-bottom: 20px;
+    }
+
+    .filter-title {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--forest-green);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .filter-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: var(--transition-fast);
+    }
+
+    .filter-option:hover { color: var(--forest-green); }
+
+    .filter-option input[type="checkbox"] {
+      accent-color: var(--forest-green);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .filter-option label {
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--text-medium);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .filter-count {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      background: var(--cream);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+    }
+
+    .clear-filters-btn {
+      width: 100%;
+      padding: 12px;
+      background: rgba(27,94,32,0.08);
+      color: var(--forest-green);
+      border-radius: var(--radius-md);
+      font-weight: 500;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      border: none;
+      margin-top: 8px;
+    }
+
+    .clear-filters-btn:hover { background: var(--forest-green); color: var(--white); }
+
+    /* Products Header */
+    .products-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+
+    .products-count {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .sort-select {
+      padding: 10px 18px;
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      color: var(--text-dark);
+      background: var(--white);
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231B5E20'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+    }
+
+    .sort-select:focus { border-color: var(--forest-green); outline: none; }
+
+    /* Shop Products Grid */
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 1100px) {
+      .shop-layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .shop-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .shop-grid { grid-template-columns: 1fr; }
+      .products-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="Vedamrit Home">
+        <span class="logo-name">Vedamrit</span>
+        <span class="logo-tagline">Ancient Wisdom. Modern Wellness.</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link active">Shop</a>
+        <a href="categories.html" class="nav-link">Categories</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <div class="nav-cta">
+        <button class="btn btn-whatsapp" onclick="openWhatsApp()" id="navWaBtn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+          Order on WhatsApp
+        </button>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="shop.html" class="nav-link">Shop</a>
+      <a href="categories.html" class="nav-link">Categories</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+      <button class="btn btn-whatsapp" onclick="openWhatsApp()">Order on WhatsApp</button>
+    </div>
+  </nav>
+
+  <!-- PAGE BANNER -->
+  <div class="page-banner" role="banner">
+    <div class="container">
+      <h1>Our Products</h1>
+      <p>Premium Ayurvedic products crafted with nature's finest ingredients</p>
+    </div>
+  </div>
+
+  <!-- MAIN SHOP -->
+  <section class="section" aria-labelledby="shopHeading">
+    <div class="container">
+      <div class="shop-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" aria-label="Product filters">
+          <div class="filter-card">
+            <h2 class="filter-title">Categories</h2>
+            <div class="filter-option">
+              <input type="checkbox" id="f-hair" onchange="filterProducts()">
+              <label for="f-hair">Hair Care <span class="filter-count">8</span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="f-skin" onchange="filterProducts()">
+              <label for="f-skin">Skin Care <span class="filter-count">10</span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="f-oils" onchange="filterProducts()">
+              <label for="f-oils">Ayurvedic Oils <span class="filter-count">6</span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="f-powder" onchange="filterProducts()">
+              <label for="f-powder">Herbal Powders <span class="filter-count">7</span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="f-wellness" onchange="filterProducts()">
+              <label for="f-wellness">Wellness <span class="filter-count">9</span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="f-immunity" onchange="filterProducts()">
+              <label for="f-immunity">Immunity <span class="filter-count">5</span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="f-digestive" onchange="filterProducts()">
+              <label for="f-digestive">Digestive Care <span class="filter-count">6</span></label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="f-personal" onchange="filterProducts()">
+              <label for="f-personal">Personal Care <span class="filter-count">8</span></label>
+            </div>
+          </div>
+
+          <div class="filter-card">
+            <h2 class="filter-title">Price Range</h2>
+            <div class="filter-option">
+              <input type="checkbox" id="p-under300" onchange="filterProducts()">
+              <label for="p-under300">Under ₹300</label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="p-300-500" onchange="filterProducts()">
+              <label for="p-300-500">₹300 – ₹500</label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="p-500-800" onchange="filterProducts()">
+              <label for="p-500-800">₹500 – ₹800</label>
+            </div>
+            <div class="filter-option">
+              <input type="checkbox" id="p-above800" onchange="filterProducts()">
+              <label for="p-above800">Above ₹800</label>
+            </div>
+          </div>
+
+          <button class="clear-filters-btn" onclick="clearFilters()" id="clearFiltersBtn">Clear All Filters</button>
+        </aside>
+
+        <!-- PRODUCTS AREA -->
+        <div>
+          <div class="products-header">
+            <p class="products-count" id="productCount">Showing <strong>12</strong> products</p>
+            <select class="sort-select" id="sortSelect" onchange="sortProducts()" aria-label="Sort products">
+              <option value="featured">Featured</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="newest">Newest First</option>
+            </select>
+          </div>
+
+          <div class="shop-grid" id="shopGrid">
+
+            <!-- Product Cards -->
+            <article class="product-card reveal" data-category="hair-care" data-price="399">
+              <a href="product.html?id=brahmi-hair-oil" class="product-card-img">
+                <img src="assets/images/hair_oil.jpg" alt="Brahmi Bhringraj Hair Oil" loading="lazy" />
+                <span class="product-badge">Bestseller</span>
+              </a>
+              <div class="product-card-body">
+                <div class="product-category">Hair Care</div>
+                <h3 class="product-name">Brahmi Bhringraj Hair Oil</h3>
+                <p class="product-desc">Deeply nourishing hair oil with 21 Ayurvedic herbs for stronger, shinier hair.</p>
+                <div class="product-benefits">
+                  <span class="benefit-tag">Reduces Hair Fall</span>
+                  <span class="benefit-tag">Promotes Growth</span>
+                </div>
+                <div class="product-footer">
+                  <div>
+                    <div class="product-price"><span class="currency">₹</span>399</div>
+                    <div class="product-size">200ml</div>
+                  </div>
+                  <button class="btn-wa-sm" onclick="openWhatsApp('Brahmi Bhringraj Hair Oil (200ml)')">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                    Order
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="product-card reveal reveal-delay-1" data-category="skin-care" data-price="549">
+              <a href="product.html?id=kumkumadi-cream" class="product-card-img">
+                <img src="assets/images/face_cream.jpg" alt="Kumkumadi Glow Cream" loading="lazy" />
+                <span class="product-badge">New</span>
+              </a>
+              <div class="product-card-body">
+                <div class="product-category">Skin Care</div>
+                <h3 class="product-name">Kumkumadi Glow Cream</h3>
+                <p class="product-desc">Luxurious face cream with saffron, sandalwood and rose for radiant skin.</p>
+                <div class="product-benefits">
+                  <span class="benefit-tag">Brightens Skin</span>
+                  <span class="benefit-tag">Deep Hydration</span>
+                </div>
+                <div class="product-footer">
+                  <div>
+                    <div class="product-price"><span class="currency">₹</span>549</div>
+                    <div class="product-size">50g</div>
+                  </div>
+                  <button class="btn-wa-sm" onclick="openWhatsApp('Kumkumadi Glow Cream (50g)')">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                    Order
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="product-card reveal reveal-delay-2" data-category="herbal-powders" data-price="449">
+              <a href="product.html?id=ashwagandha-powder" class="product-card-img">
+                <img src="assets/images/herbal_powder.jpg" alt="Ashwagandha Shatavari Powder" loading="lazy" />
+              </a>
+              <div class="product-card-body">
+                <div class="product-category">Herbal Powders</div>
+                <h3 class="product-name">Ashwagandha Shatavari Powder</h3>
+                <p class="product-desc">Powerful adaptogenic blend for vitality, energy and hormonal balance.</p>
+                <div class="product-benefits">
+                  <span class="benefit-tag">Boosts Energy</span>
+                  <span class="benefit-tag">Reduces Stress</span>
+                </div>
+                <div class="product-footer">
+                  <div>
+                    <div class="product-price"><span class="currency">₹</span>449</div>
+                    <div class="product-size">100g</div>
+                  </div>
+                  <button class="btn-wa-sm" onclick="openWhatsApp('Ashwagandha Shatavari Powder (100g)')">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                    Order
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="product-card reveal" data-category="immunity" data-price="349">
+              <a href="product.html?id=immunity-tonic" class="product-card-img">
+                <img src="assets/images/immunity_booster.jpg" alt="Giloy Tulsi Immunity Tonic" loading="lazy" />
+                <span class="product-badge">Top Rated</span>
+              </a>
+              <div class="product-card-body">
+                <div class="product-category">Immunity</div>
+                <h3 class="product-name">Giloy Tulsi Immunity Tonic</h3>
+                <p class="product-desc">Potent Ayurvedic tonic with Giloy, Tulsi and Amla to support natural immunity.</p>
+                <div class="product-benefits">
+                  <span class="benefit-tag">Boosts Immunity</span>
+                  <span class="benefit-tag">Antioxidant Rich</span>
+                </div>
+                <div class="product-footer">
+                  <div>
+                    <div class="product-price"><span class="currency">₹</span>349</div>
+                    <div class="product-size">500ml</div>
+                  </div>
+                  <button class="btn-wa-sm" onclick="openWhatsApp('Giloy Tulsi Immunity Tonic (500ml)')">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                    Order
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="product-card reveal reveal-delay-1" data-category="ayurvedic-oils" data-price="499">
+              <a href="product.html?id=panchakarma-oil" class="product-card-img">
+                <img src="assets/images/body_oil.jpg" alt="Panchakarma Body Massage Oil" loading="lazy" />
+              </a>
+              <div class="product-card-body">
+                <div class="product-category">Ayurvedic Oils</div>
+                <h3 class="product-name">Panchakarma Body Massage Oil</h3>
+                <p class="product-desc">A rejuvenating blend of sesame oil, marigold and vetiver for deep relaxation.</p>
+                <div class="product-benefits">
+                  <span class="benefit-tag">Deep Relaxation</span>
+                  <span class="benefit-tag">Muscle Relief</span>
+                </div>
+                <div class="product-footer">
+                  <div>
+                    <div class="product-price"><span class="currency">₹</span>499</div>
+                    <div class="product-size">100ml</div>
+                  </div>
+                  <button class="btn-wa-sm" onclick="openWhatsApp('Panchakarma Body Massage Oil (100ml)')">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                    Order
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="product-card reveal reveal-delay-2" data-category="hair-care" data-price="299">
+              <a href="product.html?id=amla-shikakai-shampoo" class="product-card-img">
+                <img src="assets/images/herbal_powder.jpg" alt="Amla Shikakai Herbal Shampoo Powder" loading="lazy" />
+              </a>
+              <div class="product-card-body">
+                <div class="product-category">Hair Care</div>
+                <h3 class="product-name">Amla Shikakai Shampoo Powder</h3>
+                <p class="product-desc">Chemical-free Ayurvedic shampoo powder that gently cleanses and adds natural shine.</p>
+                <div class="product-benefits">
+                  <span class="benefit-tag">Gentle Cleanse</span>
+                  <span class="benefit-tag">Natural Shine</span>
+                </div>
+                <div class="product-footer">
+                  <div>
+                    <div class="product-price"><span class="currency">₹</span>299</div>
+                    <div class="product-size">150g</div>
+                  </div>
+                  <button class="btn-wa-sm" onclick="openWhatsApp('Amla Shikakai Shampoo Powder (150g)')">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                    Order
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="product-card reveal" data-category="skin-care" data-price="649">
+              <a href="product.html?id=neem-turmeric-face-pack" class="product-card-img">
+                <img src="assets/images/face_cream.jpg" alt="Neem Turmeric Face Pack" loading="lazy" />
+              </a>
+              <div class="product-card-body">
+                <div class="product-category">Skin Care</div>
+                <h3 class="product-name">Neem Turmeric Face Pack</h3>
+                <p class="product-desc">A powerful purifying clay face pack with neem, turmeric and multani mitti.</p>
+                <div class="product-benefits">
+                  <span class="benefit-tag">Clears Acne</span>
+                  <span class="benefit-tag">Deep Purify</span>
+                </div>
+                <div class="product-footer">
+                  <div>
+                    <div class="product-price"><span class="currency">₹</span>649</div>
+                    <div class="product-size">75g</div>
+                  </div>
+                  <button class="btn-wa-sm" onclick="openWhatsApp('Neem Turmeric Face Pack (75g)')">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                    Order
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="product-card reveal reveal-delay-1" data-category="wellness" data-price="799">
+              <a href="product.html?id=triphala-churna" class="product-card-img">
+                <img src="assets/images/herbal_powder.jpg" alt="Triphala Churna Digestive Powder" loading="lazy" />
+              </a>
+              <div class="product-card-body">
+                <div class="product-category">Digestive Care</div>
+                <h3 class="product-name">Triphala Churna</h3>
+                <p class="product-desc">The classic Ayurvedic trifecta — Amalaki, Bibhitaki, Haritaki — for digestive wellness.</p>
+                <div class="product-benefits">
+                  <span class="benefit-tag">Gut Health</span>
+                  <span class="benefit-tag">Detox</span>
+                </div>
+                <div class="product-footer">
+                  <div>
+                    <div class="product-price"><span class="currency">₹</span>799</div>
+                    <div class="product-size">200g</div>
+                  </div>
+                  <button class="btn-wa-sm" onclick="openWhatsApp('Triphala Churna (200g)')">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                    Order
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="product-card reveal reveal-delay-2" data-category="ayurvedic-oils" data-price="599">
+              <a href="product.html?id=castor-oil" class="product-card-img">
+                <img src="assets/images/body_oil.jpg" alt="Cold Pressed Castor Oil" loading="lazy" />
+              </a>
+              <div class="product-card-body">
+                <div class="product-category">Ayurvedic Oils</div>
+                <h3 class="product-name">Cold Pressed Castor Oil</h3>
+                <p class="product-desc">Pure cold-pressed castor oil for hair, skin, and joint nourishment.</p>
+                <div class="product-benefits">
+                  <span class="benefit-tag">Hair Growth</span>
+                  <span class="benefit-tag">Moisturizes Skin</span>
+                </div>
+                <div class="product-footer">
+                  <div>
+                    <div class="product-price"><span class="currency">₹</span>599</div>
+                    <div class="product-size">200ml</div>
+                  </div>
+                  <button class="btn-wa-sm" onclick="openWhatsApp('Cold Pressed Castor Oil (200ml)')">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                    Order
+                  </button>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLOATING WA -->
+  <a href="#" class="whatsapp-float" onclick="openWhatsApp(); return false;" id="floatingWaBtn">
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/>
+    </svg>
+    <span class="wa-label">Order on WhatsApp</span>
+  </a>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="logo-name">Vedamrit</div>
+          <div class="logo-tagline">Ancient Wisdom. Modern Wellness.</div>
+          <p class="footer-desc">Premium Ayurvedic products crafted with natural ingredients inspired by India's timeless wellness traditions.</p>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Quick Links</h3>
+          <nav class="footer-links">
+            <a href="index.html" class="footer-link">Home</a>
+            <a href="shop.html" class="footer-link">Shop All</a>
+            <a href="about.html" class="footer-link">About Us</a>
+            <a href="contact.html" class="footer-link">Contact</a>
+          </nav>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Policies</h3>
+          <nav class="footer-links">
+            <a href="privacy.html" class="footer-link">Privacy Policy</a>
+            <a href="returns.html" class="footer-link">Return Policy</a>
+            <a href="terms.html" class="footer-link">Terms</a>
+            <a href="disclaimer.html" class="footer-link">Disclaimer</a>
+          </nav>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Contact</h3>
+          <div class="footer-links">
+            <span class="footer-link">+91 99999 99999</span>
+            <span class="footer-link">hello@vedamrit.in</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2024 Vedamrit. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+  <script src="assets/main.js"></script>
+  <script>
+    function filterProducts() {
+      // Simplified filter — in production this would filter the grid
+      showToast('Filters applied 🌿');
+    }
+    function clearFilters() {
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+      document.querySelectorAll('.product-card').forEach(c => c.style.display = '');
+    }
+    function sortProducts() {
+      showToast('Products sorted ✓');
+    }
+  </script>
+</body>
+</html>

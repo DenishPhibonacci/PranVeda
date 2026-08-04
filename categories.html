@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Categories — Vedamrit Ayurvedic Products</title>
+  <meta name="description" content="Explore Vedamrit's Ayurvedic product categories: Hair Care, Skin Care, Ayurvedic Oils, Herbal Powders, Wellness, Immunity, Digestive Care and Personal Care." />
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    .cat-section {
+      margin-bottom: 80px;
+    }
+
+    .cat-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--border-light);
+    }
+
+    .cat-section-title {
+      font-family: var(--font-heading);
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--forest-green);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cat-products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .browse-all-link {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--sage-green);
+      transition: var(--transition-fast);
+    }
+
+    .browse-all-link:hover { color: var(--forest-green); }
+
+    .cat-hero-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 64px;
+    }
+
+    @media (max-width: 1100px) {
+      .cat-products-grid { grid-template-columns: repeat(2, 1fr); }
+      .cat-hero-cards { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .cat-products-grid { grid-template-columns: 1fr; }
+      .cat-hero-cards { grid-template-columns: repeat(2, 1fr); }
+      .cat-section-header { flex-direction: column; gap: 8px; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar scrolled" id="navbar" role="navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-name">Vedamrit</span>
+        <span class="logo-tagline">Ancient Wisdom. Modern Wellness.</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="categories.html" class="nav-link active">Categories</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <div class="nav-cta">
+        <button class="btn btn-whatsapp" onclick="openWhatsApp()">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+          Order on WhatsApp
+        </button>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="shop.html" class="nav-link">Shop</a>
+      <a href="categories.html" class="nav-link">Categories</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+      <button class="btn btn-whatsapp" onclick="openWhatsApp()">Order on WhatsApp</button>
+    </div>
+  </nav>
+
+  <div class="page-banner">
+    <div class="container">
+      <h1>All Categories</h1>
+      <p>Explore our complete range of premium Ayurvedic wellness products</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+
+      <!-- Category Cards Overview -->
+      <div class="section-header reveal">
+        <span class="label-text">Browse by Category</span>
+        <h2 class="section-title">Our Wellness Range</h2>
+        <div class="gold-divider center-divider"></div>
+      </div>
+
+      <div class="cat-hero-cards">
+        <a href="#hair-care" class="category-card reveal"><div class="cat-icon">💆</div><div class="cat-name">Hair Care</div><div class="cat-count">8 Products</div></a>
+        <a href="#skin-care" class="category-card reveal reveal-delay-1"><div class="cat-icon">✨</div><div class="cat-name">Skin Care</div><div class="cat-count">10 Products</div></a>
+        <a href="#ayurvedic-oils" class="category-card reveal reveal-delay-2"><div class="cat-icon">🫙</div><div class="cat-name">Ayurvedic Oils</div><div class="cat-count">6 Products</div></a>
+        <a href="#herbal-powders" class="category-card reveal reveal-delay-3"><div class="cat-icon">🌾</div><div class="cat-name">Herbal Powders</div><div class="cat-count">7 Products</div></a>
+        <a href="#wellness" class="category-card reveal"><div class="cat-icon">🧘</div><div class="cat-name">Wellness</div><div class="cat-count">9 Products</div></a>
+        <a href="#immunity" class="category-card reveal reveal-delay-1"><div class="cat-icon">🛡️</div><div class="cat-name">Immunity</div><div class="cat-count">5 Products</div></a>
+        <a href="#digestive-care" class="category-card reveal reveal-delay-2"><div class="cat-icon">🌀</div><div class="cat-name">Digestive Care</div><div class="cat-count">6 Products</div></a>
+        <a href="#personal-care" class="category-card reveal reveal-delay-3"><div class="cat-icon">🧴</div><div class="cat-name">Personal Care</div><div class="cat-count">8 Products</div></a>
+      </div>
+
+      <!-- HAIR CARE -->
+      <div class="cat-section reveal" id="hair-care">
+        <div class="cat-section-header">
+          <h2 class="cat-section-title">💆 Hair Care</h2>
+          <a href="shop.html" class="browse-all-link">Browse All Hair Care →</a>
+        </div>
+        <div class="cat-products-grid">
+          <article class="product-card"><a href="product.html" class="product-card-img"><img src="assets/images/hair_oil.jpg" alt="Brahmi Bhringraj Hair Oil" loading="lazy" /><span class="product-badge">Bestseller</span></a><div class="product-card-body"><div class="product-category">Hair Care</div><h3 class="product-name">Brahmi Bhringraj Hair Oil</h3><p class="product-desc">Deeply nourishing formula with 21 Ayurvedic herbs for stronger, shinier hair.</p><div class="product-benefits"><span class="benefit-tag">Reduces Hair Fall</span><span class="benefit-tag">Promotes Growth</span></div><div class="product-footer"><div><div class="product-price"><span class="currency">₹</span>399</div><div class="product-size">200ml</div></div><button class="btn-wa-sm" onclick="openWhatsApp('Brahmi Bhringraj Hair Oil (200ml)')"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413z"/></svg>Order</button></div></div></article>
+          <article class="product-card"><a href="product.html" class="product-card-img"><img src="assets/images/herbal_powder.jpg" alt="Amla Shikakai Shampoo Powder" loading="lazy" /></a><div class="product-card-body"><div class="product-category">Hair Care</div><h3 class="product-name">Amla Shikakai Shampoo Powder</h3><p class="product-desc">Chemical-free Ayurvedic shampoo powder for gentle cleansing and natural shine.</p><div class="product-benefits"><span class="benefit-tag">Gentle Cleanse</span><span class="benefit-tag">Natural Shine</span></div><div class="product-footer"><div><div class="product-price"><span class="currency">₹</span>299</div><div class="product-size">150g</div></div><button class="btn-wa-sm" onclick="openWhatsApp('Amla Shikakai Shampoo Powder (150g)')"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413z"/></svg>Order</button></div></div></article>
+        </div>
+      </div>
+
+      <!-- SKIN CARE -->
+      <div class="cat-section reveal" id="skin-care">
+        <div class="cat-section-header">
+          <h2 class="cat-section-title">✨ Skin Care</h2>
+          <a href="shop.html" class="browse-all-link">Browse All Skin Care →</a>
+        </div>
+        <div class="cat-products-grid">
+          <article class="product-card"><a href="product.html" class="product-card-img"><img src="assets/images/face_cream.jpg" alt="Kumkumadi Glow Cream" loading="lazy" /><span class="product-badge">New</span></a><div class="product-card-body"><div class="product-category">Skin Care</div><h3 class="product-name">Kumkumadi Glow Cream</h3><p class="product-desc">Luxurious face cream with saffron, sandalwood and rose for radiant skin.</p><div class="product-benefits"><span class="benefit-tag">Brightens Skin</span><span class="benefit-tag">Deep Hydration</span></div><div class="product-footer"><div><div class="product-price"><span class="currency">₹</span>549</div><div class="product-size">50g</div></div><button class="btn-wa-sm" onclick="openWhatsApp('Kumkumadi Glow Cream (50g)')"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413z"/></svg>Order</button></div></div></article>
+          <article class="product-card"><a href="product.html" class="product-card-img"><img src="assets/images/face_cream.jpg" alt="Neem Turmeric Face Pack" loading="lazy" /></a><div class="product-card-body"><div class="product-category">Skin Care</div><h3 class="product-name">Neem Turmeric Face Pack</h3><p class="product-desc">Purifying clay face pack with neem, turmeric and multani mitti.</p><div class="product-benefits"><span class="benefit-tag">Clears Acne</span><span class="benefit-tag">Deep Purify</span></div><div class="product-footer"><div><div class="product-price"><span class="currency">₹</span>649</div><div class="product-size">75g</div></div><button class="btn-wa-sm" onclick="openWhatsApp('Neem Turmeric Face Pack (75g)')"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413z"/></svg>Order</button></div></div></article>
+        </div>
+      </div>
+
+      <!-- IMMUNITY -->
+      <div class="cat-section reveal" id="immunity">
+        <div class="cat-section-header">
+          <h2 class="cat-section-title">🛡️ Immunity</h2>
+          <a href="shop.html" class="browse-all-link">Browse All Immunity →</a>
+        </div>
+        <div class="cat-products-grid">
+          <article class="product-card"><a href="product.html" class="product-card-img"><img src="assets/images/immunity_booster.jpg" alt="Giloy Tulsi Immunity Tonic" loading="lazy" /><span class="product-badge">Top Rated</span></a><div class="product-card-body"><div class="product-category">Immunity</div><h3 class="product-name">Giloy Tulsi Immunity Tonic</h3><p class="product-desc">Potent Ayurvedic tonic with Giloy, Tulsi and Amla to support natural immunity.</p><div class="product-benefits"><span class="benefit-tag">Boosts Immunity</span><span class="benefit-tag">Antioxidant Rich</span></div><div class="product-footer"><div><div class="product-price"><span class="currency">₹</span>349</div><div class="product-size">500ml</div></div><button class="btn-wa-sm" onclick="openWhatsApp('Giloy Tulsi Immunity Tonic (500ml)')"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413z"/></svg>Order</button></div></div></article>
+          <article class="product-card"><a href="product.html" class="product-card-img"><img src="assets/images/herbal_powder.jpg" alt="Ashwagandha Shatavari Powder" loading="lazy" /></a><div class="product-card-body"><div class="product-category">Herbal Powders</div><h3 class="product-name">Ashwagandha Shatavari Powder</h3><p class="product-desc">Powerful adaptogenic blend for vitality, energy and stress relief.</p><div class="product-benefits"><span class="benefit-tag">Boosts Energy</span><span class="benefit-tag">Reduces Stress</span></div><div class="product-footer"><div><div class="product-price"><span class="currency">₹</span>449</div><div class="product-size">100g</div></div><button class="btn-wa-sm" onclick="openWhatsApp('Ashwagandha Shatavari Powder (100g)')"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413z"/></svg>Order</button></div></div></article>
+        </div>
+      </div>
+
+      <!-- AYURVEDIC OILS -->
+      <div class="cat-section reveal" id="ayurvedic-oils">
+        <div class="cat-section-header">
+          <h2 class="cat-section-title">🫙 Ayurvedic Oils</h2>
+          <a href="shop.html" class="browse-all-link">Browse All Oils →</a>
+        </div>
+        <div class="cat-products-grid">
+          <article class="product-card"><a href="product.html" class="product-card-img"><img src="assets/images/body_oil.jpg" alt="Panchakarma Body Massage Oil" loading="lazy" /></a><div class="product-card-body"><div class="product-category">Ayurvedic Oils</div><h3 class="product-name">Panchakarma Body Massage Oil</h3><p class="product-desc">Rejuvenating blend of sesame oil, marigold and vetiver for deep relaxation.</p><div class="product-benefits"><span class="benefit-tag">Deep Relaxation</span><span class="benefit-tag">Muscle Relief</span></div><div class="product-footer"><div><div class="product-price"><span class="currency">₹</span>499</div><div class="product-size">100ml</div></div><button class="btn-wa-sm" onclick="openWhatsApp('Panchakarma Body Massage Oil (100ml)')"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413z"/></svg>Order</button></div></div></article>
+          <article class="product-card"><a href="product.html" class="product-card-img"><img src="assets/images/body_oil.jpg" alt="Cold Pressed Castor Oil" loading="lazy" /></a><div class="product-card-body"><div class="product-category">Ayurvedic Oils</div><h3 class="product-name">Cold Pressed Castor Oil</h3><p class="product-desc">Pure cold-pressed castor oil for hair, skin and joint nourishment.</p><div class="product-benefits"><span class="benefit-tag">Hair Growth</span><span class="benefit-tag">Moisturizes Skin</span></div><div class="product-footer"><div><div class="product-price"><span class="currency">₹</span>599</div><div class="product-size">200ml</div></div><button class="btn-wa-sm" onclick="openWhatsApp('Cold Pressed Castor Oil (200ml)')"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413z"/></svg>Order</button></div></div></article>
+        </div>
+      </div>
+
+      <!-- DIGESTIVE CARE -->
+      <div class="cat-section reveal" id="digestive-care">
+        <div class="cat-section-header">
+          <h2 class="cat-section-title">🌀 Digestive Care</h2>
+          <a href="shop.html" class="browse-all-link">Browse All →</a>
+        </div>
+        <div class="cat-products-grid">
+          <article class="product-card"><a href="product.html" class="product-card-img"><img src="assets/images/herbal_powder.jpg" alt="Triphala Churna" loading="lazy" /></a><div class="product-card-body"><div class="product-category">Digestive Care</div><h3 class="product-name">Triphala Churna</h3><p class="product-desc">The classic Ayurvedic trifecta for digestive wellness and detox.</p><div class="product-benefits"><span class="benefit-tag">Gut Health</span><span class="benefit-tag">Detox</span></div><div class="product-footer"><div><div class="product-price"><span class="currency">₹</span>799</div><div class="product-size">200g</div></div><button class="btn-wa-sm" onclick="openWhatsApp('Triphala Churna (200g)')"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413z"/></svg>Order</button></div></div></article>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <a href="#" class="whatsapp-float" onclick="openWhatsApp(); return false;" id="floatingWaBtn">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+    <span class="wa-label">Order on WhatsApp</span>
+  </a>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand"><div class="logo-name">Vedamrit</div><div class="logo-tagline">Ancient Wisdom. Modern Wellness.</div><p class="footer-desc">Premium Ayurvedic products inspired by India's timeless traditions.</p></div>
+        <div><h3 class="footer-col-title">Quick Links</h3><nav class="footer-links"><a href="index.html" class="footer-link">Home</a><a href="shop.html" class="footer-link">Shop</a><a href="about.html" class="footer-link">About</a><a href="contact.html" class="footer-link">Contact</a></nav></div>
+        <div><h3 class="footer-col-title">Policies</h3><nav class="footer-links"><a href="privacy.html" class="footer-link">Privacy Policy</a><a href="returns.html" class="footer-link">Return Policy</a><a href="terms.html" class="footer-link">Terms</a><a href="disclaimer.html" class="footer-link">Disclaimer</a></nav></div>
+        <div><h3 class="footer-col-title">Contact</h3><div class="footer-links"><span class="footer-link">+91 99999 99999</span><span class="footer-link">hello@vedamrit.in</span></div></div>
+      </div>
+      <div class="footer-bottom"><p>© 2024 Vedamrit. All rights reserved. Made with 💚 in India.</p></div>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+  <script src="assets/main.js"></script>
+</body>
+</html>

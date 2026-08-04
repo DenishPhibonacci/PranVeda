@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brahmi Bhringraj Hair Oil — Vedamrit Ayurvedic Products</title>
+  <meta name="description" content="Vedamrit Brahmi Bhringraj Hair Oil — A deeply nourishing hair oil infused with 21 Ayurvedic herbs. Reduces hair fall, promotes growth, nourishes scalp. Order on WhatsApp." />
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    .product-detail-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      align-items: start;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .gallery-main {
+      grid-column: 1 / -1;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      cursor: pointer;
+    }
+
+    .gallery-main img, .gallery-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition-smooth);
+    }
+
+    .gallery-thumb {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      aspect-ratio: 1;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: var(--transition-fast);
+    }
+
+    .gallery-thumb:hover, .gallery-thumb.active {
+      border-color: var(--gold);
+    }
+
+    .gallery-thumb img:hover { transform: scale(1.05); }
+
+    /* Product Info */
+    .product-info { position: sticky; top: 100px; }
+
+    .product-rating {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .rating-stars { color: var(--gold); font-size: 1.1rem; }
+    .rating-count { font-size: 0.875rem; color: var(--text-light); }
+
+    .product-detail-name {
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 600;
+      color: var(--text-dark);
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .product-detail-price {
+      font-family: var(--font-heading);
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--forest-green);
+      margin-bottom: 4px;
+    }
+
+    .product-detail-price .currency { font-size: 1.4rem; vertical-align: super; }
+
+    .price-mrp {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-bottom: 24px;
+    }
+
+    .price-mrp del { margin-right: 8px; }
+    .price-discount { color: var(--gold); font-weight: 600; }
+
+    .product-short-desc {
+      font-size: 1rem;
+      color: var(--text-medium);
+      line-height: 1.85;
+      margin-bottom: 28px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .size-selector {
+      margin-bottom: 28px;
+    }
+
+    .size-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-medium);
+      margin-bottom: 12px;
+    }
+
+    .size-options {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .size-btn {
+      padding: 8px 20px;
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--radius-full);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      background: var(--white);
+    }
+
+    .size-btn:hover, .size-btn.active {
+      border-color: var(--forest-green);
+      background: rgba(27,94,32,0.06);
+      color: var(--forest-green);
+    }
+
+    .qty-selector {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      width: fit-content;
+    }
+
+    .qty-btn {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      background: var(--cream);
+      transition: var(--transition-fast);
+      border: none;
+      font-weight: 600;
+    }
+
+    .qty-btn:hover { background: var(--forest-green); color: var(--white); }
+
+    .qty-input {
+      width: 48px;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      border: none;
+      background: var(--white);
+      padding: 0;
+    }
+
+    .order-actions {
+      display: flex;
+      gap: 14px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .btn-wa-full {
+      flex: 1;
+      min-width: 220px;
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: var(--white);
+      padding: 16px 28px;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      border: none;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+    }
+
+    .btn-wa-full:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(37,211,102,0.5);
+    }
+
+    .trust-badges {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding: 20px 0;
+      margin-top: 8px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .trust-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-medium);
+    }
+
+    .trust-badge-icon {
+      font-size: 1.1rem;
+    }
+
+    /* Reviews */
+    .review-summary {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      padding: 32px;
+      background: var(--cream);
+      border-radius: var(--radius-lg);
+      margin-bottom: 32px;
+    }
+
+    .review-avg {
+      text-align: center;
+    }
+
+    .review-avg .big-num {
+      font-family: var(--font-heading);
+      font-size: 4rem;
+      font-weight: 700;
+      color: var(--forest-green);
+      line-height: 1;
+    }
+
+    .rating-bars { flex: 1; }
+
+    .rating-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .bar-label { font-size: 0.8rem; color: var(--text-medium); width: 40px; }
+
+    .bar-track {
+      flex: 1;
+      height: 8px;
+      background: var(--cream-dark);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 4px;
+      transition: width 0.8s ease;
+    }
+
+    .bar-pct { font-size: 0.8rem; color: var(--text-light); width: 32px; text-align: right; }
+
+    @media (max-width: 900px) {
+      .product-detail-layout { grid-template-columns: 1fr; gap: 40px; }
+      .product-info { position: static; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-main { aspect-ratio: 3/2; }
+      .review-summary { flex-direction: column; align-items: flex-start; gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar" role="navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-name">Vedamrit</span>
+        <span class="logo-tagline">Ancient Wisdom. Modern Wellness.</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link active">Shop</a>
+        <a href="categories.html" class="nav-link">Categories</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <div class="nav-cta">
+        <button class="btn btn-whatsapp" onclick="orderOnWhatsApp()">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+          Order on WhatsApp
+        </button>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="shop.html" class="nav-link">Shop</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+      <button class="btn btn-whatsapp" onclick="orderOnWhatsApp()">Order on WhatsApp</button>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div style="background:var(--cream); padding: 100px 0 20px;">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span aria-hidden="true">›</span>
+        <a href="shop.html">Shop</a>
+        <span aria-hidden="true">›</span>
+        <span class="current">Brahmi Bhringraj Hair Oil</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- PRODUCT DETAIL -->
+  <section class="section" style="padding-top: 32px;" aria-labelledby="productTitle">
+    <div class="container">
+      <div class="product-detail-layout">
+
+        <!-- GALLERY -->
+        <div>
+          <div class="gallery-grid">
+            <div class="gallery-main" id="mainImgWrap">
+              <img src="assets/images/hair_oil.jpg" id="mainImg" alt="Vedamrit Brahmi Bhringraj Hair Oil — main view" />
+            </div>
+            <div class="gallery-thumb active" onclick="changeMainImg('assets/images/hair_oil.jpg', this)">
+              <img src="assets/images/hair_oil.jpg" alt="Brahmi Bhringraj Hair Oil — view 1" />
+            </div>
+            <div class="gallery-thumb" onclick="changeMainImg('assets/images/herbal_powder.jpg', this)">
+              <img src="assets/images/herbal_powder.jpg" alt="Brahmi Bhringraj Hair Oil — ingredients" />
+            </div>
+          </div>
+        </div>
+
+        <!-- PRODUCT INFO -->
+        <div class="product-info">
+          <div class="product-category" style="margin-bottom:12px;">Hair Care</div>
+
+          <div class="product-rating">
+            <div class="rating-stars" aria-label="4.8 out of 5 stars">★★★★★</div>
+            <span class="rating-count">4.8 · 142 reviews</span>
+          </div>
+
+          <h1 class="product-detail-name" id="productTitle">Brahmi Bhringraj Hair Oil</h1>
+
+          <div class="product-detail-price">
+            <span class="currency">₹</span>399
+          </div>
+          <div class="price-mrp">
+            <del>₹549</del>
+            <span class="price-discount">Save 27%</span>
+            · 200ml
+          </div>
+
+          <p class="product-short-desc">
+            A deeply nourishing Ayurvedic hair oil infused with the power of 21 time-tested herbs including Brahmi, Bhringraj, Amla, Hibiscus, and Coconut Oil. Crafted to strengthen hair from root to tip, reduce excessive hair fall, and promote long, thick, lustrous hair naturally.
+          </p>
+
+          <!-- SIZE -->
+          <div class="size-selector">
+            <div class="size-label">Select Size</div>
+            <div class="size-options">
+              <button class="size-btn active" onclick="selectSize(this)">200ml — ₹399</button>
+              <button class="size-btn" onclick="selectSize(this)">400ml — ₹699</button>
+              <button class="size-btn" onclick="selectSize(this)">1 Litre — ₹1,299</button>
+            </div>
+          </div>
+
+          <!-- QUANTITY -->
+          <div style="margin-bottom: 8px;">
+            <div class="size-label">Quantity</div>
+          </div>
+          <div class="qty-selector">
+            <button class="qty-btn" data-qty="minus" aria-label="Decrease quantity">−</button>
+            <input class="qty-input" type="number" value="1" min="1" max="99" id="qtyInput" aria-label="Product quantity" />
+            <button class="qty-btn" data-qty="plus" aria-label="Increase quantity">+</button>
+          </div>
+
+          <!-- ORDER BUTTON -->
+          <div class="order-actions">
+            <button class="btn-wa-full" onclick="orderOnWhatsApp()" id="mainOrderBtn">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+              Order on WhatsApp
+            </button>
+          </div>
+
+          <!-- TRUST BADGES -->
+          <div class="trust-badges">
+            <div class="trust-badge"><span class="trust-badge-icon">🚚</span>Free Delivery over ₹499</div>
+            <div class="trust-badge"><span class="trust-badge-icon">💵</span>COD Available</div>
+            <div class="trust-badge"><span class="trust-badge-icon">🔄</span>Easy Returns</div>
+            <div class="trust-badge"><span class="trust-badge-icon">🌿</span>100% Natural</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCT TABS -->
+      <div style="margin-top: 80px;" class="tab-container">
+        <div class="tabs" role="tablist" aria-label="Product details">
+          <button class="tab-btn" role="tab">Description</button>
+          <button class="tab-btn" role="tab">Benefits</button>
+          <button class="tab-btn" role="tab">Ingredients</button>
+          <button class="tab-btn" role="tab">How to Use</button>
+          <button class="tab-btn" role="tab">Storage & FAQ</button>
+          <button class="tab-btn" role="tab">Reviews</button>
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="tab-panel" role="tabpanel">
+          <h2 class="section-title" style="font-size:1.6rem; margin-bottom:16px;">About This Product</h2>
+          <p style="color:var(--text-medium); line-height:1.9; margin-bottom:16px;">
+            Vedamrit Brahmi Bhringraj Hair Oil is a premium Ayurvedic hair care formulation that honours the wisdom of traditional Indian hair care. Brahmi and Bhringraj — two of Ayurveda's most celebrated hair herbs — form the heart of this luxuriously nourishing oil, supported by a rich blend of 19 additional herbs.
+          </p>
+          <p style="color:var(--text-medium); line-height:1.9; margin-bottom:16px;">
+            Cold-pressed coconut oil forms the base, carrying the therapeutic properties of the herbs deep into the scalp and hair shaft. Regular use helps strengthen the hair follicles, reduce excessive hair fall, and create the ideal conditions for healthy hair growth.
+          </p>
+          <p style="color:var(--text-medium); line-height:1.9;">
+            This product is free from mineral oil, parabens, sulphates, artificial fragrances, and harmful chemicals. It is suitable for all hair types.
+          </p>
+        </div>
+
+        <!-- BENEFITS -->
+        <div class="tab-panel" role="tabpanel">
+          <h2 class="section-title" style="font-size:1.6rem; margin-bottom:28px;">Key Benefits</h2>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+            <div class="why-card">
+              <div class="why-icon">💪</div>
+              <h3 class="why-title">Reduces Hair Fall</h3>
+              <p class="why-desc">Bhringraj and Brahmi strengthen hair roots, significantly reducing excessive hair fall and breakage over regular use.</p>
+            </div>
+            <div class="why-card">
+              <div class="why-icon">🌱</div>
+              <h3 class="why-title">Promotes Hair Growth</h3>
+              <p class="why-desc">Nourishes dormant hair follicles and stimulates the scalp to encourage healthy, natural hair growth.</p>
+            </div>
+            <div class="why-card">
+              <div class="why-icon">✨</div>
+              <h3 class="why-title">Adds Natural Shine</h3>
+              <p class="why-desc">Amla and coconut oil coat each hair strand, restoring natural lustre and making hair visibly shinier.</p>
+            </div>
+            <div class="why-card">
+              <div class="why-icon">🧘</div>
+              <h3 class="why-title">Scalp Nourishment</h3>
+              <p class="why-desc">Deeply conditions the scalp, reduces dryness and dandruff, and maintains a healthy scalp environment.</p>
+            </div>
+            <div class="why-card">
+              <div class="why-icon">🌡️</div>
+              <h3 class="why-title">Cooling Effect</h3>
+              <p class="why-desc">Brahmi has a natural cooling effect on the scalp, which helps reduce stress and promote better sleep quality.</p>
+            </div>
+            <div class="why-card">
+              <div class="why-icon">🔒</div>
+              <h3 class="why-title">Prevents Premature Greying</h3>
+              <p class="why-desc">Bhringraj and Amla are traditionally known in Ayurveda to support natural hair pigmentation.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- INGREDIENTS -->
+        <div class="tab-panel" role="tabpanel">
+          <h2 class="section-title" style="font-size:1.6rem; margin-bottom:20px;">Ingredients</h2>
+          <p style="color:var(--text-medium); margin-bottom:20px;">Our formula is made from pure, natural ingredients — nothing synthetic, nothing harmful.</p>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+            <div style="background:var(--cream); padding:16px 20px; border-radius:var(--radius-md);">
+              <strong style="color:var(--forest-green);">Bhringraj</strong>
+              <p style="font-size:0.85rem; color:var(--text-medium); margin-top:4px;">Hair fall reduction, growth stimulation</p>
+            </div>
+            <div style="background:var(--cream); padding:16px 20px; border-radius:var(--radius-md);">
+              <strong style="color:var(--forest-green);">Brahmi</strong>
+              <p style="font-size:0.85rem; color:var(--text-medium); margin-top:4px;">Scalp cooling, follicle strengthening</p>
+            </div>
+            <div style="background:var(--cream); padding:16px 20px; border-radius:var(--radius-md);">
+              <strong style="color:var(--forest-green);">Amla (Indian Gooseberry)</strong>
+              <p style="font-size:0.85rem; color:var(--text-medium); margin-top:4px;">Vitamin C, natural shine, pigmentation</p>
+            </div>
+            <div style="background:var(--cream); padding:16px 20px; border-radius:var(--radius-md);">
+              <strong style="color:var(--forest-green);">Hibiscus</strong>
+              <p style="font-size:0.85rem; color:var(--text-medium); margin-top:4px;">Conditions hair, prevents split ends</p>
+            </div>
+            <div style="background:var(--cream); padding:16px 20px; border-radius:var(--radius-md);">
+              <strong style="color:var(--forest-green);">Cold-Pressed Coconut Oil</strong>
+              <p style="font-size:0.85rem; color:var(--text-medium); margin-top:4px;">Deep conditioning base oil</p>
+            </div>
+            <div style="background:var(--cream); padding:16px 20px; border-radius:var(--radius-md);">
+              <strong style="color:var(--forest-green);">Neem</strong>
+              <p style="font-size:0.85rem; color:var(--text-medium); margin-top:4px;">Anti-dandruff, scalp purification</p>
+            </div>
+            <div style="background:var(--cream); padding:16px 20px; border-radius:var(--radius-md);">
+              <strong style="color:var(--forest-green);">Sesame Oil</strong>
+              <p style="font-size:0.85rem; color:var(--text-medium); margin-top:4px;">Deep penetration, warming property</p>
+            </div>
+            <div style="background:var(--cream); padding:16px 20px; border-radius:var(--radius-md);">
+              <strong style="color:var(--forest-green);">+ 14 more herbs</strong>
+              <p style="font-size:0.85rem; color:var(--text-medium); margin-top:4px;">A complete Ayurvedic formulation</p>
+            </div>
+          </div>
+          <p style="font-size:0.8rem; color:var(--text-light); margin-top:20px;"><em>* Free from mineral oil, parabens, sulphates, silicones, artificial colours and fragrances.</em></p>
+        </div>
+
+        <!-- HOW TO USE -->
+        <div class="tab-panel" role="tabpanel">
+          <h2 class="section-title" style="font-size:1.6rem; margin-bottom:28px;">How to Use</h2>
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <div style="display:flex; gap:20px; align-items:flex-start;">
+              <div style="width:40px; height:40px; background:var(--forest-green); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; flex-shrink:0;">1</div>
+              <div>
+                <strong style="color:var(--forest-green);">Warm the oil gently</strong>
+                <p style="color:var(--text-medium); margin-top:4px; line-height:1.7;">Pour a small amount into a bowl and warm it slightly (not hot). Warm oil penetrates the scalp more effectively.</p>
+              </div>
+            </div>
+            <div style="display:flex; gap:20px; align-items:flex-start;">
+              <div style="width:40px; height:40px; background:var(--forest-green); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; flex-shrink:0;">2</div>
+              <div>
+                <strong style="color:var(--forest-green);">Apply to scalp</strong>
+                <p style="color:var(--text-medium); margin-top:4px; line-height:1.7;">Part your hair into sections and apply the oil directly to the scalp using your fingertips.</p>
+              </div>
+            </div>
+            <div style="display:flex; gap:20px; align-items:flex-start;">
+              <div style="width:40px; height:40px; background:var(--forest-green); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; flex-shrink:0;">3</div>
+              <div>
+                <strong style="color:var(--forest-green);">Massage for 10–15 minutes</strong>
+                <p style="color:var(--text-medium); margin-top:4px; line-height:1.7;">Use gentle circular motions with your fingertips to massage the scalp for improved circulation and absorption.</p>
+              </div>
+            </div>
+            <div style="display:flex; gap:20px; align-items:flex-start;">
+              <div style="width:40px; height:40px; background:var(--forest-green); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; flex-shrink:0;">4</div>
+              <div>
+                <strong style="color:var(--forest-green);">Leave for minimum 2 hours</strong>
+                <p style="color:var(--text-medium); margin-top:4px; line-height:1.7;">For best results, leave the oil on overnight. Wrap hair with a warm towel to enhance absorption.</p>
+              </div>
+            </div>
+            <div style="display:flex; gap:20px; align-items:flex-start;">
+              <div style="width:40px; height:40px; background:var(--forest-green); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; flex-shrink:0;">5</div>
+              <div>
+                <strong style="color:var(--forest-green);">Wash with mild shampoo</strong>
+                <p style="color:var(--text-medium); margin-top:4px; line-height:1.7;">Rinse with lukewarm water and a gentle, sulphate-free shampoo. Use 2–3 times per week for best results.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STORAGE & FAQ -->
+        <div class="tab-panel" role="tabpanel">
+          <h2 class="section-title" style="font-size:1.6rem; margin-bottom:12px;">Storage Instructions</h2>
+          <p style="color:var(--text-medium); margin-bottom:32px; line-height:1.8;">Store in a cool, dry place away from direct sunlight and heat. Keep the cap tightly closed. Do not refrigerate. Best used within 24 months of manufacture date (printed on bottle).</p>
+
+          <h2 class="section-title" style="font-size:1.6rem; margin-bottom:20px;">FAQs</h2>
+          <div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">Is this oil suitable for all hair types?<span class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></span></button>
+              <div class="faq-answer"><div class="faq-answer-inner">Yes, the Brahmi Bhringraj Hair Oil is suitable for all hair types — straight, wavy, curly, oily, dry, or normal. It is particularly beneficial for those experiencing hair thinning or hair fall.</div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">How long before I see results?<span class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></span></button>
+              <div class="faq-answer"><div class="faq-answer-inner">Most customers notice reduced hair fall within 4–6 weeks of consistent use. Visible improvement in hair thickness and length is typically seen after 2–3 months of regular use.</div></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">Can I use this during pregnancy?<span class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></span></button>
+              <div class="faq-answer"><div class="faq-answer-inner">While our products use natural ingredients, we always recommend consulting your healthcare provider before starting any new herbal or wellness routine during pregnancy or breastfeeding.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- REVIEWS -->
+        <div class="tab-panel" role="tabpanel">
+          <h2 class="section-title" style="font-size:1.6rem; margin-bottom:28px;">Customer Reviews</h2>
+
+          <div class="review-summary">
+            <div class="review-avg">
+              <div class="big-num">4.8</div>
+              <div class="stars" style="justify-content:center; margin:8px 0;">★★★★★</div>
+              <div style="font-size:0.82rem; color:var(--text-light);">142 reviews</div>
+            </div>
+            <div class="rating-bars" style="flex:1;">
+              <div class="rating-bar-row"><span class="bar-label">5 ★</span><div class="bar-track"><div class="bar-fill" style="width:75%"></div></div><span class="bar-pct">75%</span></div>
+              <div class="rating-bar-row"><span class="bar-label">4 ★</span><div class="bar-track"><div class="bar-fill" style="width:18%"></div></div><span class="bar-pct">18%</span></div>
+              <div class="rating-bar-row"><span class="bar-label">3 ★</span><div class="bar-track"><div class="bar-fill" style="width:5%"></div></div><span class="bar-pct">5%</span></div>
+              <div class="rating-bar-row"><span class="bar-label">2 ★</span><div class="bar-track"><div class="bar-fill" style="width:1%"></div></div><span class="bar-pct">1%</span></div>
+              <div class="rating-bar-row"><span class="bar-label">1 ★</span><div class="bar-track"><div class="bar-fill" style="width:1%"></div></div><span class="bar-pct">1%</span></div>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <div class="testimonial-card">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">"I've been dealing with severe hair fall for 2 years and nothing worked. Started using Vedamrit's Brahmi Bhringraj oil 3 months ago and the difference is remarkable. My hair fall reduced by at least 60% and I can see new baby hairs growing!"</p>
+              <div class="testimonial-author">
+                <div class="author-avatar">S</div>
+                <div class="author-info"><div class="author-name">Sneha Iyer</div><div class="author-location">Chennai, Tamil Nadu · Verified Buyer</div></div>
+              </div>
+            </div>
+            <div class="testimonial-card">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">"Excellent quality. The oil smells natural and herby — not overpowering. My scalp feels so much better and hair looks healthier. Ordering was super easy through WhatsApp and delivery was fast. Highly recommended!"</p>
+              <div class="testimonial-author">
+                <div class="author-avatar">M</div>
+                <div class="author-info"><div class="author-name">Meera Joshi</div><div class="author-location">Pune, Maharashtra · Verified Buyer</div></div>
+              </div>
+            </div>
+            <div class="testimonial-card">
+              <div class="stars">★★★★☆</div>
+              <p class="testimonial-text">"Good product. Takes time to show results as expected with any natural oil. The packaging is really premium and the oil texture is perfect — not too heavy, not too light. Will continue using."</p>
+              <div class="testimonial-author">
+                <div class="author-avatar">K</div>
+                <div class="author-info"><div class="author-name">Kavita Reddy</div><div class="author-location">Hyderabad, Telangana · Verified Buyer</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ORDER CTA STRIP -->
+      <div style="background: linear-gradient(135deg, var(--forest-green-dark), var(--forest-green)); border-radius: var(--radius-xl); padding: 48px; text-align:center; margin-top:64px;">
+        <span class="label-text" style="color:var(--gold);">Ready to Order?</span>
+        <h2 style="color:var(--white); font-size:2rem; margin: 12px 0;">Order Now via WhatsApp</h2>
+        <p style="color:rgba(255,255,255,0.8); margin-bottom:28px;">Fast, simple, and no payment gateway needed. We'll confirm your order and delivery details directly.</p>
+        <button class="btn-wa-full" style="display:inline-flex; max-width:320px;" onclick="orderOnWhatsApp()" id="bottomOrderBtn">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+          Order on WhatsApp
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLOATING WA -->
+  <a href="#" class="whatsapp-float" onclick="orderOnWhatsApp(); return false;" id="floatingWaBtn">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+    <span class="wa-label">Order on WhatsApp</span>
+  </a>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="assets/main.js"></script>
+  <script>
+    const PRODUCT_NAME = 'Brahmi Bhringraj Hair Oil';
+
+    function orderOnWhatsApp() {
+      const qty = document.getElementById('qtyInput')?.value || '1';
+      const activeSize = document.querySelector('.size-btn.active')?.textContent || '200ml';
+      const productStr = `${PRODUCT_NAME} (${activeSize.split('—')[0].trim()})`;
+      openWhatsApp(productStr, qty);
+    }
+
+    function changeMainImg(src, thumb) {
+      document.getElementById('mainImg').src = src;
+      document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+    }
+
+    function selectSize(btn) {
+      document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+</html>

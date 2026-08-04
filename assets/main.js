@@ -182,14 +182,80 @@ function initContactForm() {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const name = form.querySelector('#contactName')?.value || '';
-    const message = form.querySelector('#contactMessage')?.value || '';
-    const phone = form.querySelector('#contactPhone')?.value || '';
 
-    const waMsg = `Hello Vedamrit,\n\nName: ${name}\nPhone: ${phone}\n\nMessage:\n${message}\n\nThank you.`;
+    // Reset errors
+    let isValid = true;
+    const errorMsgs = form.querySelectorAll('.error-msg');
+    const inputs = form.querySelectorAll('input, select, textarea');
+    
+    errorMsgs.forEach(msg => msg.style.display = 'none');
+    inputs.forEach(input => input.classList.remove('invalid'));
+
+    // Name Validation
+    const nameInput = form.querySelector('#contactName');
+    const name = nameInput?.value.trim() || '';
+    if (!name) {
+      isValid = false;
+      nameInput.classList.add('invalid');
+      const errorMsg = form.querySelector('#nameError');
+      if (errorMsg) errorMsg.style.display = 'block';
+    }
+
+    // Phone Validation
+    const phoneInput = form.querySelector('#contactPhone');
+    const phone = phoneInput?.value.trim() || '';
+    if (!phone) {
+      isValid = false;
+      phoneInput.classList.add('invalid');
+      const errorMsg = form.querySelector('#phoneError');
+      if (errorMsg) errorMsg.style.display = 'block';
+    }
+
+    // Email Validation
+    const emailInput = form.querySelector('#contactEmail');
+    const email = emailInput?.value.trim() || '';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      isValid = false;
+      emailInput.classList.add('invalid');
+      const errorMsg = form.querySelector('#emailError');
+      if (errorMsg) {
+        errorMsg.textContent = !email ? 'Email address is required' : 'Please enter a valid email address';
+        errorMsg.style.display = 'block';
+      }
+    }
+
+    // Subject Validation
+    const subjectInput = form.querySelector('#contactSubject');
+    const subjectVal = subjectInput?.value || '';
+    const subjectText = subjectInput?.options[subjectInput.selectedIndex]?.text || '';
+    if (!subjectVal) {
+      isValid = false;
+      subjectInput.classList.add('invalid');
+      const errorMsg = form.querySelector('#subjectError');
+      if (errorMsg) errorMsg.style.display = 'block';
+    }
+
+    // Message Validation
+    const messageInput = form.querySelector('#contactMessage');
+    const message = messageInput?.value.trim() || '';
+    if (!message) {
+      isValid = false;
+      messageInput.classList.add('invalid');
+      const errorMsg = form.querySelector('#messageError');
+      if (errorMsg) errorMsg.style.display = 'block';
+    }
+
+    if (!isValid) {
+      showToast('Please fill all required fields correctly 🌿');
+      return;
+    }
+    
+    // WhatsApp format showing it's a Customer message / inquiry
+    const waMsg = `*Customer Message / Inquiry (PranVeda)*\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nSubject: ${subjectText}\n\nMessage:\n${message}\n\nThank you.`;
     const encoded = encodeURIComponent(waMsg);
     window.open(`https://wa.me/${WA_NUMBER}?text=${encoded}`, '_blank');
-    showToast('Message sent via WhatsApp! 🌿');
+    showToast('Inquiry prepared for WhatsApp! 🌿');
     form.reset();
   });
 }

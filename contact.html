@@ -59,6 +59,30 @@
     @media (max-width: 900px) {
       .contact-layout { grid-template-columns: 1fr; }
     }
+
+    /* Validation Styles */
+    .form-group {
+      position: relative;
+      margin-bottom: 24px !important;
+    }
+    .error-msg {
+      color: #d32f2f;
+      font-size: 0.8rem;
+      margin-top: 6px;
+      display: none;
+      font-weight: 500;
+    }
+    .contact-form input.invalid,
+    .contact-form textarea.invalid,
+    .contact-form select.invalid {
+      border-color: #d32f2f !important;
+      background-color: #ffebee !important;
+    }
+    .contact-form input.invalid:focus,
+    .contact-form textarea.invalid:focus,
+    .contact-form select.invalid:focus {
+      box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15) !important;
+    }
   </style>
 </head>
 <body>
@@ -171,19 +195,22 @@
                 <div class="form-group">
                   <label for="contactName">Full Name *</label>
                   <input type="text" id="contactName" name="name" placeholder="Your name" required autocomplete="name" />
+                  <span class="error-msg" id="nameError">Full name is required</span>
                 </div>
                 <div class="form-group">
                   <label for="contactPhone">Phone / WhatsApp *</label>
                   <input type="tel" id="contactPhone" name="phone" placeholder="+91 XXXXX XXXXX" required autocomplete="tel" />
+                  <span class="error-msg" id="phoneError">Phone number is required</span>
                 </div>
               </div>
               <div class="form-group">
-                <label for="contactEmail">Email Address</label>
-                <input type="email" id="contactEmail" name="email" placeholder="your@email.com" autocomplete="email" />
+                <label for="contactEmail">Email Address *</label>
+                <input type="email" id="contactEmail" name="email" placeholder="your@email.com" required autocomplete="email" />
+                <span class="error-msg" id="emailError">Please enter a valid email address</span>
               </div>
               <div class="form-group">
-                <label for="contactSubject">Subject</label>
-                <select id="contactSubject" name="subject">
+                <label for="contactSubject">Subject *</label>
+                <select id="contactSubject" name="subject" required>
                   <option value="">Select a topic</option>
                   <option value="order">Place an Order</option>
                   <option value="track">Track My Order</option>
@@ -191,10 +218,12 @@
                   <option value="product">Product Query</option>
                   <option value="other">Other</option>
                 </select>
+                <span class="error-msg" id="subjectError">Please select a subject</span>
               </div>
               <div class="form-group">
                 <label for="contactMessage">Message *</label>
                 <textarea id="contactMessage" name="message" placeholder="How can we help you? Tell us your query or what you'd like to order..." required rows="5"></textarea>
+                <span class="error-msg" id="messageError">Message is required</span>
               </div>
               <button type="submit" class="btn btn-whatsapp" style="width:100%; justify-content:center; font-size:1rem; padding:16px;" id="sendMsgBtn">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>

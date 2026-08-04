@@ -6,7 +6,7 @@
 /* =============================================
    WHATSAPP UTILITY
    ============================================= */
-const WA_NUMBER = '919999999999'; // Replace with real number
+const WA_NUMBER = '919558843327'; // Replace with real number
 
 function openWhatsApp(productName = '', quantity = '1') {
   let message = '';
@@ -185,7 +185,7 @@ function initContactForm() {
     const name = form.querySelector('#contactName')?.value || '';
     const message = form.querySelector('#contactMessage')?.value || '';
     const phone = form.querySelector('#contactPhone')?.value || '';
-    
+
     const waMsg = `Hello Vedamrit,\n\nName: ${name}\nPhone: ${phone}\n\nMessage:\n${message}\n\nThank you.`;
     const encoded = encodeURIComponent(waMsg);
     window.open(`https://wa.me/${WA_NUMBER}?text=${encoded}`, '_blank');

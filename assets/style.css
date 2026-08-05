@@ -1672,6 +1672,7 @@ h1, h2, h3, h4, h5 {
 .footer-link svg{
     width:18px;
     height:18px;
+     stroke-width:2.5;
 }
 .footer-link:hover .footer-icon{
     color:#FFFFFF;      /* Hover par bhi white */
@@ -1692,5 +1693,17 @@ body{
 .marquee-strip,
 .products-grid{
     overflow:hidden;
+}
+
+.footer-link svg{
+    width:18px;
+    height:18px;
+    min-width:18px;
+    flex-shrink:0;
+    color:#FFFFFF;
+    stroke:currentColor;
+    stroke-width:2.5;   /* Pehle 2 tha */
+    stroke-linecap:round;
+    stroke-linejoin:round;
 }
 

@@ -1735,3 +1735,85 @@ body{
   border-radius: 4px;
 }
 
+/* Footer Layout Fix */
+.product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.product-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* 1. Alignment of Prices in Single Line */
+.product-price-row {
+  display: flex;
+  align-items: center; /* Vertical centering */
+  gap: 8px; /* Space between current price, old price, and discount */
+  white-space: nowrap;
+}
+
+.product-price {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1b4332;
+  line-height: 1;
+}
+
+/* 2. Old Price Strikethrough (Cross Line Effect) */
+.old-price {
+  font-size: 0.95rem;
+  color: #888888;
+  text-decoration: line-through; /* Strikethrough line */
+  text-decoration-color: #d90429; /* Optional: Red line for high visibility */
+}
+
+.discount-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #2d6a4f;
+  background-color: #e8f5e9;
+  padding: 3px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.product-size {
+  font-size: 0.8rem;
+  color: #666666;
+}
+
+/* 3. Button Styling with WhatsApp Icon */
+.btn-wa-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #25d366; /* WhatsApp Brand Color */
+  color: #ffffff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(37, 211, 102, 0.25);
+}
+
+.btn-wa-sm i {
+  font-size: 1.1rem;
+}
+
+.btn-wa-sm:hover {
+  background-color: #1ebe5d;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(37, 211, 102, 0.35);
+}
+

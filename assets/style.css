@@ -1707,3 +1707,31 @@ body{
     stroke-linejoin:round;
 }
 
+.product-price-block {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.product-price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1b4332; /* Aapki site ke theme ke hisab se color */
+}
+
+.old-price {
+  font-size: 0.95rem;
+  color: #888888;
+  text-decoration: line-through; /* Strikethrough effect */
+}
+
+.discount-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #b7094c;
+  background-color: #ffccd5;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+

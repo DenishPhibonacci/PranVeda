@@ -1635,3 +1635,21 @@ h1, h2, h3, h4, h5 {
     border-radius:30px;
 }
 
+.address-link{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+}
+
+.address-link .footer-icon{
+    width:18px;
+    height:18px;
+    min-width:18px;
+    margin-top:4px;
+    color:#C9A227;
+}
+
+.address-link div{
+    line-height:1.8;
+}
+

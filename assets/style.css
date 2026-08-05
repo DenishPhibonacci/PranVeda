@@ -155,11 +155,12 @@ h1, h2, h3, h4, h5 {
 /* =============================================
    Layout Utilities
    ============================================= */
-.container {
-  width: 100%;
-  max-width: var(--container-width);
-  margin: 0 auto;
-  padding: 0 24px;
+.container{
+    width:100%;
+    max-width:1280px;
+    margin:auto;
+    padding:0 20px;
+    box-sizing:border-box;
 }
 
 .section {
@@ -1557,7 +1558,7 @@ h1, h2, h3, h4, h5 {
 
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
 
-  .hero { height: 100svh; }
+  .hero { height: 100svh; overflow:hidden;}
 
   .whatsapp-float .wa-label { display: none; }
   .whatsapp-float { padding: 14px; border-radius: 50%; }
@@ -1653,7 +1654,6 @@ h1, h2, h3, h4, h5 {
     line-height:1.8;
 }
 
-
 .footer-link{
     display:flex;
     align-items:center;
@@ -1661,14 +1661,34 @@ h1, h2, h3, h4, h5 {
 }
 
 .footer-icon{
-    width:17px;
-    height:17px;
-    min-width:17px;
+    width:18px;
+    height:18px;
+    min-width:18px;
+    flex-shrink:0;
+
     color:#FFFFFF;
-    transition:.3s;
 }
 
-.footer-link:hover .footer-icon{
-    color:#FFFFFF;
+.footer-link svg{
+    width:18px;
+    height:18px;
+}
+
+html,
+body{
+    width:100%;
+    overflow-x:hidden;
+}
+
+html,
+body{
+    overflow-x:hidden !important;
+}
+
+.hero,
+.hero-bg,
+.marquee-strip,
+.products-grid{
+    overflow:hidden;
 }
 

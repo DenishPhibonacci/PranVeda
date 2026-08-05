@@ -184,43 +184,65 @@ invoiceDate.value=new Date().toISOString().split("T")[0];
 // Product Price
 //=========================================
 
-product.addEventListener("change",()=>{
+/*=========================================
+        LOAD PRODUCTS
+=========================================*/
 
-switch(product.value){
+function loadProducts(){
 
-case "Brahmi Hair Oil":
+    if(!product) return;
 
-price.value=399;
+    let data =
+    JSON.parse(localStorage.getItem("PranVedaProducts")) || [];
 
-break;
+    product.innerHTML = "";
 
-case "Kumkumadi Cream":
+    product.innerHTML +=
+    `<option value="">Select Product</option>`;
 
-price.value=499;
+    data.forEach(item=>{
 
-break;
+        product.innerHTML += `
 
-case "Ashwagandha Powder":
+        <option
 
-price.value=299;
+            value="${item.name}"
 
-break;
+            data-price="${item.price}"
 
-case "Immunity Tonic":
+            data-stock="${item.stock}"
 
-price.value=450;
+        >
 
-break;
+            ${item.name}
 
-default:
+        </option>
 
-price.value="";
+        `;
+
+    });
 
 }
 
+loadProducts();
+
+/*=========================================
+        PRODUCT CHANGE
+=========================================*/
+
+if(product){
+
+product.addEventListener("change",()=>{
+
+let option =
+product.options[product.selectedIndex];
+
+price.value =
+option.getAttribute("data-price") || "";
+
 });
 
-
+}
 //=========================================
 // Add Product
 //=========================================
@@ -240,7 +262,13 @@ let q=parseInt(qty.value);
 let p=parseFloat(price.value);
 
 let total=q*p;
+let selected =
+product.options[product.selectedIndex];
 
+let stock =
+parseInt(
+selected.getAttribute("data-stock")
+);
 items.push({
 
 name:product.value,
@@ -249,11 +277,9 @@ qty:q,
 
 price:p,
 
+stock:stock,
+
 total:total
-
-});
-
-renderTable();
 
 });
 
@@ -1073,5 +1099,649 @@ JSON.stringify(sample)
 );
 
 loadOrders();
+
+}
+
+
+/*=========================================
+        PRODUCTS PAGE
+=========================================*/
+
+const productName = document.getElementById("productName");
+const productCategory = document.getElementById("productCategory");
+const mrp = document.getElementById("mrp");
+const sellingPrice = document.getElementById("sellingPrice");
+const stock = document.getElementById("stock");
+const status = document.getElementById("status");
+const imageUrl = document.getElementById("imageUrl");
+
+const addNewProduct = document.getElementById("addNewProduct");
+
+const productBody = document.getElementById("productBody");
+
+const searchProduct = document.getElementById("searchProduct");
+
+let products = JSON.parse(localStorage.getItem("PranVedaProducts")) || [];
+
+let editIndex = -1;
+
+
+/*==============================
+Load Products
+==============================*/
+
+renderProducts();
+
+
+/*==============================
+Render Products
+==============================*/
+
+function renderProducts(list = products){
+
+    if(!productBody) return;
+
+    productBody.innerHTML="";
+
+    list.forEach((product,index)=>{
+
+        productBody.innerHTML +=`
+
+<tr>
+
+<td>
+
+<img
+src="${product.image}"
+class="product-image"
+onerror="this.src='../assets/images/no-image.png'">
+
+</td>
+
+<td>${product.name}</td>
+
+<td>${product.category}</td>
+
+<td>₹${product.mrp}</td>
+
+<td>₹${product.price}</td>
+
+<td>${product.stock}</td>
+
+<td>
+
+<span class="stock-badge ${product.status=='In Stock' ? 'stock-in':'stock-out'}">
+
+${product.status}
+
+</span>
+
+</td>
+
+<td>
+
+<div class="product-action">
+
+<button
+class="product-edit"
+onclick="editProduct(${index})">
+
+<i class="fas fa-pen"></i>
+
+</button>
+
+<button
+class="product-delete"
+onclick="deleteProduct(${index})">
+
+<i class="fas fa-trash"></i>
+
+</button>
+
+</div>
+
+</td>
+
+</tr>
+
+`;
+
+    });
+
+}
+
+
+/*==============================
+Add Product
+==============================*/
+
+if(addNewProduct){
+
+addNewProduct.addEventListener("click",()=>{
+
+    if(productName.value==""){
+
+        alert("Enter Product Name");
+
+        return;
+
+    }
+
+    let obj={
+
+        name:productName.value,
+
+        category:productCategory.value,
+
+        mrp:mrp.value,
+
+        price:sellingPrice.value,
+
+        stock:stock.value,
+
+        status:status.value,
+
+        image:imageUrl.value
+
+    };
+
+    if(editIndex==-1){
+
+        products.push(obj);
+
+    }else{
+
+        products[editIndex]=obj;
+
+        editIndex=-1;
+
+        addNewProduct.innerHTML='<i class="fas fa-plus"></i> Add Product';
+
+    }
+
+    localStorage.setItem(
+
+        "PranVedaProducts",
+
+        JSON.stringify(products)
+
+    );
+
+    renderProducts();
+
+    clearForm();
+
+});
+
+}
+
+
+/*==============================
+Clear Form
+==============================*/
+
+function clearForm(){
+
+productName.value="";
+mrp.value="";
+sellingPrice.value="";
+stock.value="";
+imageUrl.value="";
+
+}
+
+
+/*==============================
+Delete
+==============================*/
+
+function deleteProduct(index){
+
+if(!confirm("Delete Product ?")) return;
+
+products.splice(index,1);
+
+localStorage.setItem(
+
+"PranVedaProducts",
+
+JSON.stringify(products)
+
+);
+
+renderProducts();
+
+}
+
+
+/*==============================
+Edit
+==============================*/
+
+function editProduct(index){
+
+let p=products[index];
+
+productName.value=p.name;
+
+productCategory.value=p.category;
+
+mrp.value=p.mrp;
+
+sellingPrice.value=p.price;
+
+stock.value=p.stock;
+
+status.value=p.status;
+
+imageUrl.value=p.image;
+
+editIndex=index;
+
+addNewProduct.innerHTML='<i class="fas fa-save"></i> Update Product';
+
+}
+
+
+/*==============================
+Search
+==============================*/
+
+if(searchProduct){
+
+searchProduct.addEventListener("keyup",()=>{
+
+let value=searchProduct.value.toLowerCase();
+
+let result=products.filter(item=>
+
+item.name.toLowerCase().includes(value)
+
+||
+
+item.category.toLowerCase().includes(value)
+
+);
+
+renderProducts(result);
+
+});
+
+}
+
+
+/*==============================
+Default Products
+==============================*/
+
+if(products.length==0){
+
+products=[
+
+{
+
+name:"Brahmi Hair Oil",
+
+category:"Hair Care",
+
+mrp:499,
+
+price:399,
+
+stock:50,
+
+status:"In Stock",
+
+image:"../assets/images/hair_oil.jpg"
+
+},
+
+{
+
+name:"Kumkumadi Cream",
+
+category:"Skin Care",
+
+mrp:599,
+
+price:499,
+
+stock:25,
+
+status:"In Stock",
+
+image:"../assets/images/face_cream.jpg"
+
+},
+
+{
+
+name:"Ashwagandha Powder",
+
+category:"Wellness",
+
+mrp:399,
+
+price:299,
+
+stock:80,
+
+status:"In Stock",
+
+image:"../assets/images/herbal_powder.jpg"
+
+},
+
+{
+
+name:"Immunity Tonic",
+
+category:"Immunity",
+
+mrp:550,
+
+price:450,
+
+stock:40,
+
+status:"In Stock",
+
+image:"../assets/images/immunity_booster.jpg"
+
+}
+
+];
+
+localStorage.setItem(
+
+"PranVedaProducts",
+
+JSON.stringify(products)
+
+);
+
+renderProducts();
+
+}
+
+
+/*=========================================
+        CUSTOMERS PAGE
+=========================================*/
+
+const customerBody = document.getElementById("customerBody");
+const searchCustomer = document.getElementById("searchCustomer");
+
+let customers = [];
+
+/*=========================
+Load Customers
+=========================*/
+
+function loadCustomers(){
+
+    const orders = JSON.parse(localStorage.getItem("pranvedaOrders")) || [];
+
+    let customerMap = {};
+
+    orders.forEach(order=>{
+
+        if(customerMap[order.phone]){
+
+            customerMap[order.phone].orders++;
+
+            customerMap[order.phone].purchase += Number(order.total);
+
+        }else{
+
+            customerMap[order.phone]={
+
+                name:order.customer,
+
+                phone:order.phone,
+
+                address:order.address,
+
+                orders:1,
+
+                purchase:Number(order.total)
+
+            };
+
+        }
+
+    });
+
+    customers = Object.values(customerMap);
+
+    renderCustomers(customers);
+
+}
+
+loadCustomers();
+
+
+/*=========================
+Render Customer
+=========================*/
+
+function renderCustomers(list){
+
+    if(!customerBody) return;
+
+    customerBody.innerHTML="";
+
+    let totalPurchase=0;
+
+    list.forEach((customer,index)=>{
+
+        totalPurchase += customer.purchase;
+
+        let badge="badge-new";
+        let badgeText="New";
+
+        if(customer.orders>=5){
+
+            badge="badge-premium";
+            badgeText="Premium";
+
+        }else if(customer.orders>=2){
+
+            badge="badge-regular";
+            badgeText="Regular";
+
+        }
+
+        customerBody.innerHTML +=`
+
+<tr>
+
+<td>
+
+<div class="customer-info">
+
+<div class="customer-avatar">
+
+${customer.name.charAt(0).toUpperCase()}
+
+</div>
+
+<div>
+
+<b>${customer.name}</b><br>
+
+<span class="customer-badge ${badge}">
+
+${badgeText}
+
+</span>
+
+</div>
+
+</div>
+
+</td>
+
+<td>
+
+<a href="https://wa.me/91${customer.phone}" target="_blank">
+
+${customer.phone}
+
+</a>
+
+</td>
+
+<td>${customer.address}</td>
+
+<td>${customer.orders}</td>
+
+<td>₹${customer.purchase}</td>
+
+<td>
+
+<div class="customer-action">
+
+<button
+
+class="customer-view"
+
+onclick="viewCustomer(${index})">
+
+<i class="fas fa-eye"></i>
+
+</button>
+
+<button
+
+class="customer-edit"
+
+onclick="editCustomer(${index})">
+
+<i class="fas fa-pen"></i>
+
+</button>
+
+<button
+
+class="customer-delete"
+
+onclick="deleteCustomer(${index})">
+
+<i class="fas fa-trash"></i>
+
+</button>
+
+</div>
+
+</td>
+
+</tr>
+
+`;
+
+    });
+
+    document.getElementById("totalCustomers").innerHTML=list.length;
+
+    document.getElementById("customerSales").innerHTML="₹"+totalPurchase;
+
+    document.getElementById("newCustomers").innerHTML=
+    list.filter(c=>c.orders==1).length;
+
+    document.getElementById("returnCustomers").innerHTML=
+    list.filter(c=>c.orders>=2).length;
+
+}
+
+
+/*=========================
+Search
+=========================*/
+
+if(searchCustomer){
+
+searchCustomer.addEventListener("keyup",()=>{
+
+let value=searchCustomer.value.toLowerCase();
+
+let result=customers.filter(item=>
+
+item.name.toLowerCase().includes(value)
+
+||
+
+item.phone.includes(value)
+
+);
+
+renderCustomers(result);
+
+});
+
+}
+
+
+/*=========================
+View
+=========================*/
+
+function viewCustomer(index){
+
+let c=customers[index];
+
+alert(
+
+`Customer : ${c.name}
+
+Phone : ${c.phone}
+
+Address : ${c.address}
+
+Orders : ${c.orders}
+
+Purchase : ₹${c.purchase}`
+
+);
+
+}
+
+
+/*=========================
+Edit
+=========================*/
+
+function editCustomer(index){
+
+let c=customers[index];
+
+let newAddress=prompt(
+
+"Update Address",
+
+c.address
+
+);
+
+if(newAddress==null) return;
+
+c.address=newAddress;
+
+renderCustomers(customers);
+
+}
+
+
+/*=========================
+Delete
+=========================*/
+
+function deleteCustomer(index){
+
+if(!confirm("Delete Customer ?")) return;
+
+customers.splice(index,1);
+
+renderCustomers(customers);
 
 }

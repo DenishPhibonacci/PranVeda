@@ -1109,3 +1109,662 @@ overflow-x:auto;
 }
 
 }
+
+/*=========================================
+            PRODUCTS PAGE
+=========================================*/
+
+.product-search{
+    width:300px;
+}
+
+.product-search input{
+    width:100%;
+    padding:12px 15px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    outline:none;
+    font-size:15px;
+}
+
+.product-search input:focus{
+    border-color:#2E7D32;
+}
+
+/*=========================================
+            PRODUCT TABLE
+=========================================*/
+
+#productTable{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+#productTable thead{
+
+    background:#1B5E20;
+
+    color:#fff;
+
+}
+
+#productTable th{
+
+    padding:15px;
+
+    text-align:left;
+
+    font-size:14px;
+
+}
+
+#productTable td{
+
+    padding:15px;
+
+    border-bottom:1px solid #eee;
+
+    vertical-align:middle;
+
+}
+
+#productTable tbody tr{
+
+    transition:.3s;
+
+}
+
+#productTable tbody tr:hover{
+
+    background:#F8FCF7;
+
+}
+
+/*=========================================
+            PRODUCT IMAGE
+=========================================*/
+
+.product-image{
+
+    width:65px;
+
+    height:65px;
+
+    border-radius:12px;
+
+    object-fit:cover;
+
+    border:1px solid #ddd;
+
+    background:#fff;
+
+}
+
+/*=========================================
+            STOCK BADGE
+=========================================*/
+
+.stock-badge{
+
+    padding:6px 14px;
+
+    border-radius:25px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    display:inline-block;
+
+}
+
+.stock-in{
+
+    background:#DFF7E5;
+
+    color:#1B8F3C;
+
+}
+
+.stock-out{
+
+    background:#FFE3E3;
+
+    color:#D93025;
+
+}
+
+/*=========================================
+            ACTION BUTTONS
+=========================================*/
+
+.product-action{
+
+    display:flex;
+
+    gap:8px;
+
+}
+
+.product-action button{
+
+    width:38px;
+
+    height:38px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    color:#fff;
+
+    transition:.3s;
+
+}
+
+.product-action button:hover{
+
+    transform:translateY(-3px);
+
+}
+
+.product-view{
+
+    background:#1976D2;
+
+}
+
+.product-edit{
+
+    background:#FB8C00;
+
+}
+
+.product-delete{
+
+    background:#D32F2F;
+
+}
+
+/*=========================================
+            IMAGE PREVIEW
+=========================================*/
+
+.image-preview{
+
+    width:120px;
+
+    height:120px;
+
+    border-radius:12px;
+
+    border:2px dashed #ccc;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    overflow:hidden;
+
+    margin-top:15px;
+
+    background:#FAFAFA;
+
+}
+
+.image-preview img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+}
+
+/*=========================================
+            PRODUCT CARD
+=========================================*/
+
+.product-card{
+
+    background:#fff;
+
+    border-radius:16px;
+
+    padding:20px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+}
+
+/*=========================================
+            SEARCH BOX
+=========================================*/
+
+#searchProduct{
+
+    width:320px;
+
+    padding:12px 15px;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+    outline:none;
+
+    font-size:15px;
+
+}
+
+#searchProduct:focus{
+
+    border-color:#2E7D32;
+
+}
+
+/*=========================================
+            MOBILE
+=========================================*/
+
+@media(max-width:992px){
+
+#searchProduct{
+
+width:100%;
+
+margin-top:15px;
+
+}
+
+.table-header{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+}
+
+}
+
+@media(max-width:768px){
+
+#productTable{
+
+display:block;
+
+overflow-x:auto;
+
+white-space:nowrap;
+
+}
+
+.product-image{
+
+width:55px;
+
+height:55px;
+
+}
+
+.product-action{
+
+flex-wrap:wrap;
+
+}
+
+.product-action button{
+
+width:34px;
+
+height:34px;
+
+}
+
+.billing-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.billing-grid .full{
+
+grid-column:auto;
+
+}
+
+}
+
+/*=========================================
+            CUSTOMERS PAGE
+=========================================*/
+
+#customerTable{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+#customerTable thead{
+
+    background:#1B5E20;
+
+    color:#fff;
+
+}
+
+#customerTable th{
+
+    padding:15px;
+
+    text-align:left;
+
+    font-size:14px;
+
+}
+
+#customerTable td{
+
+    padding:15px;
+
+    border-bottom:1px solid #eee;
+
+    vertical-align:middle;
+
+}
+
+#customerTable tbody tr{
+
+    transition:.3s;
+
+}
+
+#customerTable tbody tr:hover{
+
+    background:#F8FCF7;
+
+}
+
+/*==============================
+Search
+==============================*/
+
+#searchCustomer{
+
+    width:320px;
+
+    padding:12px 15px;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+    outline:none;
+
+    font-size:15px;
+
+}
+
+#searchCustomer:focus{
+
+    border-color:#2E7D32;
+
+}
+
+/*==============================
+Customer Avatar
+==============================*/
+
+.customer-info{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.customer-avatar{
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:50%;
+
+    background:#2E7D32;
+
+    color:#fff;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-weight:700;
+
+    font-size:18px;
+
+}
+
+/*==============================
+Customer Badge
+==============================*/
+
+.customer-badge{
+
+    display:inline-block;
+
+    padding:6px 14px;
+
+    border-radius:25px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.badge-new{
+
+    background:#DFF7E5;
+
+    color:#1B8F3C;
+
+}
+
+.badge-regular{
+
+    background:#E3F2FD;
+
+    color:#1565C0;
+
+}
+
+.badge-premium{
+
+    background:#F3E5F5;
+
+    color:#8E24AA;
+
+}
+
+/*==============================
+Action Buttons
+==============================*/
+
+.customer-action{
+
+    display:flex;
+
+    gap:8px;
+
+}
+
+.customer-action button{
+
+    width:38px;
+
+    height:38px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    color:#fff;
+
+    transition:.3s;
+
+}
+
+.customer-action button:hover{
+
+    transform:translateY(-3px);
+
+}
+
+.customer-view{
+
+    background:#1976D2;
+
+}
+
+.customer-edit{
+
+    background:#FB8C00;
+
+}
+
+.customer-delete{
+
+    background:#D32F2F;
+
+}
+
+/*==============================
+Cards
+==============================*/
+
+.cards{
+
+    margin-bottom:25px;
+
+}
+
+/*==============================
+Customer Profile Card
+==============================*/
+
+.customer-profile{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+    padding:20px;
+
+}
+
+.customer-profile img{
+
+    width:80px;
+
+    height:80px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+}
+
+.customer-profile h3{
+
+    color:#1B5E20;
+
+}
+
+.customer-profile p{
+
+    color:#777;
+
+    margin-top:5px;
+
+}
+
+/*==============================
+Responsive
+==============================*/
+
+@media(max-width:992px){
+
+#searchCustomer{
+
+width:100%;
+
+margin-top:15px;
+
+}
+
+.table-header{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+}
+
+}
+
+@media(max-width:768px){
+
+#customerTable{
+
+display:block;
+
+overflow-x:auto;
+
+white-space:nowrap;
+
+}
+
+.customer-action{
+
+flex-wrap:wrap;
+
+}
+
+.customer-action button{
+
+width:34px;
+
+height:34px;
+
+}
+
+.customer-avatar{
+
+width:40px;
+
+height:40px;
+
+font-size:16px;
+
+}
+
+}

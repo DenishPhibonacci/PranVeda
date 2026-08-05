@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Products | PranVeda Admin</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/admin.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+<!-- Sidebar -->
+
+<aside class="sidebar">
+
+<div class="logo">
+
+<h2>🌿 PranVeda</h2>
+<span>Admin Panel</span>
+
+</div>
+
+<ul class="menu">
+
+<li>
+<a href="dashboard.html">
+<i class="fas fa-chart-line"></i>
+<span>Dashboard</span>
+</a>
+</li>
+
+<li>
+<a href="billing.html">
+<i class="fas fa-file-invoice"></i>
+<span>Billing</span>
+</a>
+</li>
+
+<li>
+<a href="orders.html">
+<i class="fas fa-box"></i>
+<span>Orders</span>
+</a>
+</li>
+
+<li>
+<a href="customers.html">
+<i class="fas fa-users"></i>
+<span>Customers</span>
+</a>
+</li>
+
+<li class="active">
+<a href="products.html">
+<i class="fas fa-box-open"></i>
+<span>Products</span>
+</a>
+</li>
+
+<li>
+<a href="login.html">
+<i class="fas fa-right-from-bracket"></i>
+<span>Logout</span>
+</a>
+</li>
+
+</ul>
+
+</aside>
+
+<!-- Main -->
+
+<main class="main-content">
+
+<header class="topbar">
+
+<div>
+
+<h1>Products</h1>
+
+<p>Manage Product Catalog</p>
+
+</div>
+
+<div class="admin-user">
+
+<i class="fas fa-user-circle"></i>
+
+Admin
+
+</div>
+
+</header>
+
+<!-- Add Product -->
+
+<div class="billing-card">
+
+<h2>Add New Product</h2>
+
+<div class="billing-grid">
+
+<div>
+
+<label>Product Name</label>
+
+<input type="text" id="productName">
+
+</div>
+
+<div>
+
+<label>Category</label>
+
+<select id="productCategory">
+
+<option>Hair Care</option>
+<option>Skin Care</option>
+<option>Wellness</option>
+<option>Immunity</option>
+
+</select>
+
+</div>
+
+<div>
+
+<label>MRP</label>
+
+<input type="number" id="mrp">
+
+</div>
+
+<div>
+
+<label>Selling Price</label>
+
+<input type="number" id="sellingPrice">
+
+</div>
+
+<div>
+
+<label>Stock</label>
+
+<input type="number" id="stock">
+
+</div>
+
+<div>
+
+<label>Status</label>
+
+<select id="status">
+
+<option>In Stock</option>
+<option>Out Of Stock</option>
+
+</select>
+
+</div>
+
+<div class="full">
+
+<label>Product Image URL</label>
+
+<input type="text" id="imageUrl">
+
+</div>
+
+<div class="full">
+
+<button id="addNewProduct" class="action-btn">
+
+<i class="fas fa-plus"></i>
+
+Add Product
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Search -->
+
+<div class="billing-card">
+
+<div class="table-header">
+
+<h2>Product List</h2>
+
+<input
+type="text"
+id="searchProduct"
+placeholder="Search Product">
+
+</div>
+
+<table id="productTable">
+
+<thead>
+
+<tr>
+
+<th>Image</th>
+
+<th>Name</th>
+
+<th>Category</th>
+
+<th>MRP</th>
+
+<th>Price</th>
+
+<th>Stock</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="productBody">
+
+</tbody>
+
+</table>
+
+</div>
+
+</main>
+
+</div>
+
+<script src="js/admin.js"></script>
+
+</body>
+
+</html>

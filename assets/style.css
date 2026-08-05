@@ -1646,8 +1646,8 @@ h1, h2, h3, h4, h5 {
     width:18px;
     height:18px;
     min-width:18px;
-    margin-top:4px;
-    color:#C9A227;
+    margin-top:3px;
+    color:#FFFFFF
 }
 
 .address-link div{
@@ -1673,7 +1673,9 @@ h1, h2, h3, h4, h5 {
     width:18px;
     height:18px;
 }
-
+.footer-link:hover .footer-icon{
+    color:#FFFFFF;      /* Hover par bhi white */
+}
 html,
 body{
     width:100%;

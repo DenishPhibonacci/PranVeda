@@ -1,325 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<button class="menu-toggle">
+    <i class="fas fa-bars"></i>
+</button>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div class="top-right">
 
-<title>PranVeda Admin Dashboard</title>
+    <div class="notification">
+        <i class="fas fa-bell"></i>
+        <span class="notification-count">3</span>
+    </div>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="css/admin.css">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
-</head>
-
-<body>
-
-<div class="admin-layout">
-
-    <!-- Sidebar -->
-
-    <aside class="sidebar">
-
-        <div class="logo">
-
-            <h2>🌿 PranVeda</h2>
-
-            <span>Admin Panel</span>
-
+    <div class="notification-dropdown">
+        <div class="dropdown-header">
+            Notifications
         </div>
 
-        <ul class="menu">
+        <div class="dropdown-body">
 
-            <li class="active">
-
-                <a href="dashboard.html">
-
-                    <i class="fas fa-chart-line"></i>
-
-                    Dashboard
-
-                </a>
-
-            </li>
-
-            <li>
-
-                <a href="billing.html">
-
-                    <i class="fas fa-file-invoice"></i>
-
-                    Billing
-
-                </a>
-
-            </li>
-
-            <li>
-
-                <a href="orders.html">
-
+            <div class="notification-item">
+                <div class="notification-icon" style="background:#2E7D32;">
                     <i class="fas fa-box"></i>
+                </div>
 
-                    Orders
-
-                </a>
-
-            </li>
-
-            <li>
-
-                <a href="customers.html">
-
-                    <i class="fas fa-users"></i>
-
-                    Customers
-
-                </a>
-
-            </li>
-            <li>
-                <a href="products.html">
-                    <i class="fas fa-box-open"></i>
-                    <span>Products</span>
-                </a>
-            </li>
-
-            <li>
-
-                <a href="login.html">
-
-                    <i class="fas fa-right-from-bracket"></i>
-
-                    Logout
-
-                </a>
-
-            </li>
-
-        </ul>
-
-    </aside>
-
-    <!-- Main -->
-
-    <main class="main-content">
-
-        <!-- Header -->
-
-        <header class="topbar">
-
-            <div>
-
-                <h1>Dashboard</h1>
-
-                <p>Welcome to PranVeda Billing System</p>
-
+                <div class="notification-text">
+                    <h4>New Order Received</h4>
+                    <p>Invoice PV00015</p>
+                    <div class="notification-time">
+                        2 minutes ago
+                    </div>
+                </div>
             </div>
 
-            <div class="admin-user">
+        </div>
+    </div>
 
-                <i class="fas fa-user-circle"></i>
+    <div class="profile">
 
-                Admin
+        <img src="assets/images/admin.png" alt="Admin">
 
-            </div>
+        <div class="profile-info">
+            <h3>Denish Makadiya</h3>
+            <p>Administrator</p>
+        </div>
 
-        </header>
+        <i class="fas fa-chevron-down"></i>
 
-        <!-- Dashboard Cards -->
+    </div>
 
-        <section class="cards">
+    <div class="profile-dropdown">
 
-            <div class="card">
+        <div class="profile-header">
+            <img src="assets/images/admin.png" alt="Admin">
+            <h3>Denish Makadiya</h3>
+            <span>Administrator</span>
+        </div>
 
-                <div class="icon">
+        <div class="profile-menu">
+            <a href="settings.html"><i class="fas fa-user"></i> My Profile</a>
+            <a href="settings.html"><i class="fas fa-building"></i> Company Settings</a>
+            <a href="#"><i class="fas fa-download"></i> Backup</a>
+            <a href="#"><i class="fas fa-upload"></i> Restore</a>
+            <a href="login.html"><i class="fas fa-right-from-bracket"></i> Logout</a>
+        </div>
 
-                    <i class="fas fa-indian-rupee-sign"></i>
-
-                </div>
-
-                <div>
-
-                    <h3>₹12,500</h3>
-
-                    <p>Today's Sales</p>
-
-                </div>
-
-            </div>
-
-            <div class="card">
-
-                <div class="icon">
-
-                    <i class="fas fa-file-invoice"></i>
-
-                </div>
-
-                <div>
-
-                    <h3>18</h3>
-
-                    <p>Today's Bills</p>
-
-                </div>
-
-            </div>
-
-            <div class="card">
-
-                <div class="icon">
-
-                    <i class="fas fa-users"></i>
-
-                </div>
-
-                <div>
-
-                    <h3>250</h3>
-
-                    <p>Total Customers</p>
-
-                </div>
-
-            </div>
-
-            <div class="card">
-
-                <div class="icon">
-
-                    <i class="fas fa-chart-column"></i>
-
-                </div>
-
-                <div>
-
-                    <h3>₹2,45,000</h3>
-
-                    <p>Monthly Sales</p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- Quick Action -->
-
-        <section class="quick-actions">
-
-            <h2>Quick Actions</h2>
-
-            <div class="action-grid">
-
-                <a href="billing.html" class="action-btn">
-
-                    <i class="fas fa-plus"></i>
-
-                    New Bill
-
-                </a>
-
-                <a href="orders.html" class="action-btn">
-
-                    <i class="fas fa-list"></i>
-
-                    Orders
-
-                </a>
-
-                <a href="customers.html" class="action-btn">
-
-                    <i class="fas fa-user-plus"></i>
-
-                    Customers
-
-                </a>
-
-            </div>
-
-        </section>
-
-        <!-- Recent Orders -->
-
-        <section class="recent-orders">
-
-            <h2>Recent Orders</h2>
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>Invoice</th>
-
-                        <th>Customer</th>
-
-                        <th>Total</th>
-
-                        <th>Status</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    <tr>
-
-                        <td>PV0001</td>
-
-                        <td>Rahul Patel</td>
-
-                        <td>₹399</td>
-
-                        <td>Paid</td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>PV0002</td>
-
-                        <td>Amit Shah</td>
-
-                        <td>₹799</td>
-
-                        <td>Paid</td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>PV0003</td>
-
-                        <td>Jay Mehta</td>
-
-                        <td>₹1299</td>
-
-                        <td>Pending</td>
-
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </section>
-
-    </main>
+    </div>
 
 </div>
-
-<script src="js/admin.js"></script>
-
-</body>
-</html>

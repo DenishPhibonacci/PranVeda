@@ -1735,52 +1735,53 @@ body{
   border-radius: 4px;
 }
 
-/* Footer Layout Fix */
+/* Footer Layout Structure */
 .product-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
   margin-top: 15px;
+  width: 100%;
 }
 
 .product-left {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0; /* Prevents overflow issues */
 }
 
-/* 1. Alignment of Prices in Single Line */
+/* Single-line Price Styling */
 .product-price-row {
   display: flex;
-  align-items: center; /* Vertical centering */
-  gap: 8px; /* Space between current price, old price, and discount */
-  white-space: nowrap;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: nowrap;
 }
 
 .product-price {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #1b4332;
   line-height: 1;
 }
 
-/* 2. Old Price Strikethrough (Cross Line Effect) */
 .old-price {
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   color: #888888;
-  text-decoration: line-through; /* Strikethrough line */
-  text-decoration-color: #d90429; /* Optional: Red line for high visibility */
+  text-decoration: line-through;
+  text-decoration-color: #d90429;
 }
 
 .discount-badge {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
   color: #2d6a4f;
   background-color: #e8f5e9;
-  padding: 3px 6px;
+  padding: 2px 5px;
   border-radius: 4px;
-  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .product-size {
@@ -1788,32 +1789,32 @@ body{
   color: #666666;
 }
 
-/* 3. Button Styling with WhatsApp Icon */
+/* WhatsApp Button Fix */
 .btn-wa-sm {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  background-color: #25d366; /* WhatsApp Brand Color */
+  gap: 6px;
+  background-color: #25d366;
   color: #ffffff;
   border: none;
-  padding: 10px 16px;
-  border-radius: 25px;
+  padding: 8px 14px;
+  border-radius: 20px;
   font-weight: 600;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0; /* Ensures button does not get squeezed */
+  box-shadow: 0 3px 8px rgba(37, 211, 102, 0.25);
   transition: all 0.2s ease-in-out;
-  text-decoration: none;
-  box-shadow: 0 4px 10px rgba(37, 211, 102, 0.25);
 }
 
 .btn-wa-sm i {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .btn-wa-sm:hover {
   background-color: #1ebe5d;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(37, 211, 102, 0.35);
+  transform: translateY(-1px);
 }
 

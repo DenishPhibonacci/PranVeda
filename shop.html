@@ -183,341 +183,365 @@
   </div>
 
   <!-- MAIN SHOP -->
-  <section class="section" aria-labelledby="shopHeading">
-    <div class="container">
-      <div class="shop-layout">
+<section class="section" aria-labelledby="shopHeading">
+  <div class="container">
+    <div class="shop-layout">
 
+      <!-- PRODUCTS AREA -->
+      <div>
+        <div class="products-header">
+          <p class="products-count" id="productCount">Showing <strong>12</strong> products</p>
+          <select class="sort-select" id="sortSelect" onchange="sortProducts()" aria-label="Sort products">
+            <option value="featured">Featured</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="newest">Newest First</option>
+          </select>
+        </div>
 
+        <div class="shop-grid" id="shopGrid">
 
-        <!-- PRODUCTS AREA -->
-        <div>
-          <div class="products-header">
-            <p class="products-count" id="productCount">Showing <strong>12</strong> products</p>
-            <select class="sort-select" id="sortSelect" onchange="sortProducts()" aria-label="Sort products">
-              <option value="featured">Featured</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="newest">Newest First</option>
-            </select>
-          </div>
-
-          <div class="shop-grid" id="shopGrid">
-
-            <!-- Product Cards -->
-            <article class="product-card reveal" data-category="hair-care" data-price="399">
-              <a href="product.html?id=brahmi-hair-oil" class="product-card-img">
-                <img src="assets/images/hair_oil.jpg" alt="Brahmi Bhringraj Hair Oil" loading="lazy" />
-                <span class="product-badge">Bestseller</span>
-              </a>
-              <div class="product-card-body">
-                <div class="product-category">Hair Care</div>
-                <h3 class="product-name">Brahmi Bhringraj Hair Oil</h3>
-                <div class="product-rating">
+          <!-- Product 1 -->
+          <article class="product-card reveal" data-category="hair-care" data-price="399">
+            <a href="product.html?id=brahmi-hair-oil" class="product-card-img">
+              <img src="assets/images/hair_oil.jpg" alt="Brahmi Bhringraj Hair Oil" loading="lazy" />
+              <span class="product-badge">Bestseller</span>
+            </a>
+            <div class="product-card-body">
+              <div class="product-category">Hair Care</div>
+              <h3 class="product-name">Brahmi Bhringraj Hair Oil</h3>
+              <div class="product-rating">
                 ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
-                </div>
-                <p class="product-desc">Deeply nourishing hair oil with 21 Ayurvedic herbs for stronger, shinier hair.</p>
-                <div class="product-benefits">
-                  <span class="benefit-tag">Reduces Hair Fall</span>
-                  <span class="benefit-tag">Promotes Growth</span>
-                </div>
-                <div class="product-trust">
-    <span>🌿 100% Natural</span>
-    <span>🚚 Free Delivery</span>
-</div>
-                <div class="product-footer">
-                  <div>
-                    <div class="product-price">₹399</div>
-<div class="discount-badge">🏷️ 20% OFF</div>
-<div class="save-price">Save ₹100</div>
-                    <div class="product-size">200ml</div>
-                  </div>
-                  <button class="btn-wa-full" onclick="openWhatsApp('Brahmi Bhringraj Hair Oil (200ml)')">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
-                    Order on WhatsApp
-                  </button>
-                </div>
               </div>
-            </article>
-
-            <article class="product-card reveal reveal-delay-1" data-category="skin-care" data-price="549">
-              <a href="product.html?id=kumkumadi-cream" class="product-card-img">
-                <img src="assets/images/face_cream.jpg" alt="Kumkumadi Glow Cream" loading="lazy" />
-                <span class="product-badge">New</span>
-              </a>
-              <div class="product-card-body">
-                <div class="product-category">Skin Care</div>
-                <h3 class="product-name">Kumkumadi Glow Cream</h3>
-                <div class="product-rating">
-    ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
-</div>
-                <p class="product-desc">Luxurious face cream with saffron, sandalwood and rose for radiant skin.</p>
-                <div class="product-benefits">
-                  <span class="benefit-tag">Brightens Skin</span>
-                  <span class="benefit-tag">Deep Hydration</span>
-                </div>
-                <div class="product-trust">
-    <span>🌿 100% Natural</span>
-    <span>🚚 Free Delivery</span>
-</div>
-                <div class="product-footer">
-                  <div>
-                   <div class="product-price">₹399</div>
-<div class="discount-badge">🏷️ 20% OFF</div>
-                    <div class="save-price">Save ₹100</div>
-                    <div class="product-size">50g</div>
-                  </div>
-                  <button class="btn-wa-full" onclick="openWhatsApp('Kumkumadi Glow Cream (50g)')">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
-                    Order on WhatsApp
-                  </button>
-                </div>
+              <p class="product-desc">Deeply nourishing hair oil with 21 Ayurvedic herbs for stronger, shinier hair.</p>
+              <div class="product-benefits">
+                <span class="benefit-tag">Reduces Hair Fall</span>
+                <span class="benefit-tag">Promotes Growth</span>
               </div>
-            </article>
-
-            <article class="product-card reveal reveal-delay-2" data-category="herbal-powders" data-price="449">
-              <a href="product.html?id=ashwagandha-powder" class="product-card-img">
-                <img src="assets/images/herbal_powder.jpg" alt="Ashwagandha Shatavari Powder" loading="lazy" />
-              </a>
-              <div class="product-card-body">
-                <div class="product-category">Herbal Powders</div>
-                <h3 class="product-name">Ashwagandha Shatavari Powder</h3>
-                <div class="product-rating">
-    ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
-</div>
-                <p class="product-desc">Powerful adaptogenic blend for vitality, energy and hormonal balance.</p>
-                <div class="product-benefits">
-                  <span class="benefit-tag">Boosts Energy</span>
-                  <span class="benefit-tag">Reduces Stress</span>
-                </div>
-                <div class="product-trust">
-    <span>🌿 100% Natural</span>
-    <span>🚚 Free Delivery</span>
-</div>
-                <div class="product-footer">
-                  <div>
-                   <div class="product-price">₹399</div>
-<div class="discount-badge">🏷️ 20% OFF</div>
-<div class="save-price">Save ₹100</div>
-                    <div class="product-size">100g</div>
-                  </div>
-                  <button class="btn-wa-full" onclick="openWhatsApp('Ashwagandha Shatavari Powder (100g)')">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
-                    Order on WhatsApp
-                  </button>
-                </div>
+              <div class="product-trust">
+                <span>🌿 100% Natural</span>
+                <span>🚚 Free Delivery</span>
               </div>
-            </article>
-
-            <article class="product-card reveal" data-category="immunity" data-price="349">
-              <a href="product.html?id=immunity-tonic" class="product-card-img">
-                <img src="assets/images/immunity_booster.jpg" alt="Giloy Tulsi Immunity Tonic" loading="lazy" />
-                <span class="product-badge">Top Rated</span>
-              </a>
-              <div class="product-card-body">
-                <div class="product-category">Immunity</div>
-                <h3 class="product-name">Giloy Tulsi Immunity Tonic</h3>
-                <div class="product-rating">
-    ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
-</div>
-                <p class="product-desc">Potent Ayurvedic tonic with Giloy, Tulsi and Amla to support natural immunity.</p>
-                <div class="product-benefits">
-                  <span class="benefit-tag">Boosts Immunity</span>
-                  <span class="benefit-tag">Antioxidant Rich</span>
-                </div>
-                <div class="product-trust">
-    <span>🌿 100% Natural</span>
-    <span>🚚 Free Delivery</span>
-</div>
-                <div class="product-footer">
-                  <div>
-                  <div class="product-price">₹399</div>
-<div class="discount-badge">🏷️ 20% OFF</div>
-<div class="save-price">Save ₹100</div>
-                    <div class="product-size">500ml</div>
+              <div class="product-footer">
+                <div class="product-left">
+                  <div class="product-price-row">
+                    <span class="product-price">₹399</span>
+                    <span class="discount-badge">🏷️ 20% OFF</span>
                   </div>
-                  <button class="btn-wa-full" onclick="openWhatsApp('Giloy Tulsi Immunity Tonic (500ml)')">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
-                    Order on WhatsApp
-                  </button>
+                  <div class="save-price">Save ₹100</div>
+                  <div class="product-size">200ml</div>
                 </div>
+                <button class="btn-wa-sm" onclick="openWhatsApp('Brahmi Bhringraj Hair Oil (200ml)')" aria-label="Order on WhatsApp">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                  <span>Order</span>
+                </button>
               </div>
-            </article>
+            </div>
+          </article>
 
-            <article class="product-card reveal reveal-delay-1" data-category="ayurvedic-oils" data-price="499">
-              <a href="product.html?id=panchakarma-oil" class="product-card-img">
-                <img src="assets/images/body_oil.jpg" alt="Panchakarma Body Massage Oil" loading="lazy" />
-              </a>
-              <div class="product-card-body">
-                <div class="product-category">Ayurvedic Oils</div>
-                <h3 class="product-name">Panchakarma Body Massage Oil</h3>
-                <div class="product-rating">
-    ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
-</div>
-                <p class="product-desc">A rejuvenating blend of sesame oil, marigold and vetiver for deep relaxation.</p>
-                <div class="product-benefits">
-                  <span class="benefit-tag">Deep Relaxation</span>
-                  <span class="benefit-tag">Muscle Relief</span>
-                </div>
-                <div class="product-trust">
-    <span>🌿 100% Natural</span>
-    <span>🚚 Free Delivery</span>
-</div>
-                <div class="product-footer">
-                  <div>
-                   <div class="product-price">₹399</div>
-<div class="discount-badge">🏷️ 20% OFF</div>
-<div class="save-price">Save ₹100</div>
-                    <div class="product-size">100ml</div>
+          <!-- Product 2 -->
+          <article class="product-card reveal reveal-delay-1" data-category="skin-care" data-price="549">
+            <a href="product.html?id=kumkumadi-cream" class="product-card-img">
+              <img src="assets/images/face_cream.jpg" alt="Kumkumadi Glow Cream" loading="lazy" />
+              <span class="product-badge">New</span>
+            </a>
+            <div class="product-card-body">
+              <div class="product-category">Skin Care</div>
+              <h3 class="product-name">Kumkumadi Glow Cream</h3>
+              <div class="product-rating">
+                ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
+              </div>
+              <p class="product-desc">Luxurious face cream with saffron, sandalwood and rose for radiant skin.</p>
+              <div class="product-benefits">
+                <span class="benefit-tag">Brightens Skin</span>
+                <span class="benefit-tag">Deep Hydration</span>
+              </div>
+              <div class="product-trust">
+                <span>🌿 100% Natural</span>
+                <span>🚚 Free Delivery</span>
+              </div>
+              <div class="product-footer">
+                <div class="product-left">
+                  <div class="product-price-row">
+                    <span class="product-price">₹399</span>
+                    <span class="discount-badge">🏷️ 20% OFF</span>
                   </div>
-                  <button class="btn-wa-full" onclick="openWhatsApp('Panchakarma Body Massage Oil (100ml)')">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
-                    Order on WhatsApp
-                  </button>
+                  <div class="save-price">Save ₹100</div>
+                  <div class="product-size">50g</div>
                 </div>
+                <button class="btn-wa-sm" onclick="openWhatsApp('Kumkumadi Glow Cream (50g)')" aria-label="Order on WhatsApp">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                  <span>Order</span>
+                </button>
               </div>
-            </article>
+            </div>
+          </article>
 
-            <article class="product-card reveal reveal-delay-2" data-category="hair-care" data-price="299">
-              <a href="product.html?id=amla-shikakai-shampoo" class="product-card-img">
-                <img src="assets/images/herbal_powder.jpg" alt="Amla Shikakai Herbal Shampoo Powder" loading="lazy" />
-              </a>
-              <div class="product-card-body">
-                <div class="product-category">Hair Care</div>
-                <h3 class="product-name">Amla Shikakai Shampoo Powder</h3>
-                <div class="product-rating">
-    ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
-</div>
-                <p class="product-desc">Chemical-free Ayurvedic shampoo powder that gently cleanses and adds natural shine.</p>
-                <div class="product-benefits">
-                  <span class="benefit-tag">Gentle Cleanse</span>
-                  <span class="benefit-tag">Natural Shine</span>
-                </div>
-                <div class="product-trust">
-    <span>🌿 100% Natural</span>
-    <span>🚚 Free Delivery</span>
-</div>
-                <div class="product-footer">
-                  <div>
-                   <div class="product-price">₹399</div>
-<div class="discount-badge">🏷️ 20% OFF</div>
-<div class="save-price">Save ₹100</div>
-                    <div class="product-size">150g</div>
+          <!-- Product 3 -->
+          <article class="product-card reveal reveal-delay-2" data-category="herbal-powders" data-price="449">
+            <a href="product.html?id=ashwagandha-powder" class="product-card-img">
+              <img src="assets/images/herbal_powder.jpg" alt="Ashwagandha Shatavari Powder" loading="lazy" />
+            </a>
+            <div class="product-card-body">
+              <div class="product-category">Herbal Powders</div>
+              <h3 class="product-name">Ashwagandha Shatavari Powder</h3>
+              <div class="product-rating">
+                ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
+              </div>
+              <p class="product-desc">Powerful adaptogenic blend for vitality, energy and hormonal balance.</p>
+              <div class="product-benefits">
+                <span class="benefit-tag">Boosts Energy</span>
+                <span class="benefit-tag">Reduces Stress</span>
+              </div>
+              <div class="product-trust">
+                <span>🌿 100% Natural</span>
+                <span>🚚 Free Delivery</span>
+              </div>
+              <div class="product-footer">
+                <div class="product-left">
+                  <div class="product-price-row">
+                    <span class="product-price">₹399</span>
+                    <span class="discount-badge">🏷️ 20% OFF</span>
                   </div>
-                  <button class="btn-wa-full" onclick="openWhatsApp('Amla Shikakai Shampoo Powder (150g)')">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
-                    Order on WhatsApp
-                  </button>
+                  <div class="save-price">Save ₹100</div>
+                  <div class="product-size">100g</div>
                 </div>
+                <button class="btn-wa-sm" onclick="openWhatsApp('Ashwagandha Shatavari Powder (100g)')" aria-label="Order on WhatsApp">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                  <span>Order</span>
+                </button>
               </div>
-            </article>
+            </div>
+          </article>
 
-            <article class="product-card reveal" data-category="skin-care" data-price="649">
-              <a href="product.html?id=neem-turmeric-face-pack" class="product-card-img">
-                <img src="assets/images/face_cream.jpg" alt="Neem Turmeric Face Pack" loading="lazy" />
-              </a>
-              <div class="product-card-body">
-                <div class="product-category">Skin Care</div>
-                <h3 class="product-name">Neem Turmeric Face Pack</h3>
-                <div class="product-rating">
-    ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
-</div>
-                <p class="product-desc">A powerful purifying clay face pack with neem, turmeric and multani mitti.</p>
-                <div class="product-benefits">
-                  <span class="benefit-tag">Clears Acne</span>
-                  <span class="benefit-tag">Deep Purify</span>
-                </div>
-                <div class="product-trust">
-    <span>🌿 100% Natural</span>
-    <span>🚚 Free Delivery</span>
-</div>
-                <div class="product-footer">
-                  <div>
-                  <div class="product-price">₹399</div>
-<div class="discount-badge">🏷️ 20% OFF</div>
-<div class="save-price">Save ₹100</div>
-                    <div class="product-size">75g</div>
+          <!-- Product 4 -->
+          <article class="product-card reveal" data-category="immunity" data-price="349">
+            <a href="product.html?id=immunity-tonic" class="product-card-img">
+              <img src="assets/images/immunity_booster.jpg" alt="Giloy Tulsi Immunity Tonic" loading="lazy" />
+              <span class="product-badge">Top Rated</span>
+            </a>
+            <div class="product-card-body">
+              <div class="product-category">Immunity</div>
+              <h3 class="product-name">Giloy Tulsi Immunity Tonic</h3>
+              <div class="product-rating">
+                ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
+              </div>
+              <p class="product-desc">Potent Ayurvedic tonic with Giloy, Tulsi and Amla to support natural immunity.</p>
+              <div class="product-benefits">
+                <span class="benefit-tag">Boosts Immunity</span>
+                <span class="benefit-tag">Antioxidant Rich</span>
+              </div>
+              <div class="product-trust">
+                <span>🌿 100% Natural</span>
+                <span>🚚 Free Delivery</span>
+              </div>
+              <div class="product-footer">
+                <div class="product-left">
+                  <div class="product-price-row">
+                    <span class="product-price">₹399</span>
+                    <span class="discount-badge">🏷️ 20% OFF</span>
                   </div>
-                  <button class="btn-wa-full" onclick="openWhatsApp('Neem Turmeric Face Pack (75g)')">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
-                    Order on WhatsApp
-                  </button>
+                  <div class="save-price">Save ₹100</div>
+                  <div class="product-size">500ml</div>
                 </div>
+                <button class="btn-wa-sm" onclick="openWhatsApp('Giloy Tulsi Immunity Tonic (500ml)')" aria-label="Order on WhatsApp">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                  <span>Order</span>
+                </button>
               </div>
-            </article>
+            </div>
+          </article>
 
-            <article class="product-card reveal reveal-delay-1" data-category="wellness" data-price="799">
-              <a href="product.html?id=triphala-churna" class="product-card-img">
-                <img src="assets/images/herbal_powder.jpg" alt="Triphala Churna Digestive Powder" loading="lazy" />
-              </a>
-              <div class="product-card-body">
-                <div class="product-category">Digestive Care</div>
-                <h3 class="product-name">Triphala Churna</h3>
-                <div class="product-rating">
-    ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
-</div>
-                <p class="product-desc">The classic Ayurvedic trifecta — Amalaki, Bibhitaki, Haritaki — for digestive wellness.</p>
-                <div class="product-benefits">
-                  <span class="benefit-tag">Gut Health</span>
-                  <span class="benefit-tag">Detox</span>
-                </div>
-                <div class="product-trust">
-    <span>🌿 100% Natural</span>
-    <span>🚚 Free Delivery</span>
-</div>
-                <div class="product-footer">
-                  <div>
-                   <div class="product-price">₹399</div>
-<div class="discount-badge">🏷️ 20% OFF</div>
-<div class="save-price">Save ₹100</div>
-                    <div class="product-size">200g</div>
+          <!-- Product 5 -->
+          <article class="product-card reveal reveal-delay-1" data-category="ayurvedic-oils" data-price="499">
+            <a href="product.html?id=panchakarma-oil" class="product-card-img">
+              <img src="assets/images/body_oil.jpg" alt="Panchakarma Body Massage Oil" loading="lazy" />
+            </a>
+            <div class="product-card-body">
+              <div class="product-category">Ayurvedic Oils</div>
+              <h3 class="product-name">Panchakarma Body Massage Oil</h3>
+              <div class="product-rating">
+                ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
+              </div>
+              <p class="product-desc">A rejuvenating blend of sesame oil, marigold and vetiver for deep relaxation.</p>
+              <div class="product-benefits">
+                <span class="benefit-tag">Deep Relaxation</span>
+                <span class="benefit-tag">Muscle Relief</span>
+              </div>
+              <div class="product-trust">
+                <span>🌿 100% Natural</span>
+                <span>🚚 Free Delivery</span>
+              </div>
+              <div class="product-footer">
+                <div class="product-left">
+                  <div class="product-price-row">
+                    <span class="product-price">₹399</span>
+                    <span class="discount-badge">🏷️ 20% OFF</span>
                   </div>
-                  <button class="btn-wa-full" onclick="openWhatsApp('Triphala Churna (200g)')">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
-                    Order on WhatsApp
-                  </button>
+                  <div class="save-price">Save ₹100</div>
+                  <div class="product-size">100ml</div>
                 </div>
+                <button class="btn-wa-sm" onclick="openWhatsApp('Panchakarma Body Massage Oil (100ml)')" aria-label="Order on WhatsApp">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                  <span>Order</span>
+                </button>
               </div>
-            </article>
+            </div>
+          </article>
 
-            <article class="product-card reveal reveal-delay-2" data-category="ayurvedic-oils" data-price="599">
-              <a href="product.html?id=castor-oil" class="product-card-img">
-                <img src="assets/images/body_oil.jpg" alt="Cold Pressed Castor Oil" loading="lazy" />
-              </a>
-              <div class="product-card-body">
-                <div class="product-category">Ayurvedic Oils</div>
-                <h3 class="product-name">Cold Pressed Castor Oil</h3>
-                <div class="product-rating">
-    ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
-</div>
-                <p class="product-desc">Pure cold-pressed castor oil for hair, skin, and joint nourishment.</p>
-                <div class="product-benefits">
-                  <span class="benefit-tag">Hair Growth</span>
-                  <span class="benefit-tag">Moisturizes Skin</span>
-                </div>
-                <div class="product-trust">
-    <span>🌿 100% Natural</span>
-    <span>🚚 Free Delivery</span>
-</div>
-                <div class="product-footer">
-                  <div>
-                   <div class="product-price">₹399</div>
-<div class="discount-badge">🏷️ 20% OFF</div>
-<div class="save-price">Save ₹100</div>
-                    <div class="product-size">200ml</div>
+          <!-- Product 6 -->
+          <article class="product-card reveal reveal-delay-2" data-category="hair-care" data-price="299">
+            <a href="product.html?id=amla-shikakai-shampoo" class="product-card-img">
+              <img src="assets/images/herbal_powder.jpg" alt="Amla Shikakai Herbal Shampoo Powder" loading="lazy" />
+            </a>
+            <div class="product-card-body">
+              <div class="product-category">Hair Care</div>
+              <h3 class="product-name">Amla Shikakai Shampoo Powder</h3>
+              <div class="product-rating">
+                ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
+              </div>
+              <p class="product-desc">Chemical-free Ayurvedic shampoo powder that gently cleanses and adds natural shine.</p>
+              <div class="product-benefits">
+                <span class="benefit-tag">Gentle Cleanse</span>
+                <span class="benefit-tag">Natural Shine</span>
+              </div>
+              <div class="product-trust">
+                <span>🌿 100% Natural</span>
+                <span>🚚 Free Delivery</span>
+              </div>
+              <div class="product-footer">
+                <div class="product-left">
+                  <div class="product-price-row">
+                    <span class="product-price">₹399</span>
+                    <span class="discount-badge">🏷️ 20% OFF</span>
                   </div>
-                  <button class="btn-wa-full" onclick="openWhatsApp('Cold Pressed Castor Oil (200ml)')">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
-                    Order on WhatsApp
-                  </button>
+                  <div class="save-price">Save ₹100</div>
+                  <div class="product-size">150g</div>
                 </div>
+                <button class="btn-wa-sm" onclick="openWhatsApp('Amla Shikakai Shampoo Powder (150g)')" aria-label="Order on WhatsApp">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                  <span>Order</span>
+                </button>
               </div>
-            </article>
+            </div>
+          </article>
 
-          </div>
+          <!-- Product 7 -->
+          <article class="product-card reveal" data-category="skin-care" data-price="649">
+            <a href="product.html?id=neem-turmeric-face-pack" class="product-card-img">
+              <img src="assets/images/face_cream.jpg" alt="Neem Turmeric Face Pack" loading="lazy" />
+            </a>
+            <div class="product-card-body">
+              <div class="product-category">Skin Care</div>
+              <h3 class="product-name">Neem Turmeric Face Pack</h3>
+              <div class="product-rating">
+                ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
+              </div>
+              <p class="product-desc">A powerful purifying clay face pack with neem, turmeric and multani mitti.</p>
+              <div class="product-benefits">
+                <span class="benefit-tag">Clears Acne</span>
+                <span class="benefit-tag">Deep Purify</span>
+              </div>
+              <div class="product-trust">
+                <span>🌿 100% Natural</span>
+                <span>🚚 Free Delivery</span>
+              </div>
+              <div class="product-footer">
+                <div class="product-left">
+                  <div class="product-price-row">
+                    <span class="product-price">₹399</span>
+                    <span class="discount-badge">🏷️ 20% OFF</span>
+                  </div>
+                  <div class="save-price">Save ₹100</div>
+                  <div class="product-size">75g</div>
+                </div>
+                <button class="btn-wa-sm" onclick="openWhatsApp('Neem Turmeric Face Pack (75g)')" aria-label="Order on WhatsApp">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                  <span>Order</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 8 -->
+          <article class="product-card reveal reveal-delay-1" data-category="wellness" data-price="799">
+            <a href="product.html?id=triphala-churna" class="product-card-img">
+              <img src="assets/images/herbal_powder.jpg" alt="Triphala Churna Digestive Powder" loading="lazy" />
+            </a>
+            <div class="product-card-body">
+              <div class="product-category">Digestive Care</div>
+              <h3 class="product-name">Triphala Churna</h3>
+              <div class="product-rating">
+                ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
+              </div>
+              <p class="product-desc">The classic Ayurvedic trifecta — Amalaki, Bibhitaki, Haritaki — for digestive wellness.</p>
+              <div class="product-benefits">
+                <span class="benefit-tag">Gut Health</span>
+                <span class="benefit-tag">Detox</span>
+              </div>
+              <div class="product-trust">
+                <span>🌿 100% Natural</span>
+                <span>🚚 Free Delivery</span>
+              </div>
+              <div class="product-footer">
+                <div class="product-left">
+                  <div class="product-price-row">
+                    <span class="product-price">₹399</span>
+                    <span class="discount-badge">🏷️ 20% OFF</span>
+                  </div>
+                  <div class="save-price">Save ₹100</div>
+                  <div class="product-size">200g</div>
+                </div>
+                <button class="btn-wa-sm" onclick="openWhatsApp('Triphala Churna (200g)')" aria-label="Order on WhatsApp">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                  <span>Order</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 9 -->
+          <article class="product-card reveal reveal-delay-2" data-category="ayurvedic-oils" data-price="599">
+            <a href="product.html?id=castor-oil" class="product-card-img">
+              <img src="assets/images/body_oil.jpg" alt="Cold Pressed Castor Oil" loading="lazy" />
+            </a>
+            <div class="product-card-body">
+              <div class="product-category">Ayurvedic Oils</div>
+              <h3 class="product-name">Cold Pressed Castor Oil</h3>
+              <div class="product-rating">
+                ⭐⭐⭐⭐⭐ <span>4.9 (128 Reviews)</span>
+              </div>
+              <p class="product-desc">Pure cold-pressed castor oil for hair, skin, and joint nourishment.</p>
+              <div class="product-benefits">
+                <span class="benefit-tag">Hair Growth</span>
+                <span class="benefit-tag">Moisturizes Skin</span>
+              </div>
+              <div class="product-trust">
+                <span>🌿 100% Natural</span>
+                <span>🚚 Free Delivery</span>
+              </div>
+              <div class="product-footer">
+                <div class="product-left">
+                  <div class="product-price-row">
+                    <span class="product-price">₹399</span>
+                    <span class="discount-badge">🏷️ 20% OFF</span>
+                  </div>
+                  <div class="save-price">Save ₹100</div>
+                  <div class="product-size">200ml</div>
+                </div>
+                <button class="btn-wa-sm" onclick="openWhatsApp('Cold Pressed Castor Oil (200ml)')" aria-label="Order on WhatsApp">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+                  <span>Order</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- ==================== FOOTER ==================== -->
   <footer class="footer" role="contentinfo">

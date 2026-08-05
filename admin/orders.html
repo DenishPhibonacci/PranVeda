@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Orders | PranVeda Admin</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/admin.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+<!-- Sidebar -->
+
+<aside class="sidebar">
+
+<div class="logo">
+
+<h2>🌿 PranVeda</h2>
+
+<span>Admin Panel</span>
+
+</div>
+
+<ul class="menu">
+
+<li>
+<a href="dashboard.html">
+<i class="fas fa-chart-line"></i>
+<span>Dashboard</span>
+</a>
+</li>
+
+<li>
+<a href="billing.html">
+<i class="fas fa-file-invoice"></i>
+<span>Billing</span>
+</a>
+</li>
+
+<li class="active">
+<a href="orders.html">
+<i class="fas fa-box"></i>
+<span>Orders</span>
+</a>
+</li>
+
+<li>
+<a href="customers.html">
+<i class="fas fa-users"></i>
+<span>Customers</span>
+</a>
+</li>
+
+<li>
+<a href="login.html">
+<i class="fas fa-right-from-bracket"></i>
+<span>Logout</span>
+</a>
+</li>
+
+</ul>
+
+</aside>
+
+<!-- Main -->
+
+<main class="main-content">
+
+<header class="topbar">
+
+<div>
+
+<h1>Orders</h1>
+
+<p>Manage All Customer Orders</p>
+
+</div>
+
+<div class="admin-user">
+
+<i class="fas fa-user-circle"></i>
+
+Admin
+
+</div>
+
+</header>
+
+<!-- Search & Filter -->
+
+<div class="billing-card">
+
+<div class="orders-filter">
+
+<div>
+
+<label>Search</label>
+
+<input
+type="text"
+id="searchOrder"
+placeholder="Invoice / Customer / Mobile">
+
+</div>
+
+<div>
+
+<label>Status</label>
+
+<select id="statusFilter">
+
+<option value="all">All</option>
+
+<option value="paid">Paid</option>
+
+<option value="pending">Pending</option>
+
+<option value="cancelled">Cancelled</option>
+
+</select>
+
+</div>
+
+<div>
+
+<label>Date</label>
+
+<input
+type="date"
+id="dateFilter">
+
+</div>
+
+<div>
+
+<button
+id="searchBtn"
+class="action-btn">
+
+<i class="fas fa-search"></i>
+
+Search
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Orders Table -->
+
+<div class="billing-card">
+
+<div class="table-header">
+
+<h2>All Orders</h2>
+
+<button class="action-btn" id="refreshOrders">
+
+<i class="fas fa-rotate"></i>
+
+Refresh
+
+</button>
+
+</div>
+
+<table id="ordersTable">
+
+<thead>
+
+<tr>
+
+<th>Invoice</th>
+
+<th>Date</th>
+
+<th>Customer</th>
+
+<th>Mobile</th>
+
+<th>Amount</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="ordersBody">
+
+<tr>
+
+<td>PV000001</td>
+
+<td>05-08-2026</td>
+
+<td>Rahul Patel</td>
+
+<td>9876543210</td>
+
+<td>₹399</td>
+
+<td>
+
+<span class="status paid">
+
+Paid
+
+</span>
+
+</td>
+
+<td>
+
+<button class="table-btn view">
+
+<i class="fas fa-eye"></i>
+
+</button>
+
+<button class="table-btn edit">
+
+<i class="fas fa-pen"></i>
+
+</button>
+
+<button class="table-btn print">
+
+<i class="fas fa-print"></i>
+
+</button>
+
+<button class="table-btn delete">
+
+<i class="fas fa-trash"></i>
+
+</button>
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>PV000002</td>
+
+<td>05-08-2026</td>
+
+<td>Amit Shah</td>
+
+<td>9988776655</td>
+
+<td>₹799</td>
+
+<td>
+
+<span class="status pending">
+
+Pending
+
+</span>
+
+</td>
+
+<td>
+
+<button class="table-btn view">
+
+<i class="fas fa-eye"></i>
+
+</button>
+
+<button class="table-btn edit">
+
+<i class="fas fa-pen"></i>
+
+</button>
+
+<button class="table-btn print">
+
+<i class="fas fa-print"></i>
+
+</button>
+
+<button class="table-btn delete">
+
+<i class="fas fa-trash"></i>
+
+</button>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<!-- Summary -->
+
+<div class="cards">
+
+<div class="card">
+
+<div class="icon">
+
+<i class="fas fa-file-invoice"></i>
+
+</div>
+
+<div>
+
+<h3 id="totalOrders">2</h3>
+
+<p>Total Orders</p>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="icon">
+
+<i class="fas fa-indian-rupee-sign"></i>
+
+</div>
+
+<div>
+
+<h3 id="totalSales">₹1198</h3>
+
+<p>Total Sales</p>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="icon">
+
+<i class="fas fa-clock"></i>
+
+</div>
+
+<div>
+
+<h3 id="pendingOrders">1</h3>
+
+<p>Pending</p>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="icon">
+
+<i class="fas fa-circle-check"></i>
+
+</div>
+
+<div>
+
+<h3 id="paidOrders">1</h3>
+
+<p>Paid</p>
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+</div>
+
+<script src="js/admin.js"></script>
+
+</body>
+
+</html>

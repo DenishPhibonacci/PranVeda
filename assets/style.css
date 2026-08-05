@@ -1653,3 +1653,22 @@ h1, h2, h3, h4, h5 {
     line-height:1.8;
 }
 
+
+.footer-link{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.footer-icon{
+    width:17px;
+    height:17px;
+    min-width:17px;
+    color:#FFFFFF;
+    transition:.3s;
+}
+
+.footer-link:hover .footer-icon{
+    color:#FFFFFF;
+}
+

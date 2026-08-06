@@ -1,0 +1,1175 @@
+/*==========================================
+        PRODUCTS PAGE
+==========================================*/
+
+.products-page{
+
+    padding:30px;
+
+}
+
+.page-title{
+
+    margin-bottom:30px;
+
+}
+
+.page-title h1{
+
+    margin:0;
+
+    font-size:34px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.page-title p{
+
+    margin-top:8px;
+
+    color:var(--text-light);
+
+}
+
+/*==========================================
+        SUMMARY CARDS
+==========================================*/
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:25px;
+
+    margin-bottom:30px;
+
+}
+
+.card{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    border:1px solid var(--border);
+
+    box-shadow:var(--shadow);
+
+    transition:.3s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-6px);
+
+}
+
+.card h5{
+
+    margin:0;
+
+    color:var(--text-light);
+
+    font-size:14px;
+
+}
+
+.card h2{
+
+    margin-top:12px;
+
+    color:var(--primary);
+
+    font-size:30px;
+
+}
+
+.card i{
+
+    width:65px;
+
+    height:65px;
+
+    background:#E8F5E9;
+
+    color:var(--primary);
+
+    border-radius:18px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:28px;
+
+}
+
+/*==========================================
+        TOOLBAR
+==========================================*/
+
+.toolbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:end;
+
+    gap:20px;
+
+    margin-bottom:25px;
+
+}
+
+.toolbar-left{
+
+    display:flex;
+
+    gap:20px;
+
+}
+
+.filter-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+.filter-group label{
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.filter-group select{
+
+    width:180px;
+
+    height:45px;
+
+    border:1px solid var(--border);
+
+    border-radius:10px;
+
+    padding:0 12px;
+
+    font-family:'Poppins',sans-serif;
+
+    outline:none;
+
+}
+
+.toolbar-right{
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+.btn{
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:12px;
+
+    padding:12px 20px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.btn-primary{
+
+    background:var(--primary);
+
+    color:#fff;
+
+}
+
+.btn-primary:hover{
+
+    background:var(--primary-dark);
+
+}
+
+/*==========================================
+        PRODUCT TABLE
+==========================================*/
+
+.table-card{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    border:1px solid var(--border);
+
+    box-shadow:var(--shadow);
+
+    overflow:hidden;
+
+    margin-bottom:30px;
+
+}
+
+.table-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:20px 25px;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.table-header h3{
+
+    margin:0;
+
+    font-size:20px;
+
+    color:var(--text);
+
+}
+
+.table-header span{
+
+    color:var(--text-light);
+
+    font-size:14px;
+
+}
+
+.table-responsive{
+
+    overflow-x:auto;
+
+}
+
+.product-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.product-table th{
+
+    background:#F8FAFC;
+
+    color:var(--text);
+
+    font-weight:600;
+
+    font-size:14px;
+
+    padding:16px;
+
+    text-align:left;
+
+    white-space:nowrap;
+
+}
+
+.product-table td{
+
+    padding:16px;
+
+    border-bottom:1px solid #EEF2F7;
+
+    vertical-align:middle;
+
+}
+
+.product-table tbody tr{
+
+    transition:.3s;
+
+}
+
+.product-table tbody tr:hover{
+
+    background:#F8FAFC;
+
+}
+
+/*==========================================
+        PRODUCT IMAGE
+==========================================*/
+
+.product-image{
+
+    width:60px;
+
+    height:60px;
+
+    border-radius:12px;
+
+    object-fit:cover;
+
+    border:1px solid var(--border);
+
+}
+
+/*==========================================
+        STATUS BADGES
+==========================================*/
+
+.status{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:6px 14px;
+
+    border-radius:30px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.status.active{
+
+    background:#DCFCE7;
+
+    color:#15803D;
+
+}
+
+.status.inactive{
+
+    background:#F3F4F6;
+
+    color:#6B7280;
+
+}
+
+.status.warning{
+
+    background:#FEF3C7;
+
+    color:#B45309;
+
+}
+
+/*==========================================
+        STOCK BADGES
+==========================================*/
+
+.stock{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-width:55px;
+
+    padding:6px 12px;
+
+    border-radius:25px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.stock.good{
+
+    background:#DCFCE7;
+
+    color:#15803D;
+
+}
+
+.stock.medium{
+
+    background:#DBEAFE;
+
+    color:#2563EB;
+
+}
+
+.stock.low{
+
+    background:#FEE2E2;
+
+    color:#DC2626;
+
+}
+
+/*==========================================
+        ACTION BUTTONS
+==========================================*/
+
+.icon-btn{
+
+    width:40px;
+
+    height:40px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    margin-right:6px;
+
+    transition:.3s;
+
+    font-size:15px;
+
+}
+
+.icon-btn.edit{
+
+    background:#DBEAFE;
+
+    color:#2563EB;
+
+}
+
+.icon-btn.edit:hover{
+
+    background:#2563EB;
+
+    color:#fff;
+
+}
+
+.icon-btn.delete{
+
+    background:#FEE2E2;
+
+    color:#DC2626;
+
+}
+
+.icon-btn.delete:hover{
+
+    background:#DC2626;
+
+    color:#fff;
+
+}
+
+.icon-btn.view{
+
+    background:#E8F5E9;
+
+    color:var(--primary);
+
+}
+
+.icon-btn.view:hover{
+
+    background:var(--primary);
+
+    color:#fff;
+
+}
+/*==========================================
+        PRODUCT MODAL
+==========================================*/
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.45);
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:9999;
+
+    padding:20px;
+
+}
+
+.modal.show{
+
+    display:flex;
+
+}
+
+.modal-content{
+
+    width:100%;
+
+    max-width:950px;
+
+    background:#fff;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    box-shadow:0 25px 60px rgba(0,0,0,.25);
+
+    animation:modalAnimation .25s ease;
+
+}
+
+@keyframes modalAnimation{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/*==========================================
+        MODAL HEADER
+==========================================*/
+
+.modal-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:20px 25px;
+
+    background:#F8FAFC;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.modal-header h2{
+
+    margin:0;
+
+    font-size:24px;
+
+}
+
+.close-modal{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#FEE2E2;
+
+    color:#DC2626;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    transition:.3s;
+
+}
+
+.close-modal:hover{
+
+    background:#DC2626;
+
+    color:#fff;
+
+}
+
+/*==========================================
+        FORM
+==========================================*/
+
+#productForm{
+
+    padding:25px;
+
+}
+
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:20px;
+
+}
+
+.form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+.form-group.full-width{
+
+    grid-column:1 / -1;
+
+}
+
+.form-group label{
+
+    font-size:14px;
+
+    font-weight:600;
+
+    color:var(--text);
+
+}
+
+.form-group label span{
+
+    color:#DC2626;
+
+}
+
+.form-group input,
+
+.form-group select,
+
+.form-group textarea{
+
+    width:100%;
+
+    padding:12px 14px;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    font-size:14px;
+
+    font-family:'Poppins',sans-serif;
+
+    outline:none;
+
+    transition:.3s;
+
+    background:#fff;
+
+}
+
+.form-group textarea{
+
+    resize:vertical;
+
+    min-height:120px;
+
+}
+
+.form-group input:focus,
+
+.form-group select:focus,
+
+.form-group textarea:focus{
+
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 4px rgba(46,125,50,.12);
+
+}
+
+/*==========================================
+        IMAGE INPUT
+==========================================*/
+
+input[type="file"]{
+
+    padding:10px;
+
+    background:#F8FAFC;
+
+    cursor:pointer;
+
+}
+
+/*==========================================
+        MODAL FOOTER
+==========================================*/
+
+.modal-footer{
+
+    grid-column:1 / -1;
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:15px;
+
+    margin-top:10px;
+
+    padding-top:20px;
+
+    border-top:1px solid var(--border);
+
+}
+
+.btn-secondary{
+
+    background:#F3F4F6;
+
+    color:#374151;
+
+}
+
+.btn-secondary:hover{
+
+    background:#D1D5DB;
+
+}
+
+/*==========================================
+        PAGINATION
+==========================================*/
+
+.pagination{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-top:30px;
+
+}
+
+.page-btn{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#fff;
+
+    border:1px solid var(--border);
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    font-weight:600;
+
+}
+
+.page-btn:hover{
+
+    background:#E8F5E9;
+
+    color:var(--primary);
+
+}
+
+.page-btn.active{
+
+    background:var(--primary);
+
+    color:#fff;
+
+    border-color:var(--primary);
+
+}
+/*==========================================
+        PRODUCT MODAL
+==========================================*/
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.45);
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:9999;
+
+    padding:20px;
+
+}
+
+.modal.show{
+
+    display:flex;
+
+}
+
+.modal-content{
+
+    width:100%;
+
+    max-width:950px;
+
+    background:#fff;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    box-shadow:0 25px 60px rgba(0,0,0,.25);
+
+    animation:modalAnimation .25s ease;
+
+}
+
+@keyframes modalAnimation{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/*==========================================
+        MODAL HEADER
+==========================================*/
+
+.modal-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:20px 25px;
+
+    background:#F8FAFC;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.modal-header h2{
+
+    margin:0;
+
+    font-size:24px;
+
+}
+
+.close-modal{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#FEE2E2;
+
+    color:#DC2626;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    transition:.3s;
+
+}
+
+.close-modal:hover{
+
+    background:#DC2626;
+
+    color:#fff;
+
+}
+
+/*==========================================
+        FORM
+==========================================*/
+
+#productForm{
+
+    padding:25px;
+
+}
+
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:20px;
+
+}
+
+.form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+.form-group.full-width{
+
+    grid-column:1 / -1;
+
+}
+
+.form-group label{
+
+    font-size:14px;
+
+    font-weight:600;
+
+    color:var(--text);
+
+}
+
+.form-group label span{
+
+    color:#DC2626;
+
+}
+
+.form-group input,
+
+.form-group select,
+
+.form-group textarea{
+
+    width:100%;
+
+    padding:12px 14px;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    font-size:14px;
+
+    font-family:'Poppins',sans-serif;
+
+    outline:none;
+
+    transition:.3s;
+
+    background:#fff;
+
+}
+
+.form-group textarea{
+
+    resize:vertical;
+
+    min-height:120px;
+
+}
+
+.form-group input:focus,
+
+.form-group select:focus,
+
+.form-group textarea:focus{
+
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 4px rgba(46,125,50,.12);
+
+}
+
+/*==========================================
+        IMAGE INPUT
+==========================================*/
+
+input[type="file"]{
+
+    padding:10px;
+
+    background:#F8FAFC;
+
+    cursor:pointer;
+
+}
+
+/*==========================================
+        MODAL FOOTER
+==========================================*/
+
+.modal-footer{
+
+    grid-column:1 / -1;
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:15px;
+
+    margin-top:10px;
+
+    padding-top:20px;
+
+    border-top:1px solid var(--border);
+
+}
+
+.btn-secondary{
+
+    background:#F3F4F6;
+
+    color:#374151;
+
+}
+
+.btn-secondary:hover{
+
+    background:#D1D5DB;
+
+}
+
+/*==========================================
+        PAGINATION
+==========================================*/
+
+.pagination{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-top:30px;
+
+}
+
+.page-btn{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#fff;
+
+    border:1px solid var(--border);
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    font-weight:600;
+
+}
+
+.page-btn:hover{
+
+    background:#E8F5E9;
+
+    color:var(--primary);
+
+}
+
+.page-btn.active{
+
+    background:var(--primary);
+
+    color:#fff;
+
+    border-color:var(--primary);
+
+}

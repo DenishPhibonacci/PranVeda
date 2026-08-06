@@ -51,59 +51,99 @@
                 <ul>
 
                     <li>
+
                         <a href="dashboard.html">
+
                             <i class="fa-solid fa-house"></i>
+
                             Dashboard
+
                         </a>
+
                     </li>
 
                     <li>
+
                         <a href="billing.html">
+
                             <i class="fa-solid fa-file-invoice"></i>
+
                             Billing
+
                         </a>
+
                     </li>
 
                     <li class="active">
+
                         <a href="products.html">
+
                             <i class="fa-solid fa-box-open"></i>
+
                             Products
+
                         </a>
+
                     </li>
 
                     <li>
+
                         <a href="orders.html">
+
                             <i class="fa-solid fa-cart-shopping"></i>
+
                             Orders
+
                         </a>
+
                     </li>
 
                     <li>
+
                         <a href="customers.html">
+
                             <i class="fa-solid fa-users"></i>
+
                             Customers
+
                         </a>
+
                     </li>
 
                     <li>
+
                         <a href="reports.html">
+
                             <i class="fa-solid fa-chart-column"></i>
+
                             Reports
+
                         </a>
+
                     </li>
 
                     <li>
+
                         <a href="settings.html">
+
                             <i class="fa-solid fa-gear"></i>
+
                             Settings
+
                         </a>
+
                     </li>
 
                     <li>
+
                         <a href="login.html">
+
                             <i class="fa-solid fa-right-from-bracket"></i>
+
                             Logout
+
                         </a>
+
                     </li>
 
                 </ul>
@@ -128,7 +168,11 @@
 
                     </button>
 
-                    <h2>Products</h2>
+                    <h2>
+
+                        Products
+
+                    </h2>
 
                 </div>
 
@@ -138,7 +182,7 @@
 
                         <i class="fa-solid fa-magnifying-glass"></i>
 
-                        <input type="text" placeholder="Search Products...">
+                        <input type="text" id="searchProduct" placeholder="Search Product...">
 
                     </div>
 
@@ -168,9 +212,17 @@
 
                         <div>
 
-                            <h4>Denish Makadiya</h4>
+                            <h4>
 
-                            <p>Administrator</p>
+                                Denish Makadiya
+
+                            </h4>
+
+                            <p>
+
+                                Administrator
+
+                            </p>
 
                         </div>
 
@@ -180,23 +232,27 @@
 
             </header>
 
-            <!-- ================= CONTENT ================= -->
+            <!-- ================= PAGE ================= -->
 
             <main class="products-page">
 
                 <div class="page-title">
 
-                    <h1>Products Management</h1>
+                    <h1>
+
+                        Products Management
+
+                    </h1>
 
                     <p>
 
-                        Manage your products, stock and pricing.
+                        Manage Inventory, Pricing and Stock.
 
                     </p>
 
                 </div>
 
-                <!-- ================= SUMMARY CARDS ================= -->
+                <!-- ================= SUMMARY ================= -->
 
                 <div class="cards">
 
@@ -206,7 +262,11 @@
 
                             <h5>Total Products</h5>
 
-                            <h2>245</h2>
+                            <h2 id="totalProducts">
+
+                                245
+
+                            </h2>
 
                         </div>
 
@@ -218,23 +278,13 @@
 
                         <div>
 
-                            <h5>Low Stock</h5>
-
-                            <h2>8</h2>
-
-                        </div>
-
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-
-                    </div>
-
-                    <div class="card">
-
-                        <div>
-
                             <h5>Categories</h5>
 
-                            <h2>12</h2>
+                            <h2>
+
+                                12
+
+                            </h2>
 
                         </div>
 
@@ -246,9 +296,31 @@
 
                         <div>
 
+                            <h5>Low Stock</h5>
+
+                            <h2>
+
+                                8
+
+                            </h2>
+
+                        </div>
+
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+
+                    </div>
+
+                    <div class="card">
+
+                        <div>
+
                             <h5>Inventory Value</h5>
 
-                            <h2>₹4.8L</h2>
+                            <h2>
+
+                                ₹4.8L
+
+                            </h2>
 
                         </div>
 
@@ -261,6 +333,7 @@
                 <!-- ================= TOOLBAR ================= -->
 
                 <div class="toolbar">
+
                     <div class="toolbar-left">
 
                         <div class="filter-group">
@@ -270,15 +343,10 @@
                             <select id="categoryFilter">
 
                                 <option value="">All Categories</option>
-
                                 <option>Ayurvedic Oil</option>
-
                                 <option>Capsules</option>
-
                                 <option>Powder</option>
-
                                 <option>Juice</option>
-
                                 <option>Herbal Tea</option>
 
                             </select>
@@ -287,17 +355,14 @@
 
                         <div class="filter-group">
 
-                            <label>Stock</label>
+                            <label>Status</label>
 
-                            <select id="stockFilter">
+                            <select id="statusFilter">
 
-                                <option value="">All Stock</option>
-
-                                <option>In Stock</option>
-
+                                <option value="">All Status</option>
+                                <option>Active</option>
+                                <option>Inactive</option>
                                 <option>Low Stock</option>
-
-                                <option>Out of Stock</option>
 
                             </select>
 
@@ -329,183 +394,219 @@
 
                         <span id="productCount">
 
-                            Total : 245 Products
+                            Total Products : 245
 
                         </span>
 
                     </div>
 
-                    <table class="product-table">
+                    <div class="table-responsive">
 
-                        <thead>
+                        <table class="product-table">
 
-                            <tr>
+                            <thead>
 
-                                <th>Image</th>
+                                <tr>
 
-                                <th>SKU</th>
+                                    <th>Image</th>
+                                    <th>SKU</th>
+                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Brand</th>
+                                    <th>MRP</th>
+                                    <th>Selling</th>
+                                    <th>Stock</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
 
-                                <th>Product Name</th>
+                                </tr>
 
-                                <th>Category</th>
+                            </thead>
 
-                                <th>MRP</th>
+                            <tbody id="productTable">
 
-                                <th>Selling Price</th>
+                                <tr>
 
-                                <th>Stock</th>
+                                    <td>
 
-                                <th>Status</th>
+                                        <img src="assets/images/products/product1.jpg" class="product-image"
+                                            alt="Product">
 
-                                <th>Actions</th>
+                                    </td>
 
-                            </tr>
+                                    <td>PV001</td>
 
-                        </thead>
+                                    <td>Ashwagandha Powder</td>
 
-                        <tbody id="productTableBody">
+                                    <td>Powder</td>
 
-                            <tr>
+                                    <td>PranVeda</td>
 
-                                <td>
+                                    <td>₹499</td>
 
-                                    <img src="assets/images/products/ashwagandha.jpg" class="product-image"
-                                        alt="Ashwagandha">
+                                    <td>₹399</td>
 
-                                </td>
+                                    <td>
 
-                                <td>PV001</td>
+                                        <span class="stock good">
 
-                                <td>
+                                            120
 
-                                    Ashwagandha Powder
+                                        </span>
 
-                                </td>
+                                    </td>
 
-                                <td>
+                                    <td>
 
-                                    Powder
+                                        <span class="status active">
 
-                                </td>
+                                            Active
 
-                                <td>
+                                        </span>
 
-                                    ₹450
+                                    </td>
 
-                                </td>
+                                    <td>
 
-                                <td>
+                                        <button class="icon-btn edit">
 
-                                    ₹399
+                                            <i class="fa-solid fa-pen"></i>
 
-                                </td>
+                                        </button>
 
-                                <td>
+                                        <button class="icon-btn delete">
 
-                                    120
+                                            <i class="fa-solid fa-trash"></i>
 
-                                </td>
+                                        </button>
 
-                                <td>
+                                    </td>
 
-                                    <span class="status active">
+                                </tr>
 
-                                        Active
+                                <tr>
 
-                                    </span>
+                                    <td>
 
-                                </td>
+                                        <img src="assets/images/products/product2.jpg" class="product-image"
+                                            alt="Product">
 
-                                <td>
+                                    </td>
 
-                                    <button class="icon-btn edit">
+                                    <td>PV002</td>
 
-                                        <i class="fa-solid fa-pen"></i>
+                                    <td>Brahmi Hair Oil</td>
 
-                                    </button>
+                                    <td>Ayurvedic Oil</td>
 
-                                    <button class="icon-btn delete">
+                                    <td>PranVeda</td>
 
-                                        <i class="fa-solid fa-trash"></i>
+                                    <td>₹299</td>
 
-                                    </button>
+                                    <td>₹249</td>
 
-                                </td>
+                                    <td>
 
-                            </tr>
+                                        <span class="stock low">
 
-                            <tr>
+                                            8
 
-                                <td>
+                                        </span>
 
-                                    <img src="assets/images/products/brahmi-oil.jpg" class="product-image"
-                                        alt="Brahmi Oil">
+                                    </td>
 
-                                </td>
+                                    <td>
 
-                                <td>PV002</td>
+                                        <span class="status warning">
 
-                                <td>
+                                            Low Stock
 
-                                    Brahmi Hair Oil
+                                        </span>
 
-                                </td>
+                                    </td>
 
-                                <td>
+                                    <td>
 
-                                    Ayurvedic Oil
+                                        <button class="icon-btn edit">
 
-                                </td>
+                                            <i class="fa-solid fa-pen"></i>
 
-                                <td>
+                                        </button>
 
-                                    ₹299
+                                        <button class="icon-btn delete">
 
-                                </td>
+                                            <i class="fa-solid fa-trash"></i>
 
-                                <td>
+                                        </button>
 
-                                    ₹249
+                                    </td>
 
-                                </td>
+                                </tr>
 
-                                <td>
+                                <tr>
 
-                                    18
+                                    <td>
 
-                                </td>
+                                        <img src="assets/images/products/product3.jpg" class="product-image"
+                                            alt="Product">
 
-                                <td>
+                                    </td>
 
-                                    <span class="status low">
+                                    <td>PV003</td>
 
-                                        Low Stock
+                                    <td>Neem Capsules</td>
 
-                                    </span>
+                                    <td>Capsules</td>
 
-                                </td>
+                                    <td>PranVeda</td>
 
-                                <td>
+                                    <td>₹350</td>
 
-                                    <button class="icon-btn edit">
+                                    <td>₹299</td>
 
-                                        <i class="fa-solid fa-pen"></i>
+                                    <td>
 
-                                    </button>
+                                        <span class="stock medium">
 
-                                    <button class="icon-btn delete">
+                                            35
 
-                                        <i class="fa-solid fa-trash"></i>
+                                        </span>
 
-                                    </button>
+                                    </td>
 
-                                </td>
+                                    <td>
 
-                            </tr>
+                                        <span class="status active">
 
-                        </tbody>
+                                            Active
 
-                    </table>
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <button class="icon-btn edit">
+
+                                            <i class="fa-solid fa-pen"></i>
+
+                                        </button>
+
+                                        <button class="icon-btn delete">
+
+                                            <i class="fa-solid fa-trash"></i>
+
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
 
                 </div>
 
@@ -517,11 +618,7 @@
 
                         <div class="modal-header">
 
-                            <h2>
-
-                                Add Product
-
-                            </h2>
+                            <h2>Add New Product</h2>
 
                             <button class="close-modal">
 
@@ -534,12 +631,11 @@
                         <form id="productForm">
 
                             <div class="form-grid">
-
-                                <!-- ================= LEFT COLUMN ================= -->
+                                <!-- ================= PRODUCT INFORMATION ================= -->
 
                                 <div class="form-group">
 
-                                    <label>Product Name</label>
+                                    <label>Product Name <span>*</span></label>
 
                                     <input type="text" id="productName" placeholder="Enter Product Name" required>
 
@@ -555,26 +651,6 @@
 
                                 <div class="form-group">
 
-                                    <label>Category</label>
-
-                                    <select id="category">
-
-                                        <option>Ayurvedic Oil</option>
-
-                                        <option>Capsules</option>
-
-                                        <option>Powder</option>
-
-                                        <option>Juice</option>
-
-                                        <option>Herbal Tea</option>
-
-                                    </select>
-
-                                </div>
-
-                                <div class="form-group">
-
                                     <label>Brand</label>
 
                                     <input type="text" id="brand" value="PranVeda">
@@ -583,9 +659,43 @@
 
                                 <div class="form-group">
 
-                                    <label>HSN Code</label>
+                                    <label>Category</label>
 
-                                    <input type="text" id="hsn" placeholder="30049011">
+                                    <select id="category">
+
+                                        <option>Ayurvedic Oil</option>
+                                        <option>Capsules</option>
+                                        <option>Powder</option>
+                                        <option>Juice</option>
+                                        <option>Herbal Tea</option>
+
+                                    </select>
+
+                                </div>
+
+                                <!-- ================= PRICING ================= -->
+
+                                <div class="form-group">
+
+                                    <label>Purchase Price (₹)</label>
+
+                                    <input type="number" id="purchasePrice" placeholder="0">
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label>MRP (₹)</label>
+
+                                    <input type="number" id="mrp" placeholder="0">
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label>Selling Price (₹)</label>
+
+                                    <input type="number" id="sellingPrice" placeholder="0">
 
                                 </div>
 
@@ -604,37 +714,21 @@
 
                                 </div>
 
-                                <!-- ================= RIGHT COLUMN ================= -->
+                                <!-- ================= STOCK ================= -->
 
                                 <div class="form-group">
 
-                                    <label>MRP (₹)</label>
+                                    <label>Opening Stock</label>
 
-                                    <input type="number" id="mrp" placeholder="500">
+                                    <input type="number" id="stock" placeholder="0">
 
                                 </div>
 
                                 <div class="form-group">
 
-                                    <label>Selling Price (₹)</label>
+                                    <label>Minimum Stock</label>
 
-                                    <input type="number" id="sellingPrice" placeholder="450">
-
-                                </div>
-
-                                <div class="form-group">
-
-                                    <label>Purchase Price (₹)</label>
-
-                                    <input type="number" id="purchasePrice" placeholder="300">
-
-                                </div>
-
-                                <div class="form-group">
-
-                                    <label>Available Stock</label>
-
-                                    <input type="number" id="stock" placeholder="100">
+                                    <input type="number" id="minStock" placeholder="5">
 
                                 </div>
 
@@ -653,14 +747,13 @@
                                     <select id="status">
 
                                         <option selected>Active</option>
-
                                         <option>Inactive</option>
 
                                     </select>
 
                                 </div>
 
-                                <!-- ================= IMAGE UPLOAD ================= -->
+                                <!-- ================= IMAGE ================= -->
 
                                 <div class="form-group full-width">
 
@@ -676,8 +769,8 @@
 
                                     <label>Description</label>
 
-                                    <textarea id="description" rows="4"
-                                        placeholder="Enter Product Description"></textarea>
+                                    <textarea id="description" rows="5"
+                                        placeholder="Write product description..."></textarea>
 
                                 </div>
 
@@ -701,6 +794,8 @@
 
                                 </div>
 
+                            </div>
+
                         </form>
 
                     </div>
@@ -710,3 +805,169 @@
                 <!-- ================= PAGINATION START ================= -->
 
                 <div class="pagination">
+
+                    <button class="page-btn active">1</button>
+
+                    <button class="page-btn">2</button>
+
+                    <button class="page-btn">3</button>
+
+                    <button class="page-btn">
+
+                        <i class="fa-solid fa-angle-right"></i>
+
+                    </button>
+
+                </div>
+
+            </main>
+
+        </div>
+
+        <!-- ================= NOTIFICATION DROPDOWN ================= -->
+
+        <div class="notification-dropdown">
+
+            <div class="dropdown-header">
+
+                <h3>Notifications</h3>
+
+            </div>
+
+            <div class="dropdown-body">
+
+                <div class="notify-item">
+
+                    <i class="fa-solid fa-box"></i>
+
+                    <div>
+
+                        <h4>New Product Added</h4>
+
+                        <p>Ashwagandha Powder</p>
+
+                    </div>
+
+                </div>
+
+                <div class="notify-item">
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                    <div>
+
+                        <h4>Low Stock Alert</h4>
+
+                        <p>Brahmi Hair Oil</p>
+
+                    </div>
+
+                </div>
+
+                <div class="notify-item">
+
+                    <i class="fa-solid fa-cart-shopping"></i>
+
+                    <div>
+
+                        <h4>New Order Received</h4>
+
+                        <p>Invoice PV0025</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= PROFILE DROPDOWN ================= -->
+
+        <div class="profile-dropdown">
+
+            <div class="profile-header">
+
+                <img src="assets/images/admin.png" alt="Admin">
+
+                <h3>Denish Makadiya</h3>
+
+                <span>Administrator</span>
+
+            </div>
+
+            <ul>
+
+                <li>
+
+                    <a href="settings.html">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        My Profile
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="settings.html">
+
+                        <i class="fa-solid fa-gear"></i>
+
+                        Settings
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="reports.html">
+
+                        <i class="fa-solid fa-chart-column"></i>
+
+                        Reports
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="login.html">
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Logout
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+        <!-- ================= LOADER ================= -->
+
+        <div class="loader">
+
+            <div class="spinner"></div>
+
+        </div>
+
+        <!-- ================= TOAST ================= -->
+
+        <div id="toast"></div>
+
+        <!-- ================= JAVASCRIPT ================= -->
+
+        <script src="js/common.js"></script>
+
+        <script src="js/products.js"></script>
+
+</body>
+
+</html>

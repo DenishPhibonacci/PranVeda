@@ -3,341 +3,788 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Billing | PranVeda Admin</title>
+    <title>Billing | PranVeda ERP</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- Google Font -->
 
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link rel="stylesheet" href="css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+
+    <link rel="stylesheet" href="css/admin.css">
+
+    <link rel="stylesheet" href="css/billing.css">
 
 </head>
 
 <body>
 
-<div class="admin-layout">
+    <div class="layout">
 
-<!-- Sidebar -->
+        <!-- ================= SIDEBAR ================= -->
 
-<aside class="sidebar">
+        <aside class="sidebar">
 
-<div class="logo">
+            <div class="logo">
 
-<h2>🌿 PranVeda</h2>
+                <h2>🌿 PranVeda</h2>
 
-<span>Admin Panel</span>
+                <span>ERP Administration</span>
 
-</div>
+            </div>
 
-<ul class="menu">
+            <nav>
 
-<li>
-<a href="dashboard.html">
-<i class="fas fa-chart-line"></i>
-<span>Dashboard</span>
-</a>
-</li>
+                <ul>
 
-<li class="active">
-<a href="billing.html">
-<i class="fas fa-file-invoice"></i>
-<span>Billing</span>
-</a>
-</li>
+                    <li>
 
-<li>
-<a href="orders.html">
-<i class="fas fa-box"></i>
-<span>Orders</span>
-</a>
-</li>
+                        <a href="dashboard.html">
 
-<li>
-<a href="customers.html">
-<i class="fas fa-users"></i>
-<span>Customers</span>
-</a>
-</li>
+                            <i class="fa-solid fa-house"></i>
 
-<li>
-    <li>
-    <a href="products.html">
-        <i class="fas fa-box-open"></i>
-        <span>Products</span>
-    </a>
-</li>
-<a href="login.html">
-<i class="fas fa-right-from-bracket"></i>
-<span>Logout</span>
-</a>
-</li>
+                            Dashboard
 
-</ul>
+                        </a>
 
-</aside>
+                    </li>
 
-<!-- Main -->
+                    <li class="active">
 
-<main class="main-content">
+                        <a href="billing.html">
 
-<header class="topbar">
+                            <i class="fa-solid fa-file-invoice"></i>
 
-<div>
+                            Billing
 
-<h1>Create Invoice</h1>
+                        </a>
 
-<p>Manual Billing System</p>
+                    </li>
 
-</div>
+                    <li>
 
-<div class="admin-user">
+                        <a href="products.html">
 
-<i class="fas fa-user-circle"></i>
+                            <i class="fa-solid fa-box-open"></i>
 
-Admin
+                            Products
 
-</div>
+                        </a>
 
-</header>
+                    </li>
 
-<!-- Invoice Information -->
+                    <li>
 
-<div class="billing-card">
+                        <a href="orders.html">
 
-<h2>Invoice Details</h2>
+                            <i class="fa-solid fa-cart-shopping"></i>
 
-<div class="billing-grid">
+                            Orders
 
-<div>
+                        </a>
 
-<label>Invoice No</label>
+                    </li>
 
-<input
-type="text"
-id="invoiceNo"
-readonly>
+                    <li>
 
-</div>
+                        <a href="customers.html">
 
-<div>
+                            <i class="fa-solid fa-users"></i>
 
-<label>Date</label>
+                            Customers
 
-<input
-type="date"
-id="invoiceDate">
+                        </a>
 
-</div>
+                    </li>
 
-</div>
+                    <li>
 
-</div>
+                        <a href="reports.html">
 
-<!-- Customer -->
+                            <i class="fa-solid fa-chart-column"></i>
 
-<div class="billing-card">
+                            Reports
 
-<h2>Customer Details</h2>
+                        </a>
 
-<div class="billing-grid">
+                    </li>
 
-<div>
+                    <li>
 
-<label>Customer Name</label>
+                        <a href="settings.html">
 
-<input
-type="text"
-id="customerName"
-placeholder="Customer Name">
+                            <i class="fa-solid fa-gear"></i>
 
-</div>
+                            Settings
 
-<div>
+                        </a>
 
-<label>Mobile</label>
+                    </li>
 
-<input
-type="text"
-id="customerPhone"
-placeholder="9876543210">
+                    <li>
 
-</div>
+                        <a href="login.html">
 
-<div class="full">
+                            <i class="fa-solid fa-right-from-bracket"></i>
 
-<label>Address</label>
+                            Logout
 
-<textarea
-id="customerAddress"
-rows="3"></textarea>
+                        </a>
 
-</div>
+                    </li>
 
-</div>
+                </ul>
 
-</div>
+            </nav>
 
-<!-- Product -->
+        </aside>
 
-<div class="billing-card">
+        <!-- ================= MAIN ================= -->
 
-<h2>Add Product</h2>
+        <div class="main">
 
-<div class="billing-grid">
+            <!-- ================= TOPBAR ================= -->
 
-<div>
+            <header class="topbar">
 
-<label>Product</label>
+                <div class="left">
 
-<select id="product">
+                    <button class="menu-btn">
 
-<option value="">Select Product</option>
+                        <i class="fa-solid fa-bars"></i>
 
-</select>
+                    </button>
 
-</div>
+                    <h2>
 
-<div>
+                        Billing
 
-<label>Quantity</label>
+                    </h2>
 
-<input
-type="number"
-id="qty"
-value="1">
+                </div>
 
-</div>
+                <div class="center">
 
-<div>
+                    <div class="search-box">
 
-<label>Price</label>
+                        <i class="fa-solid fa-magnifying-glass"></i>
 
-<input
-type="number"
-id="price">
+                        <input type="text" placeholder="Search Invoice...">
 
-</div>
+                    </div>
 
-<div>
+                </div>
 
-<button
-class="action-btn"
-id="addProduct">
+                <div class="right">
 
-<i class="fas fa-plus"></i>
+                    <div class="date-time">
 
-Add Product
+                        <div id="currentDate"></div>
 
-</button>
+                        <div id="currentTime"></div>
 
-</div>
+                    </div>
 
-</div>
+                    <div class="notification">
 
-</div>
+                        <i class="fa-solid fa-bell"></i>
 
-<!-- Product Table -->
+                        <span>3</span>
 
-<div class="billing-card">
+                    </div>
 
-<h2>Invoice Items</h2>
+                    <div class="profile">
 
-<table id="invoiceTable">
+                        <img src="assets/images/admin.png" alt="Admin">
 
-<thead>
+                        <div>
 
-<tr>
+                            <h4>
 
-<th>Product</th>
+                                Denish Makadiya
 
-<th>Qty</th>
+                            </h4>
 
-<th>Price</th>
+                            <p>
 
-<th>Total</th>
+                                Administrator
 
-<th>Action</th>
+                            </p>
 
-</tr>
+                        </div>
 
-</thead>
+                    </div>
 
-<tbody>
+                </div>
 
-</tbody>
+            </header>
 
-</table>
+            <!-- ================= PAGE ================= -->
 
-</div>
+            <main class="billing-page">
 
-<!-- Total -->
+                <div class="page-title">
 
-<div class="billing-card">
+                    <h1>
 
-<h2>Invoice Summary</h2>
+                        Billing System
 
-<div class="summary">
+                    </h1>
 
-<p>Subtotal <span id="subtotal">₹0</span></p>
+                    <p>
 
-<p>Discount <span id="discount">₹0</span></p>
+                        Create invoices quickly and manage daily billing.
 
-<p>GST <span id="gst">₹0</span></p>
+                    </p>
 
-<h2>Grand Total <span id="grandTotal">₹0</span></h2>
+                </div>
 
-</div>
+                <!-- ================= SUMMARY CARDS ================= -->
 
-<div class="button-group">
+                <div class="cards">
 
-<button id="saveBill" class="action-btn">
+                    <div class="card">
 
-Save
+                        <div>
 
-</button>
+                            <h5>Today's Sales</h5>
 
-<button id="printBill" class="action-btn" disabled>
+                            <h2>
 
-Print
+                                ₹25,480
 
-</button>
+                            </h2>
 
-<button id="pdfBill" class="action-btn" disabled>
+                        </div>
 
-PDF
+                        <i class="fa-solid fa-indian-rupee-sign"></i>
 
-</button>
+                    </div>
 
-<button id="whatsappBill" class="action-btn" disabled>
+                    <div class="card">
 
-WhatsApp
+                        <div>
 
-</button>
+                            <h5>Today's Bills</h5>
 
-<button id="newBill" class="action-btn" disabled>
+                            <h2>
 
-New Bill
+                                35
 
-</button>
+                            </h2>
 
-</div>
+                        </div>
 
-</div>
+                        <i class="fa-solid fa-file-invoice"></i>
 
-</main>
+                    </div>
 
-</div>
+                    <div class="card">
 
-<script src="js/admin.js"></script>
+                        <div>
+
+                            <h5>Cash Collection</h5>
+
+                            <h2>
+
+                                ₹12,500
+
+                            </h2>
+
+                        </div>
+
+                        <i class="fa-solid fa-wallet"></i>
+
+                    </div>
+
+                    <div class="card">
+
+                        <div>
+
+                            <h5>UPI Collection</h5>
+
+                            <h2>
+
+                                ₹12,980
+
+                            </h2>
+
+                        </div>
+
+                        <i class="fa-brands fa-google-pay"></i>
+
+                    </div>
+
+                </div>
+
+                <!-- ================= CUSTOMER DETAILS ================= -->
+
+                <div class="billing-card">
+
+                    <div class="card-header">
+
+                        <h3>
+
+                            Customer Details
+
+                        </h3>
+
+                    </div>
+
+                    <div class="billing-form">
+                        <div class="form-group">
+
+                            <label>Customer Name</label>
+
+                            <input type="text" id="customerName" placeholder="Walk-in Customer">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Mobile Number</label>
+
+                            <input type="text" id="customerMobile" placeholder="9876543210">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Invoice No.</label>
+
+                            <input type="text" id="invoiceNo" value="INV-0001" readonly>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Billing Date</label>
+
+                            <input type="date" id="billDate">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ================= PRODUCT SECTION ================= -->
+
+                <div class="billing-card">
+
+                    <div class="card-header">
+
+                        <h3>
+
+                            Products
+
+                        </h3>
+
+                    </div>
+
+                    <div class="product-toolbar">
+
+                        <div class="search-product">
+
+                            <i class="fa-solid fa-magnifying-glass"></i>
+
+                            <input type="text" id="productSearch" placeholder="Search Product...">
+
+                        </div>
+
+                        <button class="btn btn-primary" id="addItemBtn">
+
+                            <i class="fa-solid fa-plus"></i>
+
+                            Add Product
+
+                        </button>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="billing-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th width="40%">Product</th>
+
+                                    <th width="10%">Qty</th>
+
+                                    <th width="15%">Rate</th>
+
+                                    <th width="15%">Amount</th>
+
+                                    <th width="20%">Action</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="billingTableBody">
+
+                                <tr>
+
+                                    <td>
+
+                                        <select class="product-select">
+
+                                            <option>Select Product</option>
+
+                                            <option>Ashwagandha Powder</option>
+
+                                            <option>Brahmi Hair Oil</option>
+
+                                            <option>Neem Capsule</option>
+
+                                            <option>Amla Juice</option>
+
+                                        </select>
+
+                                    </td>
+
+                                    <td>
+
+                                        <input type="number" value="1" min="1" class="qty">
+
+                                    </td>
+
+                                    <td>
+
+                                        <input type="number" value="0" class="rate">
+
+                                    </td>
+
+                                    <td>
+
+                                        ₹0
+
+                                    </td>
+
+                                    <td>
+
+                                        <button class="icon-btn delete">
+
+                                            <i class="fa-solid fa-trash"></i>
+
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <!-- ================= BILL SUMMARY START ================= -->
+
+                <div class="billing-summary">
+                    <div class="summary-card">
+
+                        <h3>Bill Summary</h3>
+
+                        <div class="summary-row">
+
+                            <span>Subtotal</span>
+
+                            <strong id="subTotal">₹0.00</strong>
+
+                        </div>
+
+                        <div class="summary-row">
+
+                            <span>Discount</span>
+
+                            <div class="discount-box">
+
+                                <input type="number" id="discount" value="0" min="0" placeholder="0">
+
+                                <select id="discountType">
+
+                                    <option value="amount">₹</option>
+
+                                    <option value="percent">%</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <div class="summary-row grand-total">
+
+                            <span>Grand Total</span>
+
+                            <strong id="grandTotal">
+
+                                ₹0.00
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ================= PAYMENT ================= -->
+
+                    <div class="summary-card">
+
+                        <h3>Payment Method</h3>
+
+                        <div class="payment-method">
+
+                            <label>
+
+                                <input type="radio" name="payment" value="Cash" checked>
+
+                                <span>
+
+                                    <i class="fa-solid fa-money-bill-wave"></i>
+
+                                    Cash
+
+                                </span>
+
+                            </label>
+
+                            <label>
+
+                                <input type="radio" name="payment" value="UPI">
+
+                                <span>
+
+                                    <i class="fa-brands fa-google-pay"></i>
+
+                                    UPI
+
+                                </span>
+
+                            </label>
+
+                            <label>
+
+                                <input type="radio" name="payment" value="Card">
+
+                                <span>
+
+                                    <i class="fa-solid fa-credit-card"></i>
+
+                                    Card
+
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ================= ACTION BUTTONS ================= -->
+
+                    <div class="summary-card">
+
+                        <h3>Billing Actions</h3>
+
+                        <div class="billing-actions">
+
+                            <button class="btn btn-success" id="saveBill">
+
+                                <i class="fa-solid fa-floppy-disk"></i>
+
+                                Save Bill
+
+                            </button>
+
+                            <button class="btn btn-primary" id="printBill">
+
+                                <i class="fa-solid fa-print"></i>
+
+                                Print Bill
+
+                            </button>
+
+                            <button class="btn btn-info" id="whatsappBill">
+
+                                <i class="fa-brands fa-whatsapp"></i>
+
+                                WhatsApp
+
+                            </button>
+
+                            <button class="btn btn-secondary" id="newBill">
+
+                                <i class="fa-solid fa-plus"></i>
+
+                                New Bill
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ================= BILL HISTORY START ================= -->
+
+                <div class="billing-card">
+
+                    <div class="card-header">
+
+                        <h3>
+
+                            Today's Billing History
+
+                        </h3>
+
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="history-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Invoice No.</th>
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Payment</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="historyTable">
+
+                                <tr>
+
+                                    <td>INV-0001</td>
+
+                                    <td>Walk-in Customer</td>
+
+                                    <td>06-08-2026</td>
+
+                                    <td>
+
+                                        <span class="payment cash">
+
+                                            Cash
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>₹1,250</td>
+
+                                    <td>
+
+                                        <button class="icon-btn view">
+
+                                            <i class="fa-solid fa-eye"></i>
+
+                                        </button>
+
+                                        <button class="icon-btn print">
+
+                                            <i class="fa-solid fa-print"></i>
+
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <td>INV-0002</td>
+
+                                    <td>Rahul Patel</td>
+
+                                    <td>06-08-2026</td>
+
+                                    <td>
+
+                                        <span class="payment upi">
+
+                                            UPI
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>₹850</td>
+
+                                    <td>
+
+                                        <button class="icon-btn view">
+
+                                            <i class="fa-solid fa-eye"></i>
+
+                                        </button>
+
+                                        <button class="icon-btn print">
+
+                                            <i class="fa-solid fa-print"></i>
+
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </main>
+
+        </div>
+
+        <!-- ================= LOADER ================= -->
+
+        <div class="loader">
+
+            <div class="spinner"></div>
+
+        </div>
+
+        <!-- ================= TOAST ================= -->
+
+        <div id="toast"></div>
+
+        <!-- ================= SCRIPTS ================= -->
+
+        <script src="js/common.js"></script>
+
+        <script src="js/billing.js"></script>
 
 </body>
 

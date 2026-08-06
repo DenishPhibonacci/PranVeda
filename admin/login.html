@@ -1,105 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>PranVeda Admin Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>PranVeda Admin Login</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Font -->
 
-<link rel="stylesheet" href="css/admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/login.css">
 
 </head>
 
 <body>
 
-<div class="login-page">
+    <div class="login-wrapper">
 
-<div class="login-card">
+        <!-- LEFT PANEL -->
 
-<div class="logo">
+        <div class="left-panel">
 
-🌿
+            <img src="assets/images/logo.png" alt="PranVeda">
 
-<h1>PranVeda</h1>
+            <h1>
 
-<p>Admin Panel</p>
+                PranVeda ERP
 
-</div>
+            </h1>
 
-<form id="loginForm">
+            <p>
 
-<div class="form-group">
+                Welcome to the PranVeda Administration Portal.
 
-<label>Username</label>
+                Manage Products, Billing, Customers,
+                Orders and Reports from one secure place.
 
-<input
-type="text"
-id="username"
-placeholder="Enter Username"
-required>
+            </p>
 
-</div>
+        </div>
 
-<div class="form-group">
+        <!-- RIGHT PANEL -->
 
-<label>Password</label>
+        <div class="right-panel">
 
-<input
-type="password"
-id="password"
-placeholder="Enter Password"
-required>
+            <div class="login-box">
 
-</div>
+                <h2 class="login-title">
 
-<button type="submit" class="login-btn">
+                    Administrator Login
 
-Login
+                </h2>
 
-</button>
+                <p class="login-subtitle">
 
-<p id="errorMessage"></p>
+                    Sign in to continue
 
-</form>
+                </p>
 
-</div>
+                <!-- Login Form -->
 
-</div>
+                <form id="loginForm">
 
-<script>
+                    <!-- Username -->
 
-document.getElementById("loginForm").addEventListener("submit",function(e){
+                    <div class="form-group">
 
-e.preventDefault();
+                        <label>Email Address</label>
 
-let user=document.getElementById("username").value;
+                        <div class="input-box">
 
-let pass=document.getElementById("password").value;
+                            <i class="fa-solid fa-envelope"></i>
 
-if(user==="admin" && pass==="12345")
-{
+                            <input type="email" id="email" class="form-control" placeholder="Enter Email Address"
+                                required>
 
-localStorage.setItem("adminLoggedIn","true");
+                        </div>
 
-window.location.href="dashboard.html";
+                    </div>
 
-}
-else
-{
+                    <!-- Password -->
 
-document.getElementById("errorMessage").innerHTML="Invalid Username or Password";
+                    <div class="form-group">
 
-}
+                        <label>Password</label>
 
-});
+                        <div class="input-box">
 
-</script>
+                            <i class="fa-solid fa-lock"></i>
+
+                            <input type="password" id="password" class="form-control" placeholder="Enter Password"
+                                required>
+
+                            <i class="fa-solid fa-eye toggle-password" id="togglePassword">
+                            </i>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Remember -->
+
+                    <div class="login-options">
+
+                        <label class="remember">
+
+                            <input type="checkbox" id="remember">
+
+                            <span>Remember Me</span>
+
+                        </label>
+
+                        <a href="#" class="forgot">
+
+                            Forgot Password?
+
+                        </a>
+
+                    </div>
+
+                    <!-- Button -->
+
+                    <button type="submit" class="login-btn">
+
+                        <i class="fa-solid fa-right-to-bracket"></i>
+
+                        Login
+
+                    </button>
+
+                </form>
+
+                <!-- Footer -->
+
+                <div class="login-footer">
+
+                    <p>
+
+                        © 2026
+
+                        <strong>PranVeda ERP</strong>
+
+                        All Rights Reserved.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script src="js/login.js"></script>
 
 </body>
+
 </html>

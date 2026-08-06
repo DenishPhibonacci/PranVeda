@@ -533,3 +533,758 @@ if (logoutLink) {
 /*==========================================
     END
 ==========================================*/
+
+"use strict";
+
+/*==========================================
+        DASHBOARD ERP V2
+==========================================*/
+
+let dashboardData = null;
+
+let salesChart = null;
+
+/*==========================================
+        INIT
+==========================================*/
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    initializeDashboard();
+
+});
+
+function initializeDashboard() {
+
+    loadDashboard();
+
+    bindEvents();
+
+    updateDateTime();
+
+    setInterval(updateDateTime, 1000);
+
+    setInterval(refreshDashboard, 30000);
+
+}
+
+/*==========================================
+        EVENTS
+==========================================*/
+
+function bindEvents() {
+
+    window.addEventListener("focus", () => {
+
+        refreshDashboard();
+
+    });
+
+}
+
+/*==========================================
+        LOAD DASHBOARD
+==========================================*/
+
+function loadDashboard() {
+
+    dashboardData =
+
+        ERP.getDashboardData();
+
+    renderCards();
+
+}
+
+/*==========================================
+        DASHBOARD CARDS
+==========================================*/
+
+function renderCards() {
+
+    setText(
+
+        "todaySales",
+
+        formatCurrency(
+
+            dashboardData.todaySales
+
+        )
+
+    );
+
+    setText(
+
+        "monthlySales",
+
+        formatCurrency(
+
+            dashboardData.monthlySales
+
+        )
+
+    );
+
+    setText(
+
+        "totalRevenue",
+
+        formatCurrency(
+
+            dashboardData.totalRevenue
+
+        )
+
+    );
+
+    setText(
+
+        "totalProducts",
+
+        dashboardData.totalProducts
+
+    );
+
+    setText(
+
+        "totalCustomers",
+
+        dashboardData.totalCustomers
+
+    );
+
+    setText(
+
+        "totalOrders",
+
+        dashboardData.totalOrders
+
+    );
+
+    setText(
+
+        "pendingOrders",
+
+        dashboardData.pendingOrders
+
+    );
+
+    setText(
+
+        "lowStockCount",
+
+        dashboardData.lowStockCount
+
+    );
+
+}
+
+/*==========================================
+        REFRESH
+==========================================*/
+
+function refreshDashboard() {
+
+    loadDashboard();
+
+    if (typeof renderRecentOrders === "function") {
+
+        renderRecentOrders();
+
+    }
+
+    if (typeof renderRecentCustomers === "function") {
+
+        renderRecentCustomers();
+
+    }
+
+    if (typeof renderLatestBills === "function") {
+
+        renderLatestBills();
+
+    }
+
+    if (typeof renderLowStock === "function") {
+
+        renderLowStock();
+
+    }
+
+    if (typeof updateSalesChart === "function") {
+
+        updateSalesChart();
+
+    }
+
+}
+
+/*==========================================
+        HELPERS
+==========================================*/
+
+function setText(id, value) {
+
+    const el = document.getElementById(id);
+
+    if (el) {
+
+        el.textContent = value;
+
+    }
+
+}
+
+function formatCurrency(amount) {
+
+    return "₹" + Number(amount).toLocaleString(
+
+        "en-IN",
+
+        {
+
+            minimumFractionDigits: 2,
+
+            maximumFractionDigits: 2
+
+        }
+
+    );
+
+}
+
+/*==========================================
+        SALES CHART
+==========================================*/
+
+function updateSalesChart() {
+
+    const canvas = document.getElementById("salesChart");
+
+    if (!canvas) {
+
+        return;
+
+    }
+
+    const bills = ERP.getBills();
+
+    const salesByDate = {};
+
+    bills.forEach(bill => {
+
+        const date = bill.date;
+
+        const amount = Number(bill.total) || 0;
+
+        if (!salesByDate[date]) {
+
+            salesByDate[date] = 0;
+
+        }
+
+        salesByDate[date] += amount;
+
+    });
+
+    const labels = Object.keys(salesByDate).slice(-7);
+
+    const values = labels.map(date => salesByDate[date]);
+
+    if (salesChart) {
+
+        salesChart.destroy();
+
+    }
+
+    salesChart = new Chart(canvas, {
+
+        type: "line",
+
+        data: {
+
+            labels: labels,
+
+            datasets: [{
+
+                label: "Sales",
+
+                data: values,
+
+                borderColor: "#2E7D32",
+
+                backgroundColor: "rgba(46,125,50,.15)",
+
+                fill: true,
+
+                tension: .35
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+
+                    display: false
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+/*==========================================
+        RECENT ORDERS
+==========================================*/
+
+function renderRecentOrders() {
+
+    const table = document.getElementById("recentOrders");
+
+    if (!table) {
+
+        return;
+
+    }
+
+    table.innerHTML = "";
+
+    dashboardData.latestOrders.forEach(order => {
+
+        table.innerHTML += `
+
+        <tr>
+
+            <td>${order.orderId}</td>
+
+            <td>${order.customer}</td>
+
+            <td>${formatCurrency(order.amount)}</td>
+
+            <td>${order.status}</td>
+
+        </tr>
+
+        `;
+
+    });
+
+}
+
+/*==========================================
+        LOW STOCK
+==========================================*/
+
+function renderLowStock() {
+
+    const table = document.getElementById("lowStockTable");
+
+    if (!table) {
+
+        return;
+
+    }
+
+    table.innerHTML = "";
+
+    dashboardData.lowStockProducts.forEach(product => {
+
+        table.innerHTML += `
+
+        <tr>
+
+            <td>${product.name}</td>
+
+            <td>${product.stock}</td>
+
+            <td>${product.unit}</td>
+
+        </tr>
+
+        `;
+
+    });
+
+}
+
+/*==========================================
+        CHART INIT
+==========================================*/
+
+window.addEventListener("load", () => {
+
+    updateSalesChart();
+
+    renderRecentOrders();
+
+    renderLowStock();
+
+});
+
+/*==========================================
+        RECENT CUSTOMERS
+==========================================*/
+
+function renderRecentCustomers() {
+
+    const table = document.getElementById("recentCustomers");
+
+    if (!table) {
+
+        return;
+
+    }
+
+    table.innerHTML = "";
+
+    dashboardData.latestCustomers.forEach(customer => {
+
+        table.innerHTML += `
+
+        <tr>
+
+            <td>${customer.name}</td>
+
+            <td>${customer.mobile}</td>
+
+            <td>${formatCurrency(customer.totalPurchase || 0)}</td>
+
+        </tr>
+
+        `;
+
+    });
+
+}
+
+/*==========================================
+        LATEST BILLS
+==========================================*/
+
+function renderLatestBills() {
+
+    const table = document.getElementById("latestBills");
+
+    if (!table) {
+
+        return;
+
+    }
+
+    table.innerHTML = "";
+
+    dashboardData.latestBills.forEach(bill => {
+
+        table.innerHTML += `
+
+        <tr>
+
+            <td>${bill.invoice}</td>
+
+            <td>${bill.customer}</td>
+
+            <td>${bill.payment}</td>
+
+            <td>${formatCurrency(bill.total)}</td>
+
+        </tr>
+
+        `;
+
+    });
+
+}
+
+/*==========================================
+        QUICK STATS
+==========================================*/
+
+function renderQuickStats() {
+
+    setText(
+
+        "totalBills",
+
+        dashboardData.totalBills
+
+    );
+
+}
+
+/*==========================================
+        DASHBOARD SUMMARY
+==========================================*/
+
+function renderDashboard() {
+
+    renderCards();
+
+    renderRecentOrders();
+
+    renderRecentCustomers();
+
+    renderLatestBills();
+
+    renderLowStock();
+
+    renderQuickStats();
+
+    updateSalesChart();
+
+}
+
+/*==========================================
+        REFRESH DASHBOARD
+==========================================*/
+
+function refreshDashboard() {
+
+    dashboardData = ERP.getDashboardData();
+
+    renderDashboard();
+
+}
+
+/*==========================================
+        WINDOW LOAD
+==========================================*/
+
+window.addEventListener("load", () => {
+
+    refreshDashboard();
+
+});
+
+/*==========================================
+        AUTO REFRESH
+==========================================*/
+
+setInterval(() => {
+
+    refreshDashboard();
+
+}, 30000);
+/*==========================================
+        TOAST
+==========================================*/
+
+function showToast(message) {
+
+    const toast = document.getElementById("toast");
+
+    if (!toast) {
+
+        return;
+
+    }
+
+    toast.innerHTML = message;
+
+    toast.style.display = "block";
+
+    toast.style.opacity = "1";
+
+    setTimeout(() => {
+
+        toast.style.opacity = "0";
+
+        setTimeout(() => {
+
+            toast.style.display = "none";
+
+        }, 300);
+
+    }, 2500);
+
+}
+
+/*==========================================
+        LOADER
+==========================================*/
+
+function showLoader() {
+
+    const loader = document.querySelector(".loader");
+
+    if (loader) {
+
+        loader.style.display = "flex";
+
+    }
+
+}
+
+function hideLoader() {
+
+    const loader = document.querySelector(".loader");
+
+    if (loader) {
+
+        loader.style.display = "none";
+
+    }
+
+}
+
+/*==========================================
+        DATE & TIME
+==========================================*/
+
+function updateDateTime() {
+
+    const now = new Date();
+
+    const date = document.getElementById("currentDate");
+
+    const time = document.getElementById("currentTime");
+
+    if (date) {
+
+        date.innerHTML = now.toLocaleDateString(
+
+            "en-IN",
+
+            {
+
+                weekday: "long",
+
+                day: "numeric",
+
+                month: "long",
+
+                year: "numeric"
+
+            }
+
+        );
+
+    }
+
+    if (time) {
+
+        time.innerHTML = now.toLocaleTimeString(
+
+            "en-IN",
+
+            {
+
+                hour: "2-digit",
+
+                minute: "2-digit",
+
+                second: "2-digit"
+
+            }
+
+        );
+
+    }
+
+}
+
+/*==========================================
+        ERROR HANDLING
+==========================================*/
+
+window.addEventListener("error", (e) => {
+
+    console.error(
+
+        "Dashboard Error:",
+
+        e.message
+
+    );
+
+});
+
+/*==========================================
+        PAGE LOAD
+==========================================*/
+
+window.addEventListener("load", () => {
+
+    showLoader();
+
+    try {
+
+        dashboardData = ERP.getDashboardData();
+
+        renderDashboard();
+
+        updateDateTime();
+
+        showToast(
+
+            "Dashboard Loaded Successfully"
+
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showToast(
+
+            "Failed to load dashboard"
+
+        );
+
+    }
+
+    finally {
+
+        hideLoader();
+
+    }
+
+});
+
+/*==========================================
+        AUTO REFRESH
+==========================================*/
+
+document.addEventListener(
+
+    "visibilitychange",
+
+    () => {
+
+        if (!document.hidden) {
+
+            refreshDashboard();
+
+        }
+
+    }
+
+);
+
+/*==========================================
+        VERSION
+==========================================*/
+
+console.log(
+
+    "PranVeda ERP Dashboard v2 Loaded"
+
+);
+
+/*==========================================
+        END
+==========================================*/

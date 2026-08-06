@@ -596,3 +596,508 @@ window.addEventListener("load",()=>{
     addNewRow();
 
 });
+
+
+"use strict";
+
+/*==========================================
+        BILLING ERP V2
+==========================================*/
+
+let billItems = [];
+let selectedCustomer = null;
+let selectedProduct = null;
+
+/*==========================================
+        INIT
+==========================================*/
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    initializeBilling();
+
+});
+
+function initializeBilling(){
+
+    loadProducts();
+
+    loadCustomers();
+
+    generateInvoice();
+
+    bindEvents();
+
+}
+
+/*==========================================
+        EVENTS
+==========================================*/
+
+function bindEvents(){
+
+    document
+        .getElementById("productSelect")
+        ?.addEventListener("change",onProductChange);
+
+    document
+        .getElementById("customerMobile")
+        ?.addEventListener("keyup",searchCustomer);
+
+    document
+        .getElementById("addItem")
+        ?.addEventListener("click",addItem);
+
+    document
+        .getElementById("saveBill")
+        ?.addEventListener("click",saveBill);
+
+}
+
+/*==========================================
+        INVOICE
+==========================================*/
+
+function generateInvoice(){
+
+    const invoice=ERP.generateInvoiceNumber();
+
+    const el=document.getElementById("invoiceNumber");
+
+    if(el){
+
+        el.value=invoice;
+
+    }
+
+}
+
+/*==========================================
+        LOAD PRODUCTS
+==========================================*/
+
+function loadProducts(){
+
+    const products=ERP.getProducts();
+
+    const select=document.getElementById("productSelect");
+
+    if(!select) return;
+
+    select.innerHTML="";
+
+    select.innerHTML+=`
+        <option value="">
+            Select Product
+        </option>
+    `;
+
+    products.forEach(product=>{
+
+        select.innerHTML+=`
+
+            <option value="${product.id}">
+
+                ${product.name}
+
+                (${product.stock})
+
+            </option>
+
+        `;
+
+    });
+
+}
+
+/*==========================================
+        LOAD CUSTOMERS
+==========================================*/
+
+function loadCustomers(){
+
+    window.customerList=
+
+        ERP.getCustomers();
+
+}
+
+/*==========================================
+        CUSTOMER SEARCH
+==========================================*/
+
+function searchCustomer(){
+
+    const mobile=document
+        .getElementById("customerMobile")
+        .value
+        .trim();
+
+    if(mobile.length<10){
+
+        return;
+
+    }
+
+    const customer=ERP.findCustomer(mobile);
+
+    if(!customer){
+
+        return;
+
+    }
+
+    selectedCustomer=customer;
+
+    setValue("customerName",customer.name);
+
+    setValue("customerAddress",customer.address);
+
+}
+
+/*==========================================
+        PRODUCT CHANGE
+==========================================*/
+
+function onProductChange(){
+
+    const id=document
+        .getElementById("productSelect")
+        .value;
+
+    if(!id){
+
+        return;
+
+    }
+
+    const product=ERP.findProduct(id);
+
+    if(!product){
+
+        return;
+
+    }
+
+    selectedProduct=product;
+
+    setValue("productPrice",product.price);
+
+    setValue("availableStock",product.stock);
+
+    setValue("productUnit",product.unit);
+
+}
+
+/*==========================================
+        ADD ITEM
+==========================================*/
+
+function addItem(){
+
+    if(!selectedProduct){
+
+        showToast("Select Product");
+
+        return;
+
+    }
+
+    const qty=parseFloat(
+
+        getValue("productQty")
+
+    )||1;
+
+    if(qty<=0){
+
+        showToast("Invalid Quantity");
+
+        return;
+
+    }
+
+    if(qty>selectedProduct.stock){
+
+        showToast("Insufficient Stock");
+
+        return;
+
+    }
+
+    const total=qty*Number(selectedProduct.price);
+
+    billItems.push({
+
+        productId:selectedProduct.id,
+
+        name:selectedProduct.name,
+
+        price:Number(selectedProduct.price),
+
+        qty:qty,
+
+        total:total
+
+    });
+
+    renderBillItems();
+
+}
+
+/*==========================================
+        BILL TABLE
+==========================================*/
+
+function renderBillItems(){
+
+    const tbody=document.getElementById("billItems");
+
+    if(!tbody){
+
+        return;
+
+    }
+
+    tbody.innerHTML="";
+
+    let grandTotal=0;
+
+    billItems.forEach((item,index)=>{
+
+        grandTotal+=item.total;
+
+        tbody.innerHTML+=`
+
+        <tr>
+
+            <td>${item.name}</td>
+
+            <td>${item.qty}</td>
+
+            <td>₹${item.price}</td>
+
+            <td>₹${item.total}</td>
+
+            <td>
+
+                <button
+                    class="icon-btn delete"
+                    onclick="removeItem(${index})">
+
+                    <i class="fa-solid fa-trash"></i>
+
+                </button>
+
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+    const total=document.getElementById("grandTotal");
+
+    if(total){
+
+        total.innerHTML="₹"+grandTotal.toFixed(2);
+
+    }
+
+}
+
+/*==========================================
+        REMOVE ITEM
+==========================================*/
+
+function removeItem(index){
+
+    billItems.splice(index,1);
+
+    renderBillItems();
+
+}
+
+/*==========================================
+        HELPERS
+==========================================*/
+
+function setValue(id,value){
+
+    const el=document.getElementById(id);
+
+    if(el){
+
+        el.value=value;
+
+    }
+
+}
+
+function getValue(id){
+
+    const el=document.getElementById(id);
+
+    return el ? el.value.trim() : "";
+
+}
+
+/*==========================================
+        SAVE BILL
+==========================================*/
+
+function saveBill(){
+
+    if(billItems.length===0){
+
+        showToast("Add at least one product");
+
+        return;
+
+    }
+
+    const customerName=getValue("customerName");
+    const customerMobile=getValue("customerMobile");
+
+    if(customerName===""){
+
+        showToast("Enter Customer Name");
+
+        return;
+
+    }
+
+    if(customerMobile===""){
+
+        showToast("Enter Mobile Number");
+
+        return;
+
+    }
+
+    const bill={
+
+        invoice:ERP.generateInvoiceNumber(),
+
+        customer:customerName,
+
+        mobile:customerMobile,
+
+        address:getValue("customerAddress"),
+
+        payment:getValue("paymentMethod"),
+
+        date:new Date().toLocaleDateString("en-IN"),
+
+        items:[...billItems],
+
+        total:getGrandTotal()
+
+    };
+
+    ERP.completeBilling(bill);
+
+    showToast("Bill Saved Successfully");
+
+    clearBilling();
+
+}
+
+/*==========================================
+        GRAND TOTAL
+==========================================*/
+
+function getGrandTotal(){
+
+    return billItems.reduce(
+
+        (sum,item)=>sum+Number(item.total),
+
+        0
+
+    );
+
+}
+
+/*==========================================
+        CLEAR BILL
+==========================================*/
+
+function clearBilling(){
+
+    billItems=[];
+
+    selectedCustomer=null;
+
+    selectedProduct=null;
+
+    document.getElementById("settingsForm")?.reset();
+
+    document.getElementById("billingForm")?.reset();
+
+    renderBillItems();
+
+    loadProducts();
+
+    generateInvoice();
+
+}
+
+/*==========================================
+        REFRESH PRODUCTS
+==========================================*/
+
+function refreshProducts(){
+
+    loadProducts();
+
+    selectedProduct=null;
+
+}
+
+/*==========================================
+        TOAST
+==========================================*/
+
+function showToast(message){
+
+    const toast=document.getElementById("toast");
+
+    if(!toast) return;
+
+    toast.innerHTML=message;
+
+    toast.style.display="block";
+
+    toast.style.opacity="1";
+
+    setTimeout(()=>{
+
+        toast.style.opacity="0";
+
+        setTimeout(()=>{
+
+            toast.style.display="none";
+
+        },300);
+
+    },2500);
+
+}
+
+/*==========================================
+        PAGE LOAD
+==========================================*/
+
+window.addEventListener("load",()=>{
+
+    refreshProducts();
+
+    renderBillItems();
+
+});
+
+/*==========================================
+        END
+==========================================*/

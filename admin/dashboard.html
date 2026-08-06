@@ -282,9 +282,9 @@
 
                             </h5>
 
-                            <h2>
+                            <h2 id="todaySales">
 
-                                ₹ 25,480
+                                ₹0.00
 
                             </h2>
 
@@ -304,9 +304,9 @@
 
                             </h5>
 
-                            <h2>
+                            <h2 id="totalOrders">
 
-                                126
+                                0
 
                             </h2>
 
@@ -326,9 +326,9 @@
 
                             </h5>
 
-                            <h2>
+                            <h2 id="totalCustomers">
 
-                                358
+                                0
 
                             </h2>
 
@@ -348,9 +348,9 @@
 
                             </h5>
 
-                            <h2>
+                            <h2 id="totalProducts">
 
-                                94
+                                0
 
                             </h2>
 
@@ -498,87 +498,81 @@
 
                         </thead>
 
-                        <tbody>
+                        <tbody id="recentOrders">
 
-                            <tr>
 
-                                <td>PV0001</td>
 
-                                <td>Rahul Patel</td>
+                            <td>PV0001</td>
 
-                                <td>₹2,450</td>
+                            <td>Rahul Patel</td>
 
-                                <td>
+                            <td>₹2,450</td>
 
-                                    <span class="status paid">
+                            <td>
 
-                                        Paid
+                                <span class="status paid">
 
-                                    </span>
+                                    Paid
 
-                                </td>
+                                </span>
 
-                            </tr>
+                            </td>
 
-                            <tr>
 
-                                <td>PV0002</td>
 
-                                <td>Mehul Shah</td>
+                            <td>PV0002</td>
 
-                                <td>₹1,250</td>
+                            <td>Mehul Shah</td>
 
-                                <td>
+                            <td>₹1,250</td>
 
-                                    <span class="status pending">
+                            <td>
 
-                                        Pending
+                                <span class="status pending">
 
-                                    </span>
+                                    Pending
 
-                                </td>
+                                </span>
 
-                            </tr>
+                            </td>
 
-                            <tr>
 
-                                <td>PV0003</td>
 
-                                <td>Neha Patel</td>
+                            <td>PV0003</td>
 
-                                <td>₹4,780</td>
+                            <td>Neha Patel</td>
 
-                                <td>
+                            <td>₹4,780</td>
 
-                                    <span class="status paid">
+                            <td>
 
-                                        Paid
+                                <span class="status paid">
 
-                                    </span>
+                                    Paid
 
-                                </td>
+                                </span>
 
-                            </tr>
+                            </td>
 
-                            <tr>
 
-                                <td>PV0004</td>
 
-                                <td>Jay Patel</td>
+                            <td>PV0004</td>
 
-                                <td>₹980</td>
+                            <td>Jay Patel</td>
 
-                                <td>
+                            <td>₹980</td>
 
-                                    <span class="status processing">
+                            <td>
 
-                                        Processing
+                                <span class="status processing">
 
-                                    </span>
+                                    Processing
 
-                                </td>
+                                </span>
 
-                            </tr>
+                            </td>
+
+
 
                         </tbody>
 
@@ -619,71 +613,70 @@
 
                             </thead>
 
-                            <tbody>
+                            <tbody id="lowStockProducts">
 
-                                <tr>
 
-                                    <td>Ashwagandha Powder</td>
+                                <td>Ashwagandha Powder</td>
 
-                                    <td>
+                                <td>
 
-                                        <span class="stock low">
+                                    <span class="stock low">
 
-                                            5 Left
+                                        5 Left
 
-                                        </span>
+                                    </span>
 
-                                    </td>
+                                </td>
 
-                                </tr>
 
-                                <tr>
 
-                                    <td>Brahmi Oil</td>
 
-                                    <td>
 
-                                        <span class="stock low">
+                                <td>Brahmi Oil</td>
 
-                                            3 Left
+                                <td>
 
-                                        </span>
+                                    <span class="stock low">
 
-                                    </td>
+                                        3 Left
 
-                                </tr>
+                                    </span>
 
-                                <tr>
+                                </td>
 
-                                    <td>Neem Capsules</td>
 
-                                    <td>
 
-                                        <span class="stock medium">
 
-                                            12 Left
 
-                                        </span>
+                                <td>Neem Capsules</td>
 
-                                    </td>
+                                <td>
 
-                                </tr>
+                                    <span class="stock medium">
 
-                                <tr>
+                                        12 Left
 
-                                    <td>Triphala Churna</td>
+                                    </span>
 
-                                    <td>
+                                </td>
 
-                                        <span class="stock good">
 
-                                            35 Left
 
-                                        </span>
 
-                                    </td>
 
-                                </tr>
+                                <td>Triphala Churna</td>
+
+                                <td>
+
+                                    <span class="stock good">
+
+                                        35 Left
+
+                                    </span>
+
+                                </td>
+
+
 
                             </tbody>
 
@@ -1021,8 +1014,7 @@
 
         <!-- ================= TOAST ================= -->
 
-        <div id="toast"></div>
-
+        <div id="toast" class="toast"></div>
         <!-- ================= CHART JS ================= -->
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1031,7 +1023,7 @@
 
         <script src="js/common.js"></script>
         <script src="js/erp.js"></script>
-
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="js/dashboard.js"></script>
 
 </body>

@@ -1,136 +1,183 @@
 "use strict";
 
-/* ============================
-   PRANVEDA ADMIN LOGIN
-============================ */
+/*=========================================
+    PRANVEDA ERP
+    LOGIN
+=========================================*/
 
-// Demo Credentials
-const DEMO_EMAIL = "admin@pranveda.in";
-const DEMO_PASSWORD = "123456";
+document.addEventListener("DOMContentLoaded", () => {
 
-// Elements
-const loginForm = document.getElementById("loginForm");
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const rememberCheck = document.getElementById("remember");
-const togglePassword = document.getElementById("togglePassword");
-
-// ============================
-// Load Remember Me
-// ============================
-
-window.addEventListener("load", () => {
-
-    const remember = localStorage.getItem("rememberLogin");
-
-    if (remember === "true") {
-
-        emailInput.value = localStorage.getItem("rememberEmail") || "";
-        rememberCheck.checked = true;
-
-    }
+    initializeLogin();
 
 });
 
-// ============================
-// Show / Hide Password
-// ============================
+/*=========================================
+    INITIALIZE
+=========================================*/
 
-togglePassword.addEventListener("click", () => {
+function initializeLogin(){
 
-    if (passwordInput.type === "password") {
+    loadRememberMe();
 
-        passwordInput.type = "text";
+    passwordToggle();
 
-        togglePassword.classList.remove("fa-eye");
-        togglePassword.classList.add("fa-eye-slash");
+    loginForm();
 
-    } else {
+}
 
-        passwordInput.type = "password";
+/*=========================================
+    PASSWORD TOGGLE
+=========================================*/
 
-        togglePassword.classList.remove("fa-eye-slash");
-        togglePassword.classList.add("fa-eye");
+function passwordToggle(){
 
-    }
+    const password =
+    document.getElementById("password");
 
-});
+    const toggle =
+    document.getElementById("togglePassword");
 
-// ============================
-// Login
-// ============================
+    if(!password || !toggle) return;
 
-loginForm.addEventListener("submit", function (e) {
+    toggle.addEventListener("click",()=>{
 
-    e.preventDefault();
+        const icon =
+        toggle.querySelector("i");
 
-    const email = emailInput.value.trim();
-    const password = passwordInput.value.trim();
+        if(password.type==="password"){
 
-    if (email === "") {
+            password.type="text";
+
+            icon.classList.remove("fa-eye");
+
+            icon.classList.add("fa-eye-slash");
+
+        }
+        else{
+
+            password.type="password";
+
+            icon.classList.remove("fa-eye-slash");
+
+            icon.classList.add("fa-eye");
+
+        }
+
+    });
+
+}
+
+/*=========================================
+    LOGIN
+=========================================*/
+
+function loginForm(){
+
+    const form =
+    document.getElementById("loginForm");
+
+    if(!form) return;
+
+    form.addEventListener("submit",(e)=>{
+
+        e.preventDefault();
+
+        login();
+
+    });
+
+}
+
+/*=========================================
+    LOGIN FUNCTION
+=========================================*/
+
+function login(){
+
+    const email =
+    document.getElementById("email").value.trim();
+
+    const password =
+    document.getElementById("password").value.trim();
+
+    const remember =
+    document.getElementById("rememberMe").checked;
+
+    const button =
+    document.getElementById("loginBtn");
+
+    if(email===""){
 
         alert("Please enter Email.");
 
-        emailInput.focus();
-
         return;
 
     }
 
-    if (password === "") {
+    if(password===""){
 
         alert("Please enter Password.");
 
-        passwordInput.focus();
-
         return;
 
     }
 
-    // Demo Login
+    /* Demo Login */
 
-    if (email === DEMO_EMAIL && password === DEMO_PASSWORD) {
+    if(
+        email==="admin@pranveda.com"
+        &&
+        password==="123456"
+    ){
 
-        if (rememberCheck.checked) {
+        if(remember){
 
-            localStorage.setItem("rememberLogin", "true");
-            localStorage.setItem("rememberEmail", email);
+            localStorage.setItem("rememberEmail",email);
 
-        } else {
+        }
+        else{
 
-            localStorage.removeItem("rememberLogin");
             localStorage.removeItem("rememberEmail");
 
         }
 
-        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("isLoggedIn","true");
 
-        loginSuccess();
+        button.disabled=true;
 
-    } else {
+        button.innerHTML=
+        '<i class="fa-solid fa-spinner fa-spin"></i> Logging In...';
+
+        setTimeout(()=>{
+
+            window.location.href="dashboard.html";
+
+        },1200);
+
+    }
+    else{
 
         alert("Invalid Email or Password");
 
     }
 
-});
+}
 
-// ============================
-// Login Success
-// ============================
+/*=========================================
+    REMEMBER ME
+=========================================*/
 
-function loginSuccess() {
+function loadRememberMe(){
 
-    const btn = document.querySelector(".login-btn");
+    const email =
+    localStorage.getItem("rememberEmail");
 
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Logging In...';
+    if(email){
 
-    btn.disabled = true;
+        document.getElementById("email").value=email;
 
-    setTimeout(() => {
+        document.getElementById("rememberMe").checked=true;
 
-        window.location.href = "dashboard.html";
-
-    }, 1500);
+    }
 
 }

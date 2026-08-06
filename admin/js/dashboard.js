@@ -1,27 +1,7 @@
 "use strict";
 
 /*==========================================
-    PRANVEDA ERP
-    Dashboard.js
-==========================================*/
-
-// Dashboard Data
-
-const Dashboard = {
-
-    sales: 0,
-
-    orders: 0,
-
-    customers: 0,
-
-    products: 0
-
-};
-
-
-/*==========================================
-    DOM Ready
+    PRANVEDA ERP DASHBOARD
 ==========================================*/
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -30,86 +10,167 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-
 /*==========================================
-    Initialize
+    INITIALIZE
 ==========================================*/
 
 function initializeDashboard() {
 
-    loadDashboard();
+    updateDateTime();
 
-    loadChart();
+    setInterval(updateDateTime, 1000);
 
-    loadRecentOrders();
+    initializeCharts();
 
-    loadLowStock();
+    initializeSidebar();
 
-    loadRecentCustomers();
+    initializeDropdowns();
 
 }
 
-
 /*==========================================
-    Dashboard Cards
+    DATE & TIME
 ==========================================*/
 
-function loadDashboard() {
+function updateDateTime() {
 
-    const orders =
-        getStorage("orders", []);
+    const now = new Date();
 
-    const customers =
-        getStorage("customers", []);
+    const dateOptions = {
 
-    const products =
-        getStorage("products", []);
+        weekday: 'long',
 
-    let totalSales = 0;
+        day: 'numeric',
 
-    orders.forEach(item => {
+        month: 'long',
 
-        totalSales += Number(item.total || 0);
+        year: 'numeric'
+
+    };
+
+    const timeOptions = {
+
+        hour: '2-digit',
+
+        minute: '2-digit',
+
+        second: '2-digit'
+
+    };
+
+    const date = document.getElementById("currentDate");
+
+    const time = document.getElementById("currentTime");
+
+    if (date)
+
+        date.innerHTML = now.toLocaleDateString("en-IN", dateOptions);
+
+    if (time)
+
+        time.innerHTML = now.toLocaleTimeString("en-IN", timeOptions);
+
+}
+
+/*==========================================
+    SIDEBAR
+==========================================*/
+
+function initializeSidebar() {
+
+    const button = document.querySelector(".menu-btn");
+
+    const sidebar = document.querySelector(".sidebar");
+
+    if (!button || !sidebar) return;
+
+    button.addEventListener("click", () => {
+
+        sidebar.classList.toggle("active");
 
     });
 
-    Dashboard.sales = totalSales;
+}
 
-    Dashboard.orders = orders.length;
+/*==========================================
+    DROPDOWN
+==========================================*/
 
-    Dashboard.customers = customers.length;
+function initializeDropdowns() {
 
-    Dashboard.products = products.length;
+    const notification = document.querySelector(".notification");
 
-    document.getElementById("todaySales").innerHTML =
-        formatCurrency(totalSales);
+    const notificationDropdown = document.querySelector(".notification-dropdown");
 
-    document.getElementById("totalOrders").innerHTML =
-        orders.length;
+    const profile = document.querySelector(".profile");
 
-    document.getElementById("totalCustomers").innerHTML =
-        customers.length;
+    const profileDropdown = document.querySelector(".profile-dropdown");
 
-    document.getElementById("totalProducts").innerHTML =
-        products.length;
+    if (notification && notificationDropdown) {
+
+        notification.addEventListener("click", (e) => {
+
+            e.stopPropagation();
+
+            notificationDropdown.classList.toggle("show");
+
+            if (profileDropdown)
+                profileDropdown.classList.remove("show");
+
+        });
+
+    }
+
+    if (profile && profileDropdown) {
+
+        profile.addEventListener("click", (e) => {
+
+            e.stopPropagation();
+
+            profileDropdown.classList.toggle("show");
+
+            if (notificationDropdown)
+                notificationDropdown.classList.remove("show");
+
+        });
+
+    }
+
+    document.addEventListener("click", () => {
+
+        if (notificationDropdown)
+            notificationDropdown.classList.remove("show");
+
+        if (profileDropdown)
+            profileDropdown.classList.remove("show");
+
+    });
 
 }
 
-
 /*==========================================
-    Chart
+    CHARTS
 ==========================================*/
 
-let salesChart;
+function initializeCharts() {
 
-function loadChart() {
+    createRevenueChart();
 
-    const ctx =
-        document.getElementById("salesChart");
+    createSalesChart();
 
-    if (!ctx) return;
+}
 
-    salesChart = new Chart(ctx, {
+/*==========================================
+    REVENUE CHART
+==========================================*/
+
+function createRevenueChart() {
+
+    const canvas = document.getElementById("revenueChart");
+
+    if (!canvas) return;
+
+    new Chart(canvas, {
 
         type: "line",
 
@@ -127,23 +188,31 @@ function loadChart() {
 
             datasets: [{
 
-                label: "Sales",
+                label: "Revenue",
 
                 data: [
-                    1500,
-                    2500,
-                    1800,
-                    3500,
-                    4200,
-                    3100,
-                    Dashboard.sales
+                    12000,
+                    18000,
+                    15000,
+                    24000,
+                    22000,
+                    28000,
+                    32000
                 ],
+
+                borderColor: "#2E7D32",
+
+                backgroundColor: "rgba(46,125,50,.15)",
+
+                fill: true,
 
                 borderWidth: 3,
 
-                tension: .35,
+                tension: .4,
 
-                fill: true
+                pointRadius: 5,
+
+                pointBackgroundColor: "#2E7D32"
 
             }]
 
@@ -153,10 +222,29 @@ function loadChart() {
 
             responsive: true,
 
+            maintainAspectRatio: false,
+
             plugins: {
 
                 legend: {
                     display: false
+                }
+
+            },
+
+            scales: {
+
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: "#ECEFF1"
+                    }
+                },
+
+                x: {
+                    grid: {
+                        display: false
+                    }
                 }
 
             }
@@ -168,185 +256,75 @@ function loadChart() {
 }
 
 /*==========================================
-    Recent Orders
+    SALES CHART
 ==========================================*/
 
-function loadRecentOrders() {
+function createSalesChart() {
 
-    const tbody = document.getElementById("recentOrders");
+    const canvas = document.getElementById("salesChart");
 
-    if (!tbody) return;
+    if (!canvas) return;
 
-    const orders = getStorage("orders", []);
+    new Chart(canvas, {
 
-    tbody.innerHTML = "";
+        type: "doughnut",
 
-    if (orders.length === 0) {
+        data: {
 
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="4" class="text-center">
-                    No Orders Found
-                </td>
-            </tr>
-        `;
+            labels: [
 
-        return;
-    }
+                "Ayurvedic Oil",
+                "Capsule",
+                "Powder",
+                "Juice"
 
-    orders
-        .slice(-5)
-        .reverse()
-        .forEach(order => {
+            ],
 
-            tbody.innerHTML += `
-                <tr>
+            datasets: [{
 
-                    <td>${order.invoice || "-"}</td>
+                data: [
 
-                    <td>${order.customer || "-"}</td>
+                    38,
+                    22,
+                    18,
+                    22
 
-                    <td>${formatCurrency(order.total || 0)}</td>
+                ],
 
-                    <td>
+                backgroundColor: [
 
-                        <span class="badge badge-success">
+                    "#2E7D32",
+                    "#66BB6A",
+                    "#81C784",
+                    "#A5D6A7"
 
-                            ${order.status || "Paid"}
+                ],
 
-                        </span>
+                borderWidth: 0
 
-                    </td>
+            }]
 
-                </tr>
-            `;
+        },
 
-        });
+        options: {
 
-}
+            responsive: true,
 
+            maintainAspectRatio: false,
 
-/*==========================================
-    Low Stock Products
-==========================================*/
+            plugins: {
 
-function loadLowStock() {
+                legend: {
 
-    const tbody = document.getElementById("lowStockProducts");
+                    position: "bottom"
 
-    if (!tbody) return;
+                }
 
-    const products = getStorage("products", []);
+            }
 
-    tbody.innerHTML = "";
-
-    const lowStock = products.filter(product => {
-
-        return Number(product.stock) <= 10;
+        }
 
     });
-
-    if (lowStock.length === 0) {
-
-        tbody.innerHTML = `
-            <tr>
-
-                <td colspan="3" class="text-center">
-
-                    No Low Stock Products
-
-                </td>
-
-            </tr>
-        `;
-
-        return;
-
-    }
-
-    lowStock.forEach(product => {
-
-        tbody.innerHTML += `
-
-            <tr>
-
-                <td>${product.name}</td>
-
-                <td>${product.stock}</td>
-
-                <td>
-
-                    <span class="badge badge-danger">
-
-                        Low Stock
-
-                    </span>
-
-                </td>
-
-            </tr>
-
-        `;
-
-    });
-
-}
-
-
-/*==========================================
-    Recent Customers
-==========================================*/
-
-function loadRecentCustomers() {
-
-    const tbody = document.getElementById("recentCustomers");
-
-    if (!tbody) return;
-
-    const customers = getStorage("customers", []);
-
-    tbody.innerHTML = "";
-
-    if (customers.length === 0) {
-
-        tbody.innerHTML = `
-            <tr>
-
-                <td colspan="4" class="text-center">
-
-                    No Customers Found
-
-                </td>
-
-            </tr>
-        `;
-
-        return;
-
-    }
-
-    customers
-        .slice(-5)
-        .reverse()
-        .forEach(customer => {
-
-            tbody.innerHTML += `
-
-                <tr>
-
-                    <td>${customer.name || "-"}</td>
-
-                    <td>${customer.mobile || "-"}</td>
-
-                    <td>${customer.city || "-"}</td>
-
-                    <td>${customer.orders || 0}</td>
-
-                </tr>
-
-            `;
-
-        });
 
 }
 
@@ -354,342 +332,204 @@ function loadRecentCustomers() {
     CARD ANIMATION
 ==========================================*/
 
-function animateValue(elementId, start, end, duration = 1000) {
+window.addEventListener("load", () => {
 
-    const element = document.getElementById(elementId);
+    const cards = document.querySelectorAll(".card");
 
-    if (!element) return;
+    cards.forEach((card, index) => {
 
-    let startTime = null;
+        card.style.opacity = "0";
 
-    function animation(currentTime) {
+        card.style.transform = "translateY(30px)";
 
-        if (!startTime) startTime = currentTime;
+        setTimeout(() => {
 
-        const progress = Math.min((currentTime - startTime) / duration, 1);
+            card.style.transition = ".5s";
 
-        const value = Math.floor(progress * (end - start) + start);
+            card.style.opacity = "1";
 
-        if (elementId === "todaySales") {
+            card.style.transform = "translateY(0)";
 
-            element.innerHTML = formatCurrency(value);
+        }, index * 150);
 
-        } else {
+    });
 
-            element.innerHTML = value;
+});
 
-        }
+/*==========================================
+    TOAST MESSAGE
+==========================================*/
 
-        if (progress < 1) {
+function showToast(message, type = "success") {
 
-            requestAnimationFrame(animation);
+    const toast = document.getElementById("toast");
 
-        }
+    if (!toast) return;
+
+    toast.innerHTML = message;
+
+    if (type === "success") {
+
+        toast.style.background = "#2E7D32";
+
+    } else if (type === "error") {
+
+        toast.style.background = "#DC2626";
+
+    } else {
+
+        toast.style.background = "#2563EB";
 
     }
 
-    requestAnimationFrame(animation);
+    toast.style.display = "block";
+
+    toast.style.opacity = "1";
+
+    toast.style.transform = "translateY(0)";
+
+    setTimeout(() => {
+
+        toast.style.opacity = "0";
+
+        toast.style.transform = "translateY(20px)";
+
+        setTimeout(() => {
+
+            toast.style.display = "none";
+
+        }, 300);
+
+    }, 3000);
 
 }
 
-
 /*==========================================
-    ANIMATE DASHBOARD
+    LOADER
 ==========================================*/
 
-function animateDashboardCards() {
+function showLoader() {
 
-    animateValue("todaySales", 0, Dashboard.sales);
+    const loader = document.querySelector(".loader");
 
-    animateValue("totalOrders", 0, Dashboard.orders);
+    if (loader) {
 
-    animateValue("totalCustomers", 0, Dashboard.customers);
+        loader.style.display = "flex";
 
-    animateValue("totalProducts", 0, Dashboard.products);
+    }
 
 }
 
+function hideLoader() {
+
+    const loader = document.querySelector(".loader");
+
+    if (loader) {
+
+        loader.style.display = "none";
+
+    }
+
+}
 
 /*==========================================
-    TODAY ACTIVITY
+    COUNTER ANIMATION
 ==========================================*/
 
-function loadTodayActivity() {
+function animateCounters() {
 
-    const list = document.querySelector(".activity-list");
+    const cards = document.querySelectorAll(".card h2");
 
-    if (!list) return;
+    cards.forEach(card => {
 
-    const orders = Dashboard.orders;
+        const text = card.innerText.replace(/[₹, ]/g, "");
 
-    const customers = Dashboard.customers;
+        const target = parseInt(text);
 
-    const products = Dashboard.products;
+        if (isNaN(target)) return;
 
-    list.innerHTML = "";
+        let count = 0;
 
-    list.innerHTML += `
-        <li>
-            <i class="fas fa-cart-shopping text-success"></i>
-            ${orders} Orders Available
-        </li>
-    `;
+        const step = Math.max(1, Math.ceil(target / 60));
 
-    list.innerHTML += `
-        <li>
-            <i class="fas fa-users text-primary"></i>
-            ${customers} Customers Available
-        </li>
-    `;
+        const timer = setInterval(() => {
 
-    list.innerHTML += `
-        <li>
-            <i class="fas fa-box-open text-warning"></i>
-            ${products} Products Available
-        </li>
-    `;
+            count += step;
 
-    list.innerHTML += `
-        <li>
-            <i class="fas fa-chart-line text-danger"></i>
-            Today's Sales ${formatCurrency(Dashboard.sales)}
-        </li>
-    `;
+            if (count >= target) {
+
+                count = target;
+
+                clearInterval(timer);
+
+            }
+
+            if (card.innerText.includes("₹")) {
+
+                card.innerHTML = "₹ " + count.toLocaleString("en-IN");
+
+            } else {
+
+                card.innerHTML = count.toLocaleString("en-IN");
+
+            }
+
+        }, 20);
+
+    });
 
 }
 
+window.addEventListener("load", animateCounters);
 
 /*==========================================
-    DASHBOARD REFRESH
+    LOCAL STORAGE DEMO
 ==========================================*/
 
-function refreshDashboard() {
+function saveDashboardState() {
 
-    loadDashboard();
-
-    loadRecentOrders();
-
-    loadLowStock();
-
-    loadRecentCustomers();
-
-    loadTodayActivity();
-
-    animateDashboardCards();
+    localStorage.setItem("lastDashboardVisit", new Date().toISOString());
 
 }
 
+saveDashboardState();
 
 /*==========================================
-    AUTO REFRESH
+    AUTO REFRESH TIME
 ==========================================*/
 
 setInterval(() => {
 
-    refreshDashboard();
+    console.log("Dashboard refreshed at", new Date().toLocaleTimeString());
 
-}, 30000);
-
-
-/*==========================================
-    WELCOME MESSAGE
-==========================================*/
-
-window.addEventListener("load", () => {
-
-    setTimeout(() => {
-
-        showToast(
-
-            "Welcome to PranVeda Dashboard",
-
-            "success"
-
-        );
-
-    }, 700);
-
-});
-
+}, 60000);
 
 /*==========================================
-    INITIAL CALL
+    DEMO NOTIFICATION
 ==========================================*/
 
-window.addEventListener("load", () => {
+setTimeout(() => {
 
-    refreshDashboard();
+    showToast("Welcome to PranVeda ERP Dashboard");
 
-});
+}, 1000);
 
 /*==========================================
-    CARD ANIMATION
+    LOGOUT CHECK
 ==========================================*/
 
-function animateValue(elementId, start, end, duration = 1000) {
+const logoutLink = document.querySelector('a[href="login.html"]');
 
-    const element = document.getElementById(elementId);
+if (logoutLink) {
 
-    if (!element) return;
+    logoutLink.addEventListener("click", () => {
 
-    let startTime = null;
+        localStorage.removeItem("isLoggedIn");
 
-    function animation(currentTime) {
-
-        if (!startTime) startTime = currentTime;
-
-        const progress = Math.min((currentTime - startTime) / duration, 1);
-
-        const value = Math.floor(progress * (end - start) + start);
-
-        if (elementId === "todaySales") {
-
-            element.innerHTML = formatCurrency(value);
-
-        } else {
-
-            element.innerHTML = value;
-
-        }
-
-        if (progress < 1) {
-
-            requestAnimationFrame(animation);
-
-        }
-
-    }
-
-    requestAnimationFrame(animation);
+    });
 
 }
 
-
 /*==========================================
-    ANIMATE DASHBOARD
+    END
 ==========================================*/
-
-function animateDashboardCards() {
-
-    animateValue("todaySales", 0, Dashboard.sales);
-
-    animateValue("totalOrders", 0, Dashboard.orders);
-
-    animateValue("totalCustomers", 0, Dashboard.customers);
-
-    animateValue("totalProducts", 0, Dashboard.products);
-
-}
-
-
-/*==========================================
-    TODAY ACTIVITY
-==========================================*/
-
-function loadTodayActivity() {
-
-    const list = document.querySelector(".activity-list");
-
-    if (!list) return;
-
-    const orders = Dashboard.orders;
-
-    const customers = Dashboard.customers;
-
-    const products = Dashboard.products;
-
-    list.innerHTML = "";
-
-    list.innerHTML += `
-        <li>
-            <i class="fas fa-cart-shopping text-success"></i>
-            ${orders} Orders Available
-        </li>
-    `;
-
-    list.innerHTML += `
-        <li>
-            <i class="fas fa-users text-primary"></i>
-            ${customers} Customers Available
-        </li>
-    `;
-
-    list.innerHTML += `
-        <li>
-            <i class="fas fa-box-open text-warning"></i>
-            ${products} Products Available
-        </li>
-    `;
-
-    list.innerHTML += `
-        <li>
-            <i class="fas fa-chart-line text-danger"></i>
-            Today's Sales ${formatCurrency(Dashboard.sales)}
-        </li>
-    `;
-
-}
-
-
-/*==========================================
-    DASHBOARD REFRESH
-==========================================*/
-
-function refreshDashboard() {
-
-    loadDashboard();
-
-    loadRecentOrders();
-
-    loadLowStock();
-
-    loadRecentCustomers();
-
-    loadTodayActivity();
-
-    animateDashboardCards();
-
-}
-
-
-/*==========================================
-    AUTO REFRESH
-==========================================*/
-
-setInterval(() => {
-
-    refreshDashboard();
-
-}, 30000);
-
-
-/*==========================================
-    WELCOME MESSAGE
-==========================================*/
-
-window.addEventListener("load", () => {
-
-    setTimeout(() => {
-
-        showToast(
-
-            "Welcome to PranVeda Dashboard",
-
-            "success"
-
-        );
-
-    }, 700);
-
-});
-
-
-/*==========================================
-    INITIAL CALL
-==========================================*/
-
-window.addEventListener("load", () => {
-
-    refreshDashboard();
-
-});

@@ -12,11 +12,19 @@ const ERP = {
 
         customers: "erp_customers",
 
-        bills: "erp_bills",
-
         orders: "erp_orders",
 
-        settings: "erp_settings"
+        bills: "erp_bills",
+
+        settings: "erp_settings",
+
+        categories: "erp_categories",
+
+        suppliers: "erp_suppliers",
+
+        notifications: "erp_notifications",
+
+        users: "erp_users"
 
     }
 
@@ -358,61 +366,61 @@ ERP.updateBill = function (invoice, data) {
         DASHBOARD DATA V2
 ==========================================*/
 
-ERP.getDashboardData=function(){
+ERP.getDashboardData = function () {
 
-    const products=ERP.getProducts();
+    const products = ERP.getProducts();
 
-    const customers=ERP.getCustomers();
+    const customers = ERP.getCustomers();
 
-    const orders=ERP.getOrders();
+    const orders = ERP.getOrders();
 
-    const bills=ERP.getBills();
+    const bills = ERP.getBills();
 
-    const today=new Date().toLocaleDateString("en-IN");
+    const today = new Date().toLocaleDateString("en-IN");
 
-    const month=new Date().getMonth();
+    const month = new Date().getMonth();
 
-    const year=new Date().getFullYear();
+    const year = new Date().getFullYear();
 
-    let todaySales=0;
+    let todaySales = 0;
 
-    let monthlySales=0;
+    let monthlySales = 0;
 
-    let totalRevenue=0;
+    let totalRevenue = 0;
 
-    let pendingOrders=0;
+    let pendingOrders = 0;
 
-    bills.forEach(bill=>{
+    bills.forEach(bill => {
 
-        const amount=Number(bill.total)||0;
+        const amount = Number(bill.total) || 0;
 
-        totalRevenue+=amount;
+        totalRevenue += amount;
 
-        if(bill.date===today){
+        if (bill.date === today) {
 
-            todaySales+=amount;
+            todaySales += amount;
 
         }
 
-        const billDate=new Date(bill.date);
+        const billDate = new Date(bill.date);
 
-        if(
+        if (
 
-            billDate.getMonth()===month &&
+            billDate.getMonth() === month &&
 
-            billDate.getFullYear()===year
+            billDate.getFullYear() === year
 
-        ){
+        ) {
 
-            monthlySales+=amount;
+            monthlySales += amount;
 
         }
 
     });
 
-    orders.forEach(order=>{
+    orders.forEach(order => {
 
-        if(order.status==="Pending"){
+        if (order.status === "Pending") {
 
             pendingOrders++;
 
@@ -420,15 +428,15 @@ ERP.getDashboardData=function(){
 
     });
 
-    const lowStock=
+    const lowStock =
 
         products.filter(
 
-            p=>Number(p.stock)<=5
+            p => Number(p.stock) <= 5
 
         );
 
-    return{
+    return {
 
         todaySales,
 
@@ -436,17 +444,17 @@ ERP.getDashboardData=function(){
 
         totalRevenue,
 
-        totalProducts:products.length,
+        totalProducts: products.length,
 
-        totalCustomers:customers.length,
+        totalCustomers: customers.length,
 
-        totalOrders:orders.length,
+        totalOrders: orders.length,
 
-        totalBills:bills.length,
+        totalBills: bills.length,
 
         pendingOrders,
 
-        lowStockCount:lowStock.length,
+        lowStockCount: lowStock.length,
 
         latestOrders:
 
@@ -739,11 +747,79 @@ ERP.importData = function (data) {
 
 };
 
+ERP.uuid=function(){
+
+return Date.now().toString(36)+
+
+Math.random().toString(36).substring(2,8);
+
+}
+
+ERP.isEmpty=function(value){
+
+return value==null ||
+
+value==="";
+
+}
+
+ERP.formatCurrency=function(value){
+
+return "₹"+
+
+Number(value).toLocaleString("en-IN",{
+
+minimumFractionDigits:2
+
+});
+
+}
+
+ERP.today=function(){
+
+return new Date()
+
+.toLocaleDateString("en-IN");
+
+}
+
+ERP.addNotification=function(message){
+
+const data=
+
+ERP.get(
+
+ERP.storage.notifications
+
+);
+
+data.unshift({
+
+id:ERP.uuid(),
+
+message,
+
+date:new Date(),
+
+read:false
+
+});
+
+ERP.save(
+
+ERP.storage.notifications,
+
+data
+
+);
+
+}
+
 /*==========================================
         ERP VERSION
 ==========================================*/
 
-ERP.version = "1.0.0";
+ERP.version = "2.0.0";
 
 /*==========================================
         END OF ERP ENGINE

@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Settings | PranVeda ERP</title>
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+
+    <link rel="stylesheet" href="css/admin.css">
+
+    <link rel="stylesheet" href="css/settings.css">
+
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <!-- ================= SIDEBAR ================= -->
+
+        <aside class="sidebar">
+
+            <div class="logo">
+
+                <h2>🌿 PranVeda</h2>
+
+                <span>ERP Administration</span>
+
+            </div>
+
+            <nav>
+
+                <ul>
+
+                    <li>
+
+                        <a href="dashboard.html">
+
+                            <i class="fa-solid fa-house"></i>
+
+                            Dashboard
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="billing.html">
+
+                            <i class="fa-solid fa-file-invoice"></i>
+
+                            Billing
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="products.html">
+
+                            <i class="fa-solid fa-box-open"></i>
+
+                            Products
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="orders.html">
+
+                            <i class="fa-solid fa-cart-shopping"></i>
+
+                            Orders
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="customers.html">
+
+                            <i class="fa-solid fa-users"></i>
+
+                            Customers
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="reports.html">
+
+                            <i class="fa-solid fa-chart-column"></i>
+
+                            Reports
+
+                        </a>
+
+                    </li>
+
+                    <li class="active">
+
+                        <a href="settings.html">
+
+                            <i class="fa-solid fa-gear"></i>
+
+                            Settings
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="login.html">
+
+                            <i class="fa-solid fa-right-from-bracket"></i>
+
+                            Logout
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </nav>
+
+        </aside>
+
+        <!-- ================= MAIN ================= -->
+
+        <div class="main">
+
+            <header class="topbar">
+
+                <div class="left">
+
+                    <button class="menu-btn">
+
+                        <i class="fa-solid fa-bars"></i>
+
+                    </button>
+
+                    <h2>
+
+                        Settings
+
+                    </h2>
+
+                </div>
+
+                <div class="center">
+
+                    <div class="search-box">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        <input type="text" id="searchSettings" placeholder="Search Settings...">
+
+                    </div>
+
+                </div>
+
+                <div class="right">
+
+                    <div class="date-time">
+
+                        <div id="currentDate"></div>
+
+                        <div id="currentTime"></div>
+
+                    </div>
+
+                    <div class="notification">
+
+                        <i class="fa-solid fa-bell"></i>
+
+                        <span>3</span>
+
+                    </div>
+
+                    <div class="profile">
+
+                        <img src="assets/images/admin.png" alt="Admin">
+
+                        <div>
+
+                            <h4>
+
+                                Denish Makadiya
+
+                            </h4>
+
+                            <p>
+
+                                Administrator
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+            <!-- ================= PAGE ================= -->
+
+            <main class="settings-page">
+
+                <div class="page-title">
+
+                    <h1>
+
+                        System Settings
+
+                    </h1>
+
+                    <p>
+
+                        Manage your company, invoice, WhatsApp and security settings.
+
+                    </p>
+
+                </div>
+
+                <!-- ================= DASHBOARD CARDS ================= -->
+
+                <div class="cards">
+
+                    <div class="card">
+
+                        <div>
+
+                            <h5>Company</h5>
+
+                            <h2>
+
+                                Profile
+
+                            </h2>
+
+                        </div>
+
+                        <i class="fa-solid fa-building"></i>
+
+                    </div>
+
+                    <div class="card">
+
+                        <div>
+
+                            <h5>Invoice</h5>
+
+                            <h2>
+
+                                Settings
+
+                            </h2>
+
+                        </div>
+
+                        <i class="fa-solid fa-file-invoice"></i>
+
+                    </div>
+
+                    <div class="card">
+
+                        <div>
+
+                            <h5>WhatsApp</h5>
+
+                            <h2>
+
+                                Connected
+
+                            </h2>
+
+                        </div>
+
+                        <i class="fa-brands fa-whatsapp"></i>
+
+                    </div>
+
+                    <div class="card">
+
+                        <div>
+
+                            <h5>Security</h5>
+
+                            <h2>
+
+                                Protected
+
+                            </h2>
+
+                        </div>
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                    </div>
+
+                </div>
+
+                <!-- ================= SETTINGS FORM START ================= -->
+
+                <form id="settingsForm">
+                    <!-- ================= COMPANY INFORMATION ================= -->
+
+                    <div class="settings-card">
+
+                        <div class="card-header">
+
+                            <h2>
+
+                                <i class="fa-solid fa-building"></i>
+
+                                Company Information
+
+                            </h2>
+
+                        </div>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label>Company Name</label>
+
+                                <input type="text" id="companyName" placeholder="PranVeda">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Brand Name</label>
+
+                                <input type="text" id="brandName" placeholder="PranVeda">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Owner Name</label>
+
+                                <input type="text" id="ownerName" placeholder="Denish Makadiya">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Mobile Number</label>
+
+                                <input type="tel" id="mobileNumber" placeholder="+91 9876543210">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>WhatsApp Number</label>
+
+                                <input type="tel" id="whatsappNumber" placeholder="+91 9876543210">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Email Address</label>
+
+                                <input type="email" id="companyEmail" placeholder="support@pranveda.com">
+
+                            </div>
+
+                            <div class="form-group full-width">
+
+                                <label>Website</label>
+
+                                <input type="url" id="companyWebsite" placeholder="https://www.pranveda.com">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ================= ADDRESS INFORMATION ================= -->
+
+                    <div class="settings-card">
+
+                        <div class="card-header">
+
+                            <h2>
+
+                                <i class="fa-solid fa-location-dot"></i>
+
+                                Company Address
+
+                            </h2>
+
+                        </div>
+
+                        <div class="form-grid">
+
+                            <div class="form-group full-width">
+
+                                <label>Address</label>
+
+                                <textarea id="companyAddress" rows="3" placeholder="Enter Company Address"></textarea>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>City</label>
+
+                                <input type="text" id="companyCity" placeholder="Ahmedabad">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>State</label>
+
+                                <input type="text" id="companyState" placeholder="Gujarat">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Pincode</label>
+
+                                <input type="text" id="companyPincode" placeholder="382481">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Country</label>
+
+                                <input type="text" id="companyCountry" value="India">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ================= BUSINESS INFORMATION ================= -->
+
+                    <div class="settings-card">
+
+                        <div class="card-header">
+
+                            <h2>
+
+                                <i class="fa-solid fa-briefcase"></i>
+
+                                Business Information
+
+                            </h2>
+
+                        </div>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label>Business Type</label>
+
+                                <select id="businessType">
+
+                                    <option>Ayurvedic Products</option>
+                                    <option>Retail Store</option>
+                                    <option>Wholesale</option>
+                                    <option>Distributor</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Financial Year</label>
+
+                                <select id="financialYear">
+
+                                    <option>2026 - 2027</option>
+                                    <option>2027 - 2028</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Time Zone</label>
+
+                                <select id="timeZone">
+
+                                    <option>(GMT +05:30) India</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Date Format</label>
+
+                                <select id="dateFormat">
+
+                                    <option>DD/MM/YYYY</option>
+                                    <option>MM/DD/YYYY</option>
+                                    <option>YYYY-MM-DD</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ================= INVOICE SETTINGS START ================= -->
+
+                    <div class="settings-card">
+                        <!-- ================= INVOICE SETTINGS ================= -->
+
+                        <div class="card-header">
+
+                            <h2>
+
+                                <i class="fa-solid fa-file-invoice"></i>
+
+                                Invoice Settings
+
+                            </h2>
+
+                        </div>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label>Invoice Prefix</label>
+
+                                <input type="text" id="invoicePrefix" value="INV-">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Starting Invoice Number</label>
+
+                                <input type="number" id="invoiceNumber" value="1001">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Currency</label>
+
+                                <select id="currency">
+
+                                    <option value="INR" selected>
+
+                                        ₹ Indian Rupee
+
+                                    </option>
+
+                                    <option value="USD">
+
+                                        $ US Dollar
+
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Currency Position</label>
+
+                                <select id="currencyPosition">
+
+                                    <option value="left">
+
+                                        Left (₹100)
+
+                                    </option>
+
+                                    <option value="right">
+
+                                        Right (100₹)
+
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ================= GST SETTINGS ================= -->
+
+                    <div class="settings-card">
+
+                        <div class="card-header">
+
+                            <h2>
+
+                                <i class="fa-solid fa-percent"></i>
+
+                                GST Settings
+
+                            </h2>
+
+                        </div>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label>GST Number</label>
+
+                                <input type="text" disabled placeholder="Future Update">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>GST Percentage</label>
+
+                                <input type="number" disabled placeholder="Future Update">
+
+                            </div>
+
+                            <div class="form-group full-width">
+
+                                <label>
+
+                                    <input type="checkbox" disabled>
+
+                                    Enable GST (Coming Soon)
+
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ================= WHATSAPP SETTINGS ================= -->
+
+                    <div class="settings-card">
+
+                        <div class="card-header">
+
+                            <h2>
+
+                                <i class="fa-brands fa-whatsapp"></i>
+
+                                WhatsApp Settings
+
+                            </h2>
+
+                        </div>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label>Business WhatsApp</label>
+
+                                <input type="text" id="businessWhatsapp" placeholder="+91 9876543210">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Default Message</label>
+
+                                <input type="text" id="defaultMessage"
+                                    placeholder="Thank you for shopping with PranVeda">
+
+                            </div>
+
+                            <div class="form-group full-width">
+
+                                <label>
+
+                                    <input type="checkbox" id="shareInvoice" checked>
+
+                                    Share Invoice Automatically
+
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ================= SECURITY ================= -->
+
+                    <div class="settings-card">
+
+                        <div class="card-header">
+
+                            <h2>
+
+                                <i class="fa-solid fa-lock"></i>
+
+                                Security
+
+                            </h2>
+
+                        </div>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label>Current Password</label>
+
+                                <input type="password" id="currentPassword">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>New Password</label>
+
+                                <input type="password" id="newPassword">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Confirm Password</label>
+
+                                <input type="password" id="confirmPassword">
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>Session Timeout</label>
+
+                                <select id="sessionTimeout">
+
+                                    <option>15 Minutes</option>
+
+                                    <option selected>
+
+                                        30 Minutes
+
+                                    </option>
+
+                                    <option>60 Minutes</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ================= SAVE SETTINGS ================= -->
+
+                    <div class="settings-actions">
+
+                        <button type="submit" class="btn btn-primary" id="saveSettings">
+
+                            <i class="fa-solid fa-floppy-disk"></i>
+
+                            Save Settings
+
+                        </button>
+
+                        <button type="reset" class="btn btn-secondary">
+
+                            <i class="fa-solid fa-rotate-left"></i>
+
+                            Reset
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+                <!-- ================= PAGE END ================= -->
+
+            </main>
+        </div>
+
+        <!-- ================= NOTIFICATION DROPDOWN ================= -->
+
+        <div class="notification-dropdown">
+
+            <div class="dropdown-header">
+
+                <h3>Notifications</h3>
+
+            </div>
+
+            <div class="dropdown-body">
+
+                <div class="notify-item">
+
+                    <i class="fa-solid fa-building"></i>
+
+                    <div>
+
+                        <h4>Company Profile Updated</h4>
+
+                        <p>Your company information has been saved successfully.</p>
+
+                    </div>
+
+                </div>
+
+                <div class="notify-item">
+
+                    <i class="fa-brands fa-whatsapp"></i>
+
+                    <div>
+
+                        <h4>WhatsApp Connected</h4>
+
+                        <p>Business WhatsApp is active.</p>
+
+                    </div>
+
+                </div>
+
+                <div class="notify-item">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    <div>
+
+                        <h4>Security Updated</h4>
+
+                        <p>Password was changed successfully.</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= PROFILE DROPDOWN ================= -->
+
+        <div class="profile-dropdown">
+
+            <div class="profile-header">
+
+                <img src="assets/images/admin.png" alt="Admin">
+
+                <h3>Denish Makadiya</h3>
+
+                <span>Administrator</span>
+
+            </div>
+
+            <ul>
+
+                <li>
+
+                    <a href="dashboard.html">
+
+                        <i class="fa-solid fa-house"></i>
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="settings.html">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        My Profile
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="settings.html">
+
+                        <i class="fa-solid fa-gear"></i>
+
+                        Settings
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="login.html">
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Logout
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+        <!-- ================= LOADER ================= -->
+
+        <div class="loader">
+
+            <div class="spinner"></div>
+
+        </div>
+
+        <!-- ================= TOAST ================= -->
+
+        <div id="toast"></div>
+
+        <!-- ================= JAVASCRIPT ================= -->
+
+        <script src="js/common.js"></script>
+
+        <script src="js/settings.js"></script>
+
+</body>
+
+</html>

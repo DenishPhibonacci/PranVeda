@@ -3,410 +3,997 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Orders | PranVeda Admin</title>
+    <title>Orders | PranVeda ERP</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Google Fonts -->
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link rel="stylesheet" href="css/admin.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+
+    <link rel="stylesheet" href="css/admin.css">
+
+    <link rel="stylesheet" href="css/orders.css">
 
 </head>
 
 <body>
 
-<div class="admin-layout">
+    <div class="layout">
 
-<!-- Sidebar -->
+        <!-- ================= SIDEBAR ================= -->
 
-<aside class="sidebar">
+        <aside class="sidebar">
 
-<div class="logo">
+            <div class="logo">
 
-<h2>🌿 PranVeda</h2>
+                <h2>🌿 PranVeda</h2>
 
-<span>Admin Panel</span>
+                <span>ERP Administration</span>
 
-</div>
+            </div>
 
-<ul class="menu">
+            <nav>
 
-<li>
-<a href="dashboard.html">
-<i class="fas fa-chart-line"></i>
-<span>Dashboard</span>
-</a>
-</li>
+                <ul>
 
-<li>
-<a href="billing.html">
-<i class="fas fa-file-invoice"></i>
-<span>Billing</span>
-</a>
-</li>
+                    <li>
 
-<li class="active">
-<a href="orders.html">
-<i class="fas fa-box"></i>
-<span>Orders</span>
-</a>
-</li>
+                        <a href="dashboard.html">
 
-<li>
-<a href="customers.html">
-<i class="fas fa-users"></i>
-<span>Customers</span>
-</a>
-</li>
-<li>
-    <a href="products.html">
-        <i class="fas fa-box-open"></i>
-        <span>Products</span>
-    </a>
-</li>
-<li>
-<a href="login.html">
-<i class="fas fa-right-from-bracket"></i>
-<span>Logout</span>
-</a>
-</li>
+                            <i class="fa-solid fa-house"></i>
 
-</ul>
+                            Dashboard
 
-</aside>
+                        </a>
 
-<!-- Main -->
+                    </li>
 
-<main class="main-content">
+                    <li>
 
-<header class="topbar">
+                        <a href="billing.html">
 
-<div>
+                            <i class="fa-solid fa-file-invoice"></i>
 
-<h1>Orders</h1>
+                            Billing
 
-<p>Manage All Customer Orders</p>
+                        </a>
 
-</div>
+                    </li>
 
-<div class="admin-user">
+                    <li>
 
-<i class="fas fa-user-circle"></i>
+                        <a href="products.html">
 
-Admin
+                            <i class="fa-solid fa-box-open"></i>
 
-</div>
+                            Products
 
-</header>
+                        </a>
 
-<!-- Search & Filter -->
+                    </li>
 
-<div class="billing-card">
+                    <li class="active">
 
-<div class="orders-filter">
+                        <a href="orders.html">
 
-<div>
+                            <i class="fa-solid fa-cart-shopping"></i>
 
-<label>Search</label>
+                            Orders
 
-<input
-type="text"
-id="searchOrder"
-placeholder="Invoice / Customer / Mobile">
+                        </a>
 
-</div>
+                    </li>
 
-<div>
+                    <li>
 
-<label>Status</label>
+                        <a href="customers.html">
 
-<select id="statusFilter">
+                            <i class="fa-solid fa-users"></i>
 
-<option value="all">All</option>
+                            Customers
 
-<option value="paid">Paid</option>
+                        </a>
 
-<option value="pending">Pending</option>
+                    </li>
 
-<option value="cancelled">Cancelled</option>
+                    <li>
 
-</select>
+                        <a href="reports.html">
 
-</div>
+                            <i class="fa-solid fa-chart-column"></i>
 
-<div>
+                            Reports
 
-<label>Date</label>
+                        </a>
 
-<input
-type="date"
-id="dateFilter">
+                    </li>
 
-</div>
+                    <li>
 
-<div>
+                        <a href="settings.html">
 
-<button
-id="searchBtn"
-class="action-btn">
+                            <i class="fa-solid fa-gear"></i>
 
-<i class="fas fa-search"></i>
+                            Settings
 
-Search
+                        </a>
 
-</button>
+                    </li>
 
-</div>
+                    <li>
 
-</div>
+                        <a href="login.html">
 
-</div>
+                            <i class="fa-solid fa-right-from-bracket"></i>
 
-<!-- Orders Table -->
+                            Logout
 
-<div class="billing-card">
+                        </a>
 
-<div class="table-header">
+                    </li>
 
-<h2>All Orders</h2>
+                </ul>
 
-<button class="action-btn" id="refreshOrders">
+            </nav>
 
-<i class="fas fa-rotate"></i>
+        </aside>
 
-Refresh
+        <!-- ================= MAIN ================= -->
 
-</button>
+        <div class="main">
 
-</div>
+            <header class="topbar">
 
-<table id="ordersTable">
+                <div class="left">
 
-<thead>
+                    <button class="menu-btn">
 
-<tr>
+                        <i class="fa-solid fa-bars"></i>
 
-<th>Invoice</th>
+                    </button>
 
-<th>Date</th>
+                    <h2>
 
-<th>Customer</th>
+                        Orders
 
-<th>Mobile</th>
+                    </h2>
 
-<th>Amount</th>
+                </div>
 
-<th>Status</th>
+                <div class="center">
 
-<th>Action</th>
+                    <div class="search-box">
 
-</tr>
+                        <i class="fa-solid fa-magnifying-glass"></i>
 
-</thead>
+                        <input type="text" id="searchOrder" placeholder="Search Order...">
 
-<tbody id="ordersBody">
+                    </div>
 
-<tr>
+                </div>
 
-<td>PV000001</td>
+                <div class="right">
 
-<td>05-08-2026</td>
+                    <div class="date-time">
 
-<td>Rahul Patel</td>
+                        <div id="currentDate"></div>
 
-<td>9876543210</td>
+                        <div id="currentTime"></div>
 
-<td>₹399</td>
+                    </div>
 
-<td>
+                    <div class="notification">
 
-<span class="status paid">
+                        <i class="fa-solid fa-bell"></i>
 
-Paid
+                        <span>5</span>
 
-</span>
+                    </div>
 
-</td>
+                    <div class="profile">
 
-<td>
+                        <img src="assets/images/admin.png" alt="Admin">
 
-<button class="table-btn view">
+                        <div>
 
-<i class="fas fa-eye"></i>
+                            <h4>
 
-</button>
+                                Denish Makadiya
 
-<button class="table-btn edit">
+                            </h4>
 
-<i class="fas fa-pen"></i>
+                            <p>
 
-</button>
+                                Administrator
 
-<button class="table-btn print">
+                            </p>
 
-<i class="fas fa-print"></i>
+                        </div>
 
-</button>
+                    </div>
 
-<button class="table-btn delete">
+                </div>
 
-<i class="fas fa-trash"></i>
+            </header>
 
-</button>
+            <!-- ================= PAGE ================= -->
 
-</td>
+            <main class="orders-page">
 
-</tr>
+                <div class="page-title">
 
-<tr>
+                    <h1>
 
-<td>PV000002</td>
+                        Orders Management
 
-<td>05-08-2026</td>
+                    </h1>
 
-<td>Amit Shah</td>
+                    <p>
 
-<td>9988776655</td>
+                        Manage customer orders and track delivery status.
 
-<td>₹799</td>
+                    </p>
 
-<td>
+                </div>
 
-<span class="status pending">
+                <!-- ================= SUMMARY CARDS ================= -->
 
-Pending
+                <div class="cards">
 
-</span>
+                    <div class="card">
 
-</td>
+                        <div>
 
-<td>
+                            <h5>Total Orders</h5>
 
-<button class="table-btn view">
+                            <h2 id="totalOrders">
 
-<i class="fas fa-eye"></i>
+                                125
 
-</button>
+                            </h2>
 
-<button class="table-btn edit">
+                        </div>
 
-<i class="fas fa-pen"></i>
+                        <i class="fa-solid fa-cart-shopping"></i>
 
-</button>
+                    </div>
 
-<button class="table-btn print">
+                    <div class="card">
 
-<i class="fas fa-print"></i>
+                        <div>
 
-</button>
+                            <h5>Pending</h5>
 
-<button class="table-btn delete">
+                            <h2>
 
-<i class="fas fa-trash"></i>
+                                18
 
-</button>
+                            </h2>
 
-</td>
+                        </div>
 
-</tr>
+                        <i class="fa-solid fa-clock"></i>
 
-</tbody>
+                    </div>
 
-</table>
+                    <div class="card">
 
-</div>
+                        <div>
 
-<!-- Summary -->
+                            <h5>Shipped</h5>
 
-<div class="cards">
+                            <h2>
 
-<div class="card">
+                                42
 
-<div class="icon">
+                            </h2>
 
-<i class="fas fa-file-invoice"></i>
+                        </div>
 
-</div>
+                        <i class="fa-solid fa-truck-fast"></i>
 
-<div>
+                    </div>
 
-<h3 id="totalOrders">2</h3>
+                    <div class="card">
 
-<p>Total Orders</p>
+                        <div>
 
-</div>
+                            <h5>Delivered</h5>
 
-</div>
+                            <h2>
 
-<div class="card">
+                                65
 
-<div class="icon">
+                            </h2>
 
-<i class="fas fa-indian-rupee-sign"></i>
+                        </div>
 
-</div>
+                        <i class="fa-solid fa-circle-check"></i>
 
-<div>
+                    </div>
 
-<h3 id="totalSales">₹1198</h3>
+                </div>
 
-<p>Total Sales</p>
+                <!-- ================= TOOLBAR ================= -->
 
-</div>
+                <div class="toolbar">
+                    <div class="toolbar-left">
 
-</div>
+                        <div class="filter-group">
 
-<div class="card">
+                            <label>Order Status</label>
 
-<div class="icon">
+                            <select id="statusFilter">
 
-<i class="fas fa-clock"></i>
+                                <option value="">All Status</option>
+                                <option>Pending</option>
+                                <option>Packed</option>
+                                <option>Shipped</option>
+                                <option>Delivered</option>
+                                <option>Cancelled</option>
 
-</div>
+                            </select>
 
-<div>
+                        </div>
 
-<h3 id="pendingOrders">1</h3>
+                        <div class="filter-group">
 
-<p>Pending</p>
+                            <label>Payment</label>
 
-</div>
+                            <select id="paymentFilter">
 
-</div>
+                                <option value="">All Payment</option>
+                                <option>Cash</option>
+                                <option>UPI</option>
+                                <option>Card</option>
 
-<div class="card">
+                            </select>
 
-<div class="icon">
+                        </div>
 
-<i class="fas fa-circle-check"></i>
+                        <div class="filter-group">
 
-</div>
+                            <label>Date</label>
 
-<div>
+                            <input type="date" id="dateFilter">
 
-<h3 id="paidOrders">1</h3>
+                        </div>
 
-<p>Paid</p>
+                    </div>
 
-</div>
+                    <div class="toolbar-right">
 
-</div>
+                        <button class="btn btn-primary" id="newOrderBtn">
 
-</div>
+                            <i class="fa-solid fa-plus"></i>
 
-</main>
+                            New Order
 
-</div>
+                        </button>
 
-<script src="js/admin.js"></script>
+                    </div>
+
+                </div>
+
+                <!-- ================= ORDER TABLE ================= -->
+
+                <div class="table-card">
+
+                    <div class="table-header">
+
+                        <h3>Order List</h3>
+
+                        <span id="orderCount">
+
+                            Total Orders : 125
+
+                        </span>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="order-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Order ID</th>
+                                    <th>Invoice</th>
+                                    <th>Customer</th>
+                                    <th>Mobile</th>
+                                    <th>Amount</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="orderTable">
+
+                                <tr>
+
+                                    <td>
+
+                                        ORD-0001
+
+                                    </td>
+
+                                    <td>
+
+                                        INV-0001
+
+                                    </td>
+
+                                    <td>
+
+                                        Denish Makadiya
+
+                                    </td>
+
+                                    <td>
+
+                                        +91 9876543210
+
+                                    </td>
+
+                                    <td>
+
+                                        ₹1,250
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="payment cash">
+
+                                            Cash
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="status pending">
+
+                                            Pending
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        06 Aug 2026
+
+                                    </td>
+
+                                    <td>
+
+                                        <button class="icon-btn view" title="View">
+
+                                            <i class="fa-solid fa-eye"></i>
+
+                                        </button>
+
+                                        <button class="icon-btn edit" title="Update Status">
+
+                                            <i class="fa-solid fa-pen"></i>
+
+                                        </button>
+
+                                        <button class="icon-btn print" title="Print">
+
+                                            <i class="fa-solid fa-print"></i>
+
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <td>
+
+                                        ORD-0002
+
+                                    </td>
+
+                                    <td>
+
+                                        INV-0002
+
+                                    </td>
+
+                                    <td>
+
+                                        Rahul Patel
+
+                                    </td>
+
+                                    <td>
+
+                                        +91 9988776655
+
+                                    </td>
+
+                                    <td>
+
+                                        ₹850
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="payment upi">
+
+                                            UPI
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="status delivered">
+
+                                            Delivered
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        05 Aug 2026
+
+                                    </td>
+
+                                    <td>
+
+                                        <button class="icon-btn view" title="View">
+
+                                            <i class="fa-solid fa-eye"></i>
+
+                                        </button>
+
+                                        <button class="icon-btn edit" title="Update Status">
+
+                                            <i class="fa-solid fa-pen"></i>
+
+                                        </button>
+
+                                        <button class="icon-btn print" title="Print">
+
+                                            <i class="fa-solid fa-print"></i>
+
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <!-- ================= ORDER DETAILS MODAL START ================= -->
+
+                <div class="modal" id="orderModal">
+
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+
+                            <h2>
+
+                                Order Details
+
+                            </h2>
+
+                            <button class="close-modal">
+
+                                <i class="fa-solid fa-xmark"></i>
+
+                            </button>
+
+                        </div>
+
+                        <div class="modal-body">
+                            <!-- ================= ORDER INFORMATION ================= -->
+
+                            <div class="order-info">
+
+                                <div class="info-grid">
+
+                                    <div class="info-box">
+
+                                        <label>Order ID</label>
+
+                                        <input type="text" id="orderId" value="ORD-0001" readonly>
+
+                                    </div>
+
+                                    <div class="info-box">
+
+                                        <label>Invoice No.</label>
+
+                                        <input type="text" id="invoiceId" value="INV-0001" readonly>
+
+                                    </div>
+
+                                    <div class="info-box">
+
+                                        <label>Customer Name</label>
+
+                                        <input type="text" id="customerName" value="Denish Makadiya" readonly>
+
+                                    </div>
+
+                                    <div class="info-box">
+
+                                        <label>Mobile</label>
+
+                                        <input type="text" id="customerMobile" value="9876543210" readonly>
+
+                                    </div>
+
+                                    <div class="info-box">
+
+                                        <label>Order Date</label>
+
+                                        <input type="text" id="orderDate" value="06 Aug 2026" readonly>
+
+                                    </div>
+
+                                    <div class="info-box">
+
+                                        <label>Payment</label>
+
+                                        <input type="text" id="paymentMethod" value="Cash" readonly>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <!-- ================= ORDER ITEMS ================= -->
+
+                            <h3 class="section-title">
+
+                                Ordered Products
+
+                            </h3>
+
+                            <div class="table-responsive">
+
+                                <table class="items-table">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>Product</th>
+
+                                            <th>Qty</th>
+
+                                            <th>Rate</th>
+
+                                            <th>Total</th>
+
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody id="orderItems">
+
+                                        <tr>
+
+                                            <td>Ashwagandha Powder</td>
+
+                                            <td>2</td>
+
+                                            <td>₹399</td>
+
+                                            <td>₹798</td>
+
+                                        </tr>
+
+                                        <tr>
+
+                                            <td>Brahmi Hair Oil</td>
+
+                                            <td>1</td>
+
+                                            <td>₹249</td>
+
+                                            <td>₹249</td>
+
+                                        </tr>
+
+                                    </tbody>
+
+                                    <tfoot>
+
+                                        <tr>
+
+                                            <th colspan="3">
+
+                                                Grand Total
+
+                                            </th>
+
+                                            <th>
+
+                                                ₹1047
+
+                                            </th>
+
+                                        </tr>
+
+                                    </tfoot>
+
+                                </table>
+
+                            </div>
+
+                            <!-- ================= STATUS ================= -->
+
+                            <div class="status-section">
+
+                                <div class="form-group">
+
+                                    <label>
+
+                                        Order Status
+
+                                    </label>
+
+                                    <select id="orderStatus">
+
+                                        <option>Pending</option>
+
+                                        <option>Packed</option>
+
+                                        <option>Shipped</option>
+
+                                        <option selected>
+
+                                            Delivered
+
+                                        </option>
+
+                                        <option>Cancelled</option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                            <!-- ================= ACTIONS ================= -->
+
+                            <div class="modal-footer">
+
+                                <button type="button" class="btn btn-secondary close-modal">
+
+                                    <i class="fa-solid fa-xmark"></i>
+
+                                    Close
+
+                                </button>
+
+                                <button type="button" class="btn btn-primary" id="updateOrderStatus">
+
+                                    <i class="fa-solid fa-floppy-disk"></i>
+
+                                    Update Status
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ================= PAGINATION START ================= -->
+
+                    <div class="pagination">
+                        <button class="page-btn active">1</button>
+
+                        <button class="page-btn">2</button>
+
+                        <button class="page-btn">3</button>
+
+                        <button class="page-btn">
+
+                            <i class="fa-solid fa-angle-right"></i>
+
+                        </button>
+
+                    </div>
+
+            </main>
+
+        </div>
+
+        <!-- ================= NOTIFICATION DROPDOWN ================= -->
+
+        <div class="notification-dropdown">
+
+            <div class="dropdown-header">
+
+                <h3>Notifications</h3>
+
+            </div>
+
+            <div class="dropdown-body">
+
+                <div class="notify-item">
+
+                    <i class="fa-solid fa-cart-shopping"></i>
+
+                    <div>
+
+                        <h4>New Order Received</h4>
+
+                        <p>Invoice INV-0031 has been created.</p>
+
+                    </div>
+
+                </div>
+
+                <div class="notify-item">
+
+                    <i class="fa-solid fa-truck-fast"></i>
+
+                    <div>
+
+                        <h4>Order Shipped</h4>
+
+                        <p>ORD-0018 has been shipped.</p>
+
+                    </div>
+
+                </div>
+
+                <div class="notify-item">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    <div>
+
+                        <h4>Order Delivered</h4>
+
+                        <p>ORD-0012 delivered successfully.</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= PROFILE DROPDOWN ================= -->
+
+        <div class="profile-dropdown">
+
+            <div class="profile-header">
+
+                <img src="assets/images/admin.png" alt="Admin">
+
+                <h3>
+
+                    Denish Makadiya
+
+                </h3>
+
+                <span>
+
+                    Administrator
+
+                </span>
+
+            </div>
+
+            <ul>
+
+                <li>
+
+                    <a href="settings.html">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        My Profile
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="settings.html">
+
+                        <i class="fa-solid fa-gear"></i>
+
+                        Settings
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="reports.html">
+
+                        <i class="fa-solid fa-chart-column"></i>
+
+                        Reports
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="login.html">
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Logout
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+        <!-- ================= LOADER ================= -->
+
+        <div class="loader">
+
+            <div class="spinner"></div>
+
+        </div>
+
+        <!-- ================= TOAST ================= -->
+
+        <div id="toast"></div>
+
+        <!-- ================= JAVASCRIPT ================= -->
+
+        <script src="js/common.js"></script>
+
+        <script src="js/orders.js"></script>
 
 </body>
 

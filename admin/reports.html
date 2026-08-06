@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reports | PranVeda ERP</title>
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Chart.js -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- CSS -->
+
+    <link rel="stylesheet" href="css/admin.css">
+
+    <link rel="stylesheet" href="css/reports.css">
+
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <!-- ================= SIDEBAR ================= -->
+
+        <aside class="sidebar">
+
+            <div class="logo">
+
+                <h2>🌿 PranVeda</h2>
+
+                <span>ERP Administration</span>
+
+            </div>
+
+            <nav>
+
+                <ul>
+
+                    <li>
+
+                        <a href="dashboard.html">
+
+                            <i class="fa-solid fa-house"></i>
+
+                            Dashboard
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="billing.html">
+
+                            <i class="fa-solid fa-file-invoice"></i>
+
+                            Billing
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="products.html">
+
+                            <i class="fa-solid fa-box-open"></i>
+
+                            Products
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="orders.html">
+
+                            <i class="fa-solid fa-cart-shopping"></i>
+
+                            Orders
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="customers.html">
+
+                            <i class="fa-solid fa-users"></i>
+
+                            Customers
+
+                        </a>
+
+                    </li>
+
+                    <li class="active">
+
+                        <a href="reports.html">
+
+                            <i class="fa-solid fa-chart-column"></i>
+
+                            Reports
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="settings.html">
+
+                            <i class="fa-solid fa-gear"></i>
+
+                            Settings
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="login.html">
+
+                            <i class="fa-solid fa-right-from-bracket"></i>
+
+                            Logout
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </nav>
+
+        </aside>
+
+        <!-- ================= MAIN ================= -->
+
+        <div class="main">
+
+            <header class="topbar">
+
+                <div class="left">
+
+                    <button class="menu-btn">
+
+                        <i class="fa-solid fa-bars"></i>
+
+                    </button>
+
+                    <h2>
+
+                        Reports
+
+                    </h2>
+
+                </div>
+
+                <div class="center">
+
+                    <div class="search-box">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        <input type="text" id="searchReport" placeholder="Search Report...">
+
+                    </div>
+
+                </div>
+
+                <div class="right">
+
+                    <div class="date-time">
+
+                        <div id="currentDate"></div>
+
+                        <div id="currentTime"></div>
+
+                    </div>
+
+                    <div class="notification">
+
+                        <i class="fa-solid fa-bell"></i>
+
+                        <span>4</span>
+
+                    </div>
+
+                    <div class="profile">
+
+                        <img src="assets/images/admin.png" alt="Admin">
+
+                        <div>
+
+                            <h4>
+
+                                Denish Makadiya
+
+                            </h4>
+
+                            <p>
+
+                                Administrator
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+            <!-- ================= PAGE ================= -->
+
+            <main class="reports-page">
+
+                <div class="page-title">
+
+                    <h1>
+
+                        Reports & Analytics
+
+                    </h1>
+
+                    <p>
+
+                        Analyze sales, customers, products and business performance.
+
+                    </p>
+
+                </div>
+
+                <!-- ================= SUMMARY CARDS ================= -->
+
+                <div class="cards">
+
+                    <div class="card">
+
+                        <div>
+
+                            <h5>Today's Sales</h5>
+
+                            <h2 id="todaySales">
+
+                                ₹25,480
+
+                            </h2>
+
+                        </div>
+
+                        <i class="fa-solid fa-indian-rupee-sign"></i>
+
+                    </div>
+
+                    <div class="card">
+
+                        <div>
+
+                            <h5>Monthly Sales</h5>
+
+                            <h2 id="monthlySales">
+
+                                ₹6.85L
+
+                            </h2>
+
+                        </div>
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                    </div>
+
+                    <div class="card">
+
+                        <div>
+
+                            <h5>Total Orders</h5>
+
+                            <h2 id="totalOrders">
+
+                                125
+
+                            </h2>
+
+                        </div>
+
+                        <i class="fa-solid fa-cart-shopping"></i>
+
+                    </div>
+
+                    <div class="card">
+
+                        <div>
+
+                            <h5>Total Customers</h5>
+
+                            <h2 id="totalCustomers">
+
+                                150
+
+                            </h2>
+
+                        </div>
+
+                        <i class="fa-solid fa-users"></i>
+
+                    </div>
+
+                </div>
+
+                <!-- ================= FILTER SECTION ================= -->
+
+                <div class="toolbar">
+                    <div class="toolbar-left">
+
+                        <div class="filter-group">
+
+                            <label>From Date</label>
+
+                            <input type="date" id="fromDate">
+
+                        </div>
+
+                        <div class="filter-group">
+
+                            <label>To Date</label>
+
+                            <input type="date" id="toDate">
+
+                        </div>
+
+                        <div class="filter-group">
+
+                            <label>Report Type</label>
+
+                            <select id="reportType">
+
+                                <option value="sales">Sales Report</option>
+                                <option value="products">Product Report</option>
+                                <option value="customers">Customer Report</option>
+                                <option value="payments">Payment Report</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="toolbar-right">
+
+                        <button class="btn btn-primary" id="generateReport">
+
+                            <i class="fa-solid fa-chart-line"></i>
+
+                            Generate Report
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- ================= CHARTS ================= -->
+
+                <div class="chart-grid">
+
+                    <div class="chart-card">
+
+                        <div class="card-header">
+
+                            <h3>
+
+                                Sales Overview
+
+                            </h3>
+
+                        </div>
+
+                        <canvas id="salesChart"></canvas>
+
+                    </div>
+
+                    <div class="chart-card">
+
+                        <div class="card-header">
+
+                            <h3>
+
+                                Payment Summary
+
+                            </h3>
+
+                        </div>
+
+                        <canvas id="paymentChart"></canvas>
+
+                    </div>
+
+                </div>
+
+                <!-- ================= SALES REPORT ================= -->
+
+                <div class="table-card">
+
+                    <div class="table-header">
+
+                        <h3>
+
+                            Sales Report
+
+                        </h3>
+
+                        <span id="salesCount">
+
+                            Total Records : 125
+
+                        </span>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="report-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Invoice</th>
+
+                                    <th>Customer</th>
+
+                                    <th>Date</th>
+
+                                    <th>Payment</th>
+
+                                    <th>Amount</th>
+
+                                    <th>Status</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="salesTable">
+
+                                <tr>
+
+                                    <td>INV-0001</td>
+
+                                    <td>Denish Makadiya</td>
+
+                                    <td>06 Aug 2026</td>
+
+                                    <td>
+
+                                        <span class="payment cash">
+
+                                            Cash
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        ₹1,250
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="status success">
+
+                                            Completed
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <td>INV-0002</td>
+
+                                    <td>Rahul Patel</td>
+
+                                    <td>05 Aug 2026</td>
+
+                                    <td>
+
+                                        <span class="payment upi">
+
+                                            UPI
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        ₹850
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="status success">
+
+                                            Completed
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <!-- ================= PRODUCT REPORT START ================= -->
+
+                <div class="report-section">
+                    <!-- ================= PRODUCT REPORT ================= -->
+
+                    <div class="table-card">
+
+                        <div class="table-header">
+
+                            <h3>
+
+                                Product Performance
+
+                            </h3>
+
+                            <span id="productCount">
+
+                                Total Products : 25
+
+                            </span>
+
+                        </div>
+
+                        <div class="table-responsive">
+
+                            <table class="report-table">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>Product</th>
+                                        <th>Category</th>
+                                        <th>Sold Qty</th>
+                                        <th>Current Stock</th>
+                                        <th>Total Sales</th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="productReportTable">
+
+                                    <tr>
+
+                                        <td>Ashwagandha Powder</td>
+                                        <td>Powder</td>
+                                        <td>120</td>
+                                        <td>35</td>
+                                        <td>₹47,880</td>
+
+                                    </tr>
+
+                                    <tr>
+
+                                        <td>Brahmi Hair Oil</td>
+                                        <td>Oil</td>
+                                        <td>85</td>
+                                        <td>20</td>
+                                        <td>₹21,165</td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ================= CUSTOMER REPORT ================= -->
+
+                    <div class="table-card">
+
+                        <div class="table-header">
+
+                            <h3>
+
+                                Top Customers
+
+                            </h3>
+
+                            <span id="customerReportCount">
+
+                                Total Customers : 150
+
+                            </span>
+
+                        </div>
+
+                        <div class="table-responsive">
+
+                            <table class="report-table">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>Customer</th>
+                                        <th>Orders</th>
+                                        <th>Total Purchase</th>
+                                        <th>Last Purchase</th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="customerReportTable">
+
+                                    <tr>
+
+                                        <td>Denish Makadiya</td>
+                                        <td>15</td>
+                                        <td>₹52,450</td>
+                                        <td>06 Aug 2026</td>
+
+                                    </tr>
+
+                                    <tr>
+
+                                        <td>Rahul Patel</td>
+                                        <td>11</td>
+                                        <td>₹31,850</td>
+                                        <td>05 Aug 2026</td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ================= BUSINESS SUMMARY ================= -->
+
+                    <div class="summary-grid">
+
+                        <div class="summary-card">
+
+                            <i class="fa-solid fa-trophy"></i>
+
+                            <h4>
+
+                                Best Selling Product
+
+                            </h4>
+
+                            <h2>
+
+                                Ashwagandha Powder
+
+                            </h2>
+
+                        </div>
+
+                        <div class="summary-card">
+
+                            <i class="fa-solid fa-user-check"></i>
+
+                            <h4>
+
+                                Top Customer
+
+                            </h4>
+
+                            <h2>
+
+                                Denish Makadiya
+
+                            </h2>
+
+                        </div>
+
+                        <div class="summary-card">
+
+                            <i class="fa-solid fa-wallet"></i>
+
+                            <h4>
+
+                                Best Payment Mode
+
+                            </h4>
+
+                            <h2>
+
+                                UPI
+
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ================= EXPORT SECTION START ================= -->
+
+                <div class="report-actions">
+                    <!-- ================= EXPORT BUTTONS ================= -->
+
+                    <button class="btn btn-success" id="exportExcel">
+
+                        <i class="fa-solid fa-file-excel"></i>
+
+                        Export Excel
+
+                    </button>
+
+                    <button class="btn btn-danger" id="exportPDF">
+
+                        <i class="fa-solid fa-file-pdf"></i>
+
+                        Export PDF
+
+                    </button>
+
+                    <button class="btn btn-primary" id="printReport">
+
+                        <i class="fa-solid fa-print"></i>
+
+                        Print Report
+
+                    </button>
+
+                </div>
+
+                <!-- ================= PAGINATION ================= -->
+
+                <div class="pagination">
+
+                    <button class="page-btn active">1</button>
+
+                    <button class="page-btn">2</button>
+
+                    <button class="page-btn">3</button>
+
+                    <button class="page-btn">
+
+                        <i class="fa-solid fa-angle-right"></i>
+
+                    </button>
+
+                </div>
+
+            </main>
+
+        </div>
+
+        <!-- ================= NOTIFICATION ================= -->
+
+        <div class="notification-dropdown">
+
+            <div class="dropdown-header">
+
+                <h3>Notifications</h3>
+
+            </div>
+
+            <div class="dropdown-body">
+
+                <div class="notify-item">
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                    <div>
+
+                        <h4>Sales Increased</h4>
+
+                        <p>Today's sales crossed ₹25,000.</p>
+
+                    </div>
+
+                </div>
+
+                <div class="notify-item">
+
+                    <i class="fa-solid fa-users"></i>
+
+                    <div>
+
+                        <h4>New Customer</h4>
+
+                        <p>5 new customers joined today.</p>
+
+                    </div>
+
+                </div>
+
+                <div class="notify-item">
+
+                    <i class="fa-solid fa-box"></i>
+
+                    <div>
+
+                        <h4>Low Stock Alert</h4>
+
+                        <p>3 products are running low.</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= PROFILE ================= -->
+
+        <div class="profile-dropdown">
+
+            <div class="profile-header">
+
+                <img src="assets/images/admin.png" alt="Admin">
+
+                <h3>
+
+                    Denish Makadiya
+
+                </h3>
+
+                <span>
+
+                    Administrator
+
+                </span>
+
+            </div>
+
+            <ul>
+
+                <li>
+
+                    <a href="settings.html">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        My Profile
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="settings.html">
+
+                        <i class="fa-solid fa-gear"></i>
+
+                        Settings
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="dashboard.html">
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="login.html">
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Logout
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+        <!-- ================= LOADER ================= -->
+
+        <div class="loader">
+
+            <div class="spinner"></div>
+
+        </div>
+
+        <!-- ================= TOAST ================= -->
+
+        <div id="toast"></div>
+
+        <!-- ================= JAVASCRIPT ================= -->
+
+        <script src="js/common.js"></script>
+
+        <script src="js/reports.js"></script>
+
+</body>
+
+</html>

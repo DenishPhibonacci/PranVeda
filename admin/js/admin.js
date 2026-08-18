@@ -193,7 +193,7 @@ function loadProducts(){
     if(!product) return;
 
     let data =
-    JSON.parse(localStorage.getItem("PranVedaProducts")) || [];
+    JSON.parse(localStorage.getItem("erp_products")) || [];
 
     product.innerHTML = "";
 
@@ -356,19 +356,7 @@ renderTable();
 }
 
 
-//=========================================
-// Save Bill
-//=========================================
-
-saveBill.addEventListener("click",()=>{
-
-if(items.length==0){
-
-alert("Please Add Product");
-
-return;
-
-}/*=========================================
+/*=========================================
         SAVE BILL
 =========================================*/
 const customerName=document.getElementById("customerName");
@@ -1121,7 +1109,7 @@ const productBody = document.getElementById("productBody");
 
 const searchProduct = document.getElementById("searchProduct");
 
-let products = JSON.parse(localStorage.getItem("PranVedaProducts")) || [];
+let products = JSON.parse(localStorage.getItem("erp_products")) || [];
 
 let editIndex = -1;
 
@@ -1261,7 +1249,7 @@ addNewProduct.addEventListener("click",()=>{
 
     localStorage.setItem(
 
-        "PranVedaProducts",
+        "erp_products",
 
         JSON.stringify(products)
 
@@ -1303,7 +1291,7 @@ products.splice(index,1);
 
 localStorage.setItem(
 
-"PranVedaProducts",
+"erp_products",
 
 JSON.stringify(products)
 
@@ -1454,7 +1442,7 @@ image:"../assets/images/immunity_booster.jpg"
 
 localStorage.setItem(
 
-"PranVedaProducts",
+"erp_products",
 
 JSON.stringify(products)
 
@@ -1737,11 +1725,11 @@ Delete
 =========================*/
 
 function deleteCustomer(index){
+{
+    if(!confirm("Delete Customer ?")) return;
 
-if(!confirm("Delete Customer ?")) return;
+    customers.splice(index,1);
 
-customers.splice(index,1);
-
-renderCustomers(customers);
+    renderCustomers(customers);
 
 }

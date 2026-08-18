@@ -2072,3 +2072,75 @@ display:none !important;
 animation:fadeDown .35s ease;
 
 }
+
+/*=========================================================
+    GLOBAL LAYOUT FIX
+    Supports .layout / .main pages
+=========================================================*/
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.layout > .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    z-index: 1000;
+}
+
+.layout > .main {
+    flex: 1;
+    min-width: 0;
+    width: calc(100% - var(--sidebar-width));
+    margin-left: var(--sidebar-width);
+    padding: 30px;
+}
+
+/* Prevent horizontal overflow */
+.layout > .main,
+.layout > .main * {
+    max-width: 100%;
+}
+
+/* Tables and wide content can scroll horizontally */
+.layout > .main .table-container,
+.layout > .main .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/*=========================================================
+    RESPONSIVE
+=========================================================*/
+
+@media (max-width: 992px) {
+
+    .layout > .sidebar {
+        left: -270px;
+        transition: var(--transition);
+    }
+
+    .layout > .sidebar.active {
+        left: 0;
+    }
+
+    .layout > .main {
+        width: 100%;
+        margin-left: 0;
+        padding: 20px;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .layout > .main {
+        padding: 15px;
+    }
+
+}

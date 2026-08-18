@@ -1105,3 +1105,1165 @@ border-radius:20px;
 background:#F3F4F6;
 
 }
+
+/*=========================================================
+    BILLING - SAME ADMIN LAYOUT AS DASHBOARD
+=========================================================*/
+
+/* Main Layout */
+.admin-layout{
+    display:flex;
+    min-height:100vh;
+    width:100%;
+    background:#F5F7FA;
+}
+
+/* Sidebar */
+.admin-layout > .sidebar{
+    width:270px;
+    height:100vh;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+
+    background:#FFFFFF;
+
+    border-right:1px solid #E5E7EB;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+    z-index:1000;
+
+    overflow-y:auto;
+}
+
+/* Logo */
+.admin-layout > .sidebar .logo{
+    padding:30px;
+
+    text-align:center;
+
+    background:#FFFFFF;
+
+    border-bottom:1px solid #E5E7EB;
+}
+
+.admin-layout > .sidebar .logo img{
+    width:50px;
+    height:50px;
+    object-fit:contain;
+
+    margin-bottom:8px;
+}
+
+.admin-layout > .sidebar .logo h2{
+    margin:0;
+
+    color:#2E7D32;
+
+    font-size:28px;
+
+    font-weight:700;
+}
+
+.admin-layout > .sidebar .logo span{
+    color:#64748B;
+
+    font-size:14px;
+}
+
+/* Sidebar Menu */
+.admin-layout > .sidebar .menu{
+    padding:20px;
+}
+
+.admin-layout > .sidebar .menu li{
+    margin-bottom:10px;
+}
+
+.admin-layout > .sidebar .menu li a{
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:14px 18px;
+
+    border-radius:14px;
+
+    text-decoration:none;
+
+    color:#1E293B;
+
+    font-size:15px;
+
+    font-weight:500;
+
+    transition:.3s;
+}
+
+.admin-layout > .sidebar .menu li a i{
+    width:20px;
+
+    text-align:center;
+
+    font-size:17px;
+}
+
+.admin-layout > .sidebar .menu li:hover a{
+    background:#E8F5E9;
+
+    color:#2E7D32;
+
+    transform:none;
+}
+
+.admin-layout > .sidebar .menu li.active a{
+    background:#2E7D32;
+
+    color:#FFFFFF;
+
+    font-weight:600;
+}
+
+/* Main Area */
+.admin-layout > .main{
+    flex:1;
+
+    min-width:0;
+
+    width:calc(100% - 270px);
+
+    margin-left:270px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:#F5F7FA;
+}
+
+/* Topbar */
+.admin-layout > .main .topbar{
+    height:80px;
+
+    width:100%;
+
+    background:#FFFFFF;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 30px;
+
+    border-bottom:1px solid #E5E7EB;
+
+    box-shadow:0 4px 15px rgba(0,0,0,.04);
+
+    flex-shrink:0;
+}
+
+/* Billing Content */
+.admin-layout > .main .billing-page{
+    width:100%;
+
+    max-width:none;
+
+    padding:30px;
+
+    box-sizing:border-box;
+}
+
+/* Prevent content from going behind sidebar */
+.admin-layout > .main .billing-page > *{
+    max-width:100%;
+}
+
+/* Responsive */
+@media(max-width:992px){
+
+    .admin-layout > .sidebar{
+        left:-270px;
+
+        transition:.3s ease;
+    }
+
+    .admin-layout > .sidebar.active{
+        left:0;
+    }
+
+    .admin-layout > .main{
+        width:100%;
+
+        margin-left:0;
+    }
+
+    .admin-layout > .main .topbar{
+        padding:0 20px;
+    }
+
+    .admin-layout > .main .billing-page{
+        padding:20px;
+    }
+}
+
+@media(max-width:768px){
+
+    .admin-layout > .main .billing-page{
+        padding:15px;
+    }
+
+    .admin-layout > .main .topbar{
+        padding:0 15px;
+    }
+}
+
+/* =========================================================
+   BILLING ADMIN SHELL
+   MATCH DASHBOARD UI
+========================================================= */
+
+/* ---------- ADMIN LAYOUT ---------- */
+
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    background: #F5F7FA;
+}
+
+
+/* ---------- SIDEBAR ---------- */
+
+.admin-layout > .sidebar {
+    width: 270px;
+    height: 100vh;
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    background: #FFFFFF;
+
+    border-right: 1px solid #E5E7EB;
+
+    box-shadow: 4px 0 20px rgba(0, 0, 0, .04);
+
+    z-index: 1000;
+
+    overflow-y: auto;
+
+    color: #1E293B;
+}
+
+
+/* ---------- SIDEBAR LOGO ---------- */
+
+.admin-layout > .sidebar .logo {
+    height: 128px;
+
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    background: #FFFFFF;
+
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.admin-layout > .sidebar .logo img {
+    width: 42px;
+    height: 42px;
+
+    object-fit: contain;
+
+    margin-bottom: 4px;
+}
+
+.admin-layout > .sidebar .logo h2 {
+    margin: 0;
+
+    color: #2E7D32;
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    line-height: 1.1;
+}
+
+.admin-layout > .sidebar .logo span {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #64748B;
+
+    font-size: 13px;
+}
+
+
+/* ---------- SIDEBAR MENU ---------- */
+
+.admin-layout > .sidebar .menu {
+    list-style: none;
+
+    padding: 20px 15px;
+
+    margin: 0;
+}
+
+.admin-layout > .sidebar .menu li {
+    margin-bottom: 8px;
+
+    list-style: none;
+}
+
+.admin-layout > .sidebar .menu li a {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 15px 18px;
+
+    border-radius: 15px;
+
+    color: #1E293B;
+
+    background: transparent;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    text-decoration: none;
+
+    transition: .25s ease;
+}
+
+.admin-layout > .sidebar .menu li a i {
+    width: 22px;
+
+    min-width: 22px;
+
+    text-align: center;
+
+    font-size: 17px;
+}
+
+.admin-layout > .sidebar .menu li a span {
+    display: block;
+}
+
+
+/* ---------- HOVER ---------- */
+
+.admin-layout > .sidebar .menu li:hover a {
+    background: #E8F5E9;
+
+    color: #2E7D32;
+
+    transform: none;
+}
+
+
+/* ---------- ACTIVE ---------- */
+
+.admin-layout > .sidebar .menu li.active a {
+    background: #2E7D32;
+
+    color: #FFFFFF;
+
+    font-weight: 600;
+
+    box-shadow: 0 6px 15px rgba(46, 125, 50, .16);
+}
+
+
+/* ---------- MAIN ---------- */
+
+.admin-layout > .main {
+    width: calc(100% - 270px);
+
+    min-width: 0;
+
+    margin-left: 270px;
+
+    flex: 1;
+
+    background: #F5F7FA;
+
+    padding: 30px;
+}
+
+
+/* ---------- TOPBAR ---------- */
+
+.admin-layout > .main .topbar {
+    width: 100%;
+
+    min-height: 75px;
+
+    margin-bottom: 30px;
+
+    padding: 0 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    background: #FFFFFF;
+
+    border-radius: 18px;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+    position: sticky;
+
+    top: 20px;
+
+    z-index: 500;
+}
+
+
+/* ---------- TOPBAR LEFT ---------- */
+
+.admin-layout > .main .topbar .left {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    min-width: 180px;
+}
+
+.admin-layout > .main .topbar .left h2 {
+    margin: 0;
+
+    color: #1E293B;
+
+    font-size: 26px;
+
+    font-weight: 700;
+}
+
+.admin-layout > .main .topbar .menu-btn {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #E8F5E9;
+
+    color: #2E7D32;
+
+    cursor: pointer;
+}
+
+
+/* ---------- TOPBAR CENTER ---------- */
+
+.admin-layout > .main .topbar .center {
+    flex: 1;
+
+    display: flex;
+
+    justify-content: center;
+
+    padding: 0 25px;
+}
+
+.admin-layout > .main .topbar .search-box {
+    width: 100%;
+
+    max-width: 460px;
+
+    height: 46px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 0 15px;
+
+    border: 1px solid #E2E8F0;
+
+    border-radius: 12px;
+
+    background: #FFFFFF;
+}
+
+.admin-layout > .main .topbar .search-box i {
+    color: #94A3B8;
+}
+
+.admin-layout > .main .topbar .search-box input {
+    width: 100%;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    font-family: Poppins, sans-serif;
+
+    font-size: 14px;
+
+    color: #334155;
+}
+
+
+/* ---------- TOPBAR RIGHT ---------- */
+
+.admin-layout > .main .topbar .right {
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+}
+
+.admin-layout > .main .date-time {
+    text-align: right;
+
+    white-space: nowrap;
+
+    color: #475569;
+
+    font-size: 13px;
+}
+
+
+/* ---------- NOTIFICATION ---------- */
+
+.admin-layout > .main .notification {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #F1F5F9;
+
+    color: #1E293B;
+
+    position: relative;
+}
+
+
+/* ---------- PROFILE ---------- */
+
+.admin-layout > .main .profile {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 6px 10px;
+
+    border-radius: 14px;
+
+    cursor: pointer;
+}
+
+.admin-layout > .main .profile img {
+    width: 46px;
+    height: 46px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    border: 3px solid #2E7D32;
+}
+
+.admin-layout > .main .profile h4 {
+    margin: 0;
+
+    font-size: 14px;
+
+    color: #334155;
+}
+
+.admin-layout > .main .profile p {
+    margin: 2px 0 0;
+
+    font-size: 12px;
+
+    color: #64748B;
+}
+
+
+/* ---------- BILLING CONTENT ---------- */
+
+.admin-layout > .main .billing-page {
+    width: 100%;
+
+    padding: 0;
+
+    margin: 0;
+}
+
+.admin-layout > .main .billing-page .page-title {
+    margin-bottom: 25px;
+}
+
+.admin-layout > .main .billing-page .page-title h1 {
+    margin: 0;
+
+    color: #172554;
+
+    font-size: 32px;
+
+    font-weight: 700;
+}
+
+.admin-layout > .main .billing-page .page-title p {
+    margin-top: 8px;
+
+    color: #64748B;
+
+    font-size: 17px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 992px) {
+
+    .admin-layout > .sidebar {
+        left: -270px;
+    }
+
+    .admin-layout > .sidebar.active {
+        left: 0;
+    }
+
+    .admin-layout > .main {
+        width: 100%;
+
+        margin-left: 0;
+
+        padding: 20px;
+    }
+
+    .admin-layout > .main .topbar {
+        padding: 0 20px;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .admin-layout > .main {
+        padding: 15px;
+    }
+
+    .admin-layout > .main .topbar {
+        padding: 0 15px;
+    }
+
+    .admin-layout > .main .topbar .center {
+        display: none;
+    }
+
+    .admin-layout > .main .topbar .right .date-time {
+        display: none;
+    }
+
+}
+
+/* =========================================
+   BILLING SIDEBAR = DASHBOARD SIDEBAR
+========================================= */
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    background: #F6F8F6;
+}
+
+.layout > .sidebar {
+    width: 270px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    background: #FFFFFF;
+
+    border-right: 1px solid #E2E8F0;
+
+    box-shadow: none;
+
+    z-index: 1000;
+}
+
+/* Logo */
+
+.layout > .sidebar .logo {
+    padding: 30px 20px;
+    text-align: center;
+
+    background: #FFFFFF;
+
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.layout > .sidebar .logo h2 {
+    color: #2E7D32;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.layout > .sidebar .logo span {
+    color: #64748B;
+    font-size: 13px;
+}
+
+/* Menu */
+
+.layout > .sidebar nav {
+    width: 100%;
+}
+
+.layout > .sidebar nav ul {
+    list-style: none;
+    padding: 20px 15px;
+    margin: 0;
+}
+
+.layout > .sidebar nav ul li {
+    margin-bottom: 8px;
+}
+
+.layout > .sidebar nav ul li a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    padding: 15px 18px;
+
+    border-radius: 15px;
+
+    color: #1E293B;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    text-decoration: none;
+
+    transition: .25s ease;
+}
+
+.layout > .sidebar nav ul li a i {
+    width: 20px;
+    text-align: center;
+}
+
+.layout > .sidebar nav ul li:hover a {
+    background: #E8F5E9;
+    color: #2E7D32;
+}
+
+.layout > .sidebar nav ul li.active a {
+    background: #2E7D32;
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+/* Main */
+
+.layout > .main {
+    width: calc(100% - 270px);
+    margin-left: 270px;
+    min-width: 0;
+
+    flex: 1;
+
+    padding: 30px;
+
+    background: #F6F8F6;
+}
+
+/* =========================================================
+   BILL VIEW MODAL
+========================================================= */
+
+.bill-view-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 25px;
+
+    background: rgba(15, 23, 42, .60);
+
+    backdrop-filter: blur(5px);
+
+    z-index: 9000;
+
+}
+
+.bill-view-modal.active {
+
+    display: flex;
+
+}
+
+.bill-view-card {
+
+    width: 100%;
+
+    max-width: 900px;
+
+    max-height: calc(100vh - 50px);
+
+    overflow-y: auto;
+
+    background: #FFFFFF;
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.22);
+
+}
+
+.bill-view-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 24px 28px;
+
+    border-bottom: 1px solid #E2E8F0;
+
+}
+
+.bill-label {
+
+    color: #2E7D32;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+}
+
+.bill-view-header h2 {
+
+    margin: 5px 0 0;
+
+    font-size: 24px;
+
+    color: #1E293B;
+
+}
+
+.bill-close-btn {
+
+    width: 40px;
+
+    height: 40px;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    background: #F1F5F9;
+
+    cursor: pointer;
+
+    font-size: 18px;
+
+}
+
+.bill-view-meta {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+
+    padding: 22px 28px;
+
+    background: #F8FAFC;
+
+}
+
+.bill-view-meta div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+}
+
+.bill-view-meta span {
+
+    color: #64748B;
+
+    font-size: 12px;
+
+}
+
+.bill-view-meta strong {
+
+    color: #1E293B;
+
+    font-size: 14px;
+
+}
+
+.bill-items-table {
+
+    padding: 25px 28px;
+
+}
+
+.bill-items-table table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+.bill-items-table th,
+.bill-items-table td {
+
+    padding: 13px;
+
+    text-align: left;
+
+    border-bottom: 1px solid #E2E8F0;
+
+}
+
+.bill-items-table th {
+
+    background: #F8FAFC;
+
+    color: #334155;
+
+    font-size: 13px;
+
+}
+
+.bill-items-table td {
+
+    font-size: 14px;
+
+}
+
+.bill-view-summary {
+
+    width: 320px;
+
+    max-width: calc(100% - 56px);
+
+    margin-left: auto;
+
+    padding: 0 28px 25px;
+
+}
+
+.bill-view-summary > div {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 7px 0;
+
+    color: #475569;
+
+}
+
+.bill-view-summary .grand-total {
+
+    margin-top: 8px;
+
+    padding-top: 14px;
+
+    border-top: 2px solid #2E7D32;
+
+    color: #2E7D32;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+}
+
+.bill-view-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    padding: 18px 28px 25px;
+
+    border-top: 1px solid #E2E8F0;
+
+}
+
+@media (max-width: 768px) {
+
+    .bill-view-modal {
+
+        padding: 12px;
+
+    }
+
+    .bill-view-meta {
+
+        grid-template-columns: repeat(2,1fr);
+
+    }
+
+    .bill-view-summary {
+
+        width: auto;
+
+    }
+
+    .bill-view-actions {
+
+        flex-direction: column;
+
+    }
+
+}
+
+/* =========================================================
+   HISTORY ACTIONS
+========================================================= */
+
+.history-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+.history-action {
+
+    width: 38px;
+
+    height: 38px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+
+}
+
+.history-action:hover {
+
+    transform: translateY(-2px);
+
+}
+
+.history-action.view {
+
+    background: #E8F0FF;
+
+    color: #2563EB;
+
+}
+
+.history-action.edit {
+
+    background: #FFF7E6;
+
+    color: #D97706;
+
+}
+
+.history-action.print {
+
+    background: #E8F5E9;
+
+    color: #2E7D32;
+
+}
+
+.history-action.whatsapp {
+
+    background: #E7F8EE;
+
+    color: #16A34A;
+
+}

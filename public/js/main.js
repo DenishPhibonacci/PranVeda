@@ -14,7 +14,7 @@ function renderProfile(p) {
   $('#heroRole').textContent = p.role || 'Unity Developer';
   $('#heroTagline').textContent = p.tagline || '';
   $('#status').classList.toggle('off', !p.available);
-  $('#statusText').textContent = p.available ? 'Available for freelance work' : 'Currently busy on projects';
+  $('#statusText').textContent = p.available ? 'Open to freelance & new opportunities' : 'Currently busy on projects';
 
   const stage = $('#avatarStage');
   const el = document.createElement(p.avatar ? 'img' : 'div');
@@ -22,6 +22,33 @@ function renderProfile(p) {
   stage.appendChild(el);
 
   $('#fYears').textContent = (p.experienceYears || 0) + '+';
+  const exp = p.experience || [], edu = p.education || [];
+  $('#fCompanies').textContent = new Set(exp.map(e => e.company.toLowerCase())).size || '—';
+  $('#fLangs').textContent = (p.languages || []).length || '—';
+  $('#fLangs').title = (p.languages || []).join(', ');
+  if ((p.languages || []).length) $('#fLangs').nextElementSibling.textContent = p.languages.join(' · ');
+
+  // Experience timeline
+  $('#experience').hidden = !exp.length && !edu.length;
+  $('#expSub').textContent = exp.length ? `${p.experienceYears || 0}+ years across ${new Set(exp.map(e => e.company.toLowerCase())).size} studios — building games, apps and tools with Unity.` : '';
+  $('#timeline').innerHTML = exp.map(e => `
+    <li class="tl-item${e.current ? ' current' : ''}">
+      <span class="tl-dot"></span>
+      <div class="tl-card">
+        <div class="tl-top"><h4>${esc(e.role)}${e.current ? '<span class="now">NOW</span>' : ''}</h4><span class="tl-dur">${esc(e.duration)}</span></div>
+        <div class="tl-co"><b>${esc(e.company)}</b>${e.location ? ' · ' + esc(e.location) : ''}</div>
+        ${e.summary ? `<p>${esc(e.summary)}</p>` : ''}
+      </div>
+    </li>`).join('');
+  $('#eduList').innerHTML = edu.map(e => `
+    <div class="edu-item"><b>${esc(e.degree)}</b><span class="yr">${esc(e.year)}</span>
+      <span>${esc([e.school, e.board].filter(Boolean).join(' · '))}</span></div>`).join('');
+
+  // Resume buttons
+  $$('[data-resume]').forEach(a => {
+    a.hidden = !p.resume;
+    if (p.resume) { a.href = asset(p.resume.url); a.target = '_blank'; a.rel = 'noopener'; }
+  });
   $('#aboutText').innerHTML = (p.about || '').split(/\n{2,}/).map(par => `<p>${esc(par).replace(/\n/g, '<br>')}</p>`).join('');
 
   const skills = p.skills || [];

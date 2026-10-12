@@ -499,8 +499,10 @@ async function viewMessages(main) {
 
 /* ---------- Profile ---------- */
 async function viewProfile(main) {
-  const pr = await req('GET', '/api/profile');
-  let avatarFile = null, removeAvatar = false;
+  const pr = await req('GET', '/api/profile?all=1');
+  let avatarFile = null, removeAvatar = false, resumeFile = null, removeResume = false;
+  const exp = JSON.parse(JSON.stringify(pr.experience || []));
+  const edu = JSON.parse(JSON.stringify(pr.education || []));
   const socials = [['github', 'GitHub'], ['linkedin', 'LinkedIn'], ['youtube', 'YouTube'], ['twitter', 'X / Twitter'], ['instagram', 'Instagram'], ['playstore', 'Google Play developer page'], ['assetstore', 'Unity Asset Store publisher page'], ['itch', 'itch.io']];
   main.innerHTML = header('Profile', 'Everything shown in the hero, about and contact sections') + `
   <form id="profileForm">
@@ -522,6 +524,7 @@ async function viewProfile(main) {
       <div class="field"><label>Tagline (hero)</label><input type="text" name="tagline" value="${esc(pr.tagline)}" maxlength="300"></div>
       <div class="field"><label>About me</label><textarea name="about" rows="7">${esc(pr.about)}</textarea><small>Leave an empty line between paragraphs</small></div>
       <div class="field"><label>Skills</label><input type="text" name="skills" value="${esc((pr.skills || []).join(', '))}"><small>Separate with commas</small></div>
+      <div class="field"><label>Languages known</label><input type="text" name="languages" value="${esc((pr.languages || []).join(', '))}"><small>Separate with commas</small></div>
       <label class="toggle"><span><b>Available for work</b><small>Shows a green "Available" badge in the hero</small></span><span class="switch"><input type="checkbox" name="available" ${pr.available ? 'checked' : ''}><span></span></span></label>
     </div>
     <div class="panel">
@@ -529,8 +532,23 @@ async function viewProfile(main) {
       <div class="grid-3">
         <div class="field"><label>Email</label><input type="email" name="email" value="${esc(pr.email)}"></div>
         <div class="field"><label>Phone / WhatsApp</label><input type="tel" name="phone" value="${esc(pr.phone)}"></div>
-        <div class="field"><label>Location</label><input type="text" name="location" value="${esc(pr.location)}"></div>
+        <div class="field"><label>Location (city)</label><input type="text" name="location" value="${esc(pr.location)}"></div>
       </div>
+      <label class="toggle"><span><b>Show phone number on website</b><small>Off = only email and the contact form are public (less spam calls)</small></span><span class="switch"><input type="checkbox" name="showPhone" ${pr.showPhone ? 'checked' : ''}><span></span></span></label>
+    </div>
+    <div class="panel">
+      <h2>Resume / CV</h2>
+      <div id="resumeBox"></div>
+      <small class="hint" style="display:block;margin-top:10px">PDF recommended. A "Download Resume" button appears in the hero, menu and experience section.</small>
+    </div>
+    <div class="panel">
+      <h2>Work experience <button type="button" class="btn btn-sm" id="addExp">${ico('plus', 15)} Add job</button></h2>
+      <p class="hint" style="margin:-8px 0 14px">Newest first. Use ↑ ↓ to reorder.</p>
+      <div class="rep-list" id="expList"></div>
+    </div>
+    <div class="panel">
+      <h2>Education <button type="button" class="btn btn-sm" id="addEdu">${ico('plus', 15)} Add</button></h2>
+      <div class="rep-list" id="eduList"></div>
     </div>
     <div class="panel">
       <h2>Social links</h2>
@@ -543,13 +561,83 @@ async function viewProfile(main) {
     $('#avPrev').innerHTML = src ? `<img src="${esc(src)}" alt="">` : esc((pr.name || 'U').charAt(0));
   };
   drawAv();
+
+  // --- Resume
+  const drawResume = () => {
+    const box = $('#resumeBox');
+    const cur = resumeFile ? { name: resumeFile.name, size: resumeFile.size, isNew: true } : (!removeResume && pr.resume);
+    if (cur) {
+      const ext = (cur.name.split('.').pop() || '').toUpperCase();
+      box.innerHTML = `<div class="file-pill"><span class="ext">${esc(ext)}</span><span class="info"><b>${esc(cur.name)}</b><small>${fmtSize(cur.size)}${cur.isNew ? ' · ready to upload — click Save' : ''}</small></span>
+        ${!cur.isNew ? `<a class="btn btn-sm" href="${esc(pr.resume.url)}" target="_blank">Open</a>` : ''}
+        <button type="button" class="btn btn-sm btn-danger icon-btn" id="rmResume" title="Remove">${ico('x', 15)}</button></div>`;
+      $('#rmResume').onclick = () => { if (resumeFile) resumeFile = null; else removeResume = true; drawResume(); };
+    } else {
+      box.innerHTML = `<div class="drop">${ico('upload')}<b>Upload your resume</b><small>PDF, DOC or DOCX</small><input type="file" accept=".pdf,.doc,.docx"></div>`;
+      bindDrop($('.drop', box), files => { resumeFile = files[0]; removeResume = false; drawResume(); });
+    }
+  };
+  drawResume();
+
+  // --- Repeatable lists (experience / education)
+  function repeater(listEl, items, fields, blank) {
+    const draw = () => {
+      listEl.innerHTML = items.length ? items.map((it, i) => `
+        <div class="rep" data-i="${i}">
+          <div class="rep-fields">${fields.map(f => f.type === 'check'
+            ? `<div class="checks" style="align-self:end"><label><input type="checkbox" data-k="${f.k}" ${it[f.k] ? 'checked' : ''}> ${f.label}</label></div>`
+            : `<div class="field" style="margin:0;${f.wide ? 'grid-column:1/-1' : ''}"><label>${f.label}</label><input type="text" data-k="${f.k}" value="${esc(it[f.k])}" placeholder="${esc(f.ph || '')}"></div>`).join('')}</div>
+          <div class="rep-acts">
+            <button type="button" class="btn btn-sm icon-btn" data-a="up" title="Move up" ${i === 0 ? 'disabled' : ''}>↑</button>
+            <button type="button" class="btn btn-sm icon-btn" data-a="down" title="Move down" ${i === items.length - 1 ? 'disabled' : ''}>↓</button>
+            <button type="button" class="btn btn-sm btn-danger icon-btn" data-a="del" title="Remove">${ico('trash', 15)}</button>
+          </div>
+        </div>`).join('') : '<div class="empty" style="padding:24px">Nothing added yet.</div>';
+    };
+    listEl.addEventListener('input', e => {
+      const k = e.target.dataset.k; if (!k) return;
+      const it = items[+e.target.closest('.rep').dataset.i];
+      it[k] = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    });
+    listEl.addEventListener('click', e => {
+      const b = e.target.closest('[data-a]'); if (!b) return;
+      const i = +b.closest('.rep').dataset.i;
+      if (b.dataset.a === 'del') items.splice(i, 1);
+      if (b.dataset.a === 'up' && i > 0) [items[i - 1], items[i]] = [items[i], items[i - 1]];
+      if (b.dataset.a === 'down' && i < items.length - 1) [items[i + 1], items[i]] = [items[i], items[i + 1]];
+      draw();
+    });
+    draw();
+    return () => { items.unshift({ ...blank }); draw(); listEl.querySelector('input').focus(); };
+  }
+  const addExp = repeater($('#expList'), exp, [
+    { k: 'role', label: 'Role', ph: 'Sr. Unity Developer' },
+    { k: 'company', label: 'Company', ph: 'Company name' },
+    { k: 'location', label: 'City', ph: 'Ahmedabad' },
+    { k: 'duration', label: 'Duration', ph: 'Jan 2020 – Mar 2021 / 1.2 Years' },
+    { k: 'summary', label: 'What you did (optional)', ph: 'Built 5 hyper-casual games, owned ads & IAP integration…', wide: true },
+    { k: 'current', label: 'Current job', type: 'check' }
+  ], { role: '', company: '', location: '', duration: '', summary: '', current: false });
+  const addEdu = repeater($('#eduList'), edu, [
+    { k: 'degree', label: 'Degree', ph: 'MCA' },
+    { k: 'year', label: 'Passing year', ph: '2015' },
+    { k: 'school', label: 'College / School', ph: 'College name, city' },
+    { k: 'board', label: 'University / Board', ph: 'GTU' }
+  ], { degree: '', year: '', school: '', board: '' });
+  $('#addExp').onclick = addExp; $('#addEdu').onclick = addEdu;
+
   $('#avInput').addEventListener('change', e => { avatarFile = e.target.files[0] || null; removeAvatar = false; drawAv(); });
   $('#avRemove').addEventListener('click', () => { avatarFile = null; removeAvatar = true; drawAv(); });
   $('#profileForm').addEventListener('submit', async e => {
     e.preventDefault(); $('#pErr').textContent = '';
     const fd = new FormData(e.target);
     fd.delete('available'); fd.append('available', e.target.available.checked);
+    fd.delete('showPhone'); fd.append('showPhone', e.target.showPhone.checked);
     fd.append('removeAvatar', removeAvatar);
+    fd.append('removeResume', removeResume);
+    if (resumeFile) fd.append('resume', resumeFile);
+    fd.append('experience', JSON.stringify(exp));
+    fd.append('education', JSON.stringify(edu));
     if (avatarFile) fd.append('avatar', avatarFile);
     try { await uploadForm('PUT', '/api/admin/profile', fd, 'Saving profile…'); toast('Profile saved'); viewProfile(main); }
     catch (err) { $('#pErr').textContent = err.message; }

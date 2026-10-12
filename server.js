@@ -18,7 +18,7 @@ const UPLOAD_DIR = path.join(ROOT, 'uploads');
 const PUBLIC_DIR = path.join(ROOT, 'public');
 const DB_FILE = path.join(DATA_DIR, 'db.json');
 
-['', 'images', 'videos', 'files'].forEach(d => fs.mkdirSync(path.join(UPLOAD_DIR, d), { recursive: true }));
+['', 'images', 'videos', 'files', 'resume'].forEach(d => fs.mkdirSync(path.join(UPLOAD_DIR, d), { recursive: true }));
 fs.mkdirSync(DATA_DIR, { recursive: true });
 
 /* ------------------------------------------------------------------ */
@@ -35,21 +35,39 @@ function defaultDb() {
     settings: { username: 'admin', salt, hash, mustChangePassword: true },
     profile: {
       brand: 'PranVeda',
-      name: 'Your Name',
-      role: 'Unity Game Developer',
-      tagline: 'I build games, tools and plugins that make Unity faster, smoother and more fun.',
+      name: 'Denish Makadiya',
+      role: 'Sr. Unity Developer',
+      tagline: 'Senior Unity developer from Ahmedabad building mobile games, gameplay systems and Unity tools — from first prototype to store release.',
       about:
-        'I am a Unity developer focused on mobile games, editor tooling and reusable plugins. ' +
-        'From gameplay systems and UI to performance tuning and Play Store releases, I take projects from idea to launch.\n\n' +
-        'Edit this text from the admin panel → Profile.',
+        'I am a Senior Unity Developer with 9+ years of experience creating mobile games and applications for Android and iOS. ' +
+        'Over my career I have worked with seven studios in Ahmedabad — building gameplay, UI, integrations and complete games from idea to launch.\n\n' +
+        'I enjoy solving hard problems, writing clean and reusable C# code, and turning ideas into polished, smooth-running games. ' +
+        'Today I lead Unity development at Phibonacci Solution, and I also build plugins and Unity assets that help other developers ship faster.',
       avatar: '',
-      experienceYears: 3,
-      location: 'India',
-      email: '',
-      phone: '',
+      resume: null, // { url, name, size }
+      experienceYears: 9,
+      location: 'Ahmedabad, Gujarat, India',
+      email: 'denish.makadiya@zohomail.com',
+      phone: '+91 97234 28591',
+      showPhone: false,
       available: true,
-      skills: ['Unity', 'C#', 'Android', 'iOS', 'Shader Graph', 'URP', 'Editor Tools', 'Multiplayer', 'Firebase', 'AdMob', 'Git'],
-      socials: { github: '', linkedin: '', youtube: '', twitter: '', instagram: '', playstore: '', assetstore: '', itch: '' }
+      languages: ['English', 'Hindi', 'Gujarati'],
+      skills: ['Unity 3D', 'C#', 'C', 'Mobile Game Development', 'Android', 'iOS', 'Xcode', 'macOS', 'Windows', 'Game Development', 'Mobile Applications', 'phpMyAdmin'],
+      experience: [
+        { role: 'Sr. Unity Developer', company: 'Phibonacci Solution', location: 'Ahmedabad', duration: 'Oct 2022 – Present', current: true },
+        { role: 'Sr. Unity Developer', company: 'Khatriji Gaming', location: 'Ahmedabad', duration: '4 Months', current: false },
+        { role: 'Sr. Unity Developer', company: 'AIS Technolabs', location: 'Ahmedabad', duration: '1.2 Years', current: false },
+        { role: 'Sr. Unity Developer', company: 'Epistic Technologies', location: 'Ahmedabad', duration: '1.1 Years', current: false },
+        { role: 'Sr. Unity Developer', company: 'TechDoodles', location: 'Ahmedabad', duration: '1.2 Years', current: false },
+        { role: 'Unity Developer', company: 'Gadget App Development', location: 'Ahmedabad', duration: '5 Months', current: false },
+        { role: 'Unity 3D Game Developer', company: 'iDivine Creation Technology', location: 'Ahmedabad', duration: '1.7 Years', current: false }
+      ],
+      education: [
+        { degree: 'Master of Computer Application (MCA)', school: 'T.N. Rao College of IT, Rajkot', board: 'GTU', year: '2015' },
+        { degree: 'Bachelor of Computer Application (BCA)', school: 'Geetanjali IT & Management, Rajkot', board: 'Saurashtra University', year: '2012' },
+        { degree: 'Higher Secondary (HSC)', school: 'Deepak High School, Moviya', board: 'GSHEB', year: '2009' }
+      ],
+      socials: { github: 'https://github.com/DenishPhibonacci', linkedin: 'https://www.linkedin.com/in/denish-makadiya-a0b776ab', youtube: '', twitter: '', instagram: '', playstore: '', assetstore: '', itch: '' }
     },
     projects: [],
     messages: []
@@ -66,6 +84,11 @@ function loadDb() {
   db = JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
   const def = defaultDb();
   db.settings = db.settings || def.settings;
+  // First run with the old placeholder profile → fill in the resume details
+  if (db.profile && db.profile.name === 'Your Name') {
+    const keep = { avatar: db.profile.avatar, brand: db.profile.brand };
+    db.profile = { ...def.profile, ...keep };
+  }
   db.profile = { ...def.profile, ...(db.profile || {}) };
   db.profile.socials = { ...def.profile.socials, ...(db.profile.socials || {}) };
   db.projects = db.projects || [];
@@ -164,7 +187,8 @@ const FIELD_RULES = {
   gallery: { dir: 'images', ext: IMAGE_EXT, max: 20 },
   avatar: { dir: 'images', ext: IMAGE_EXT, max: 1 },
   videoFile: { dir: 'videos', ext: VIDEO_EXT, max: 1 },
-  downloadFile: { dir: 'files', ext: FILE_EXT, max: 1 }
+  downloadFile: { dir: 'files', ext: FILE_EXT, max: 1 },
+  resume: { dir: 'resume', ext: ['.pdf', '.doc', '.docx'], max: 1 }
 };
 
 async function readUpload(req, allowedFields) {
@@ -283,7 +307,12 @@ const clientIp = req => (process.env.TRUST_PROXY && (req.headers['x-forwarded-fo
 /* ------------------------------------------------------------------ */
 /* Public API                                                          */
 /* ------------------------------------------------------------------ */
-route('GET', '/api/profile', (req, res) => json(res, 200, db.profile));
+function publicProfile() {
+  const p = { ...db.profile };
+  if (!p.showPhone) p.phone = '';
+  return p;
+}
+route('GET', '/api/profile', (req, res) => json(res, 200, isAuthed(req) && req.query.get('all') ? db.profile : publicProfile()));
 
 route('GET', '/api/projects', (req, res) => {
   const type = req.query.get('type');
@@ -467,7 +496,7 @@ route('DELETE', '/api/admin/projects/:id', auth, (req, res) => {
 });
 
 route('PUT', '/api/admin/profile', auth, async (req, res) => {
-  const { body, files } = await readUpload(req, ['avatar']);
+  const { body, files } = await readUpload(req, ['avatar', 'resume']);
   const b = {}; Object.keys(body).forEach(k => (b[k] = Array.isArray(body[k]) ? body[k][body[k].length - 1] : body[k]));
   const pr = db.profile;
   pr.brand = str(b.brand, 40) || pr.brand;
@@ -481,6 +510,26 @@ route('PUT', '/api/admin/profile', auth, async (req, res) => {
   pr.experienceYears = Math.max(0, Math.min(60, Number(b.experienceYears) || 0));
   pr.available = bool(b.available);
   pr.skills = list(b.skills, 40);
+  pr.languages = list(b.languages, 10);
+  pr.showPhone = bool(b.showPhone);
+  const jsonList = (v, max) => { try { const a = JSON.parse(v || '[]'); return Array.isArray(a) ? a.slice(0, max) : []; } catch (_) { return []; } };
+  if (b.experience !== undefined) {
+    pr.experience = jsonList(b.experience, 30).map(e => ({
+      role: str(e.role, 80), company: str(e.company, 100), location: str(e.location, 80),
+      duration: str(e.duration, 60), current: bool(e.current), summary: str(e.summary, 600)
+    })).filter(e => e.role || e.company);
+  }
+  if (b.education !== undefined) {
+    pr.education = jsonList(b.education, 15).map(e => ({
+      degree: str(e.degree, 120), school: str(e.school, 120), board: str(e.board, 80), year: str(e.year, 20)
+    })).filter(e => e.degree || e.school);
+  }
+  if (bool(b.removeResume) && pr.resume) { removeUpload(pr.resume.url); pr.resume = null; }
+  if (files.resume) {
+    const f = files.resume[0];
+    if (pr.resume) removeUpload(pr.resume.url);
+    pr.resume = { url: fileUrl(f), name: f.originalname, size: f.size };
+  }
   Object.keys(pr.socials).forEach(k => { pr.socials[k] = safeUrl(b['social_' + k]); });
   if (bool(b.removeAvatar) && pr.avatar) { removeUpload(pr.avatar); pr.avatar = ''; }
   if (files.avatar) { removeUpload(pr.avatar); pr.avatar = fileUrl(files.avatar[0]); }
@@ -526,7 +575,7 @@ route('GET', '/api/admin/export', auth, (req, res) => {
   json(res, 200, info);
 });
 route('POST', '/api/admin/export', auth, (req, res) => {
-  const report = exportStatic({ root: ROOT, publicDir: PUBLIC_DIR, uploadDir: UPLOAD_DIR, db, publicProject });
+  const report = exportStatic({ root: ROOT, publicDir: PUBLIC_DIR, uploadDir: UPLOAD_DIR, db, publicProject, publicProfile });
   db.settings.lastExport = new Date().toISOString();
   saveDb();
   json(res, 200, report);

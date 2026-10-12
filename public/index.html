@@ -22,7 +22,9 @@
       <nav class="nav-links">
         <a href="#work">Work</a>
         <a href="#about">About</a>
+        <a href="#experience">Experience</a>
         <a href="#skills">Skills</a>
+        <a href="#" class="resume-link" data-resume hidden>Resume</a>
         <a href="#contact" class="btn btn-primary btn-sm">Hire me</a>
       </nav>
     </div>
@@ -33,13 +35,14 @@
     <section class="hero">
       <div class="container hero-grid">
         <div>
-          <span class="status-pill" id="status"><span class="dot"></span><span id="statusText">Available for freelance work</span></span>
+          <span class="status-pill" id="status"><span class="dot"></span><span id="statusText">Open to freelance &amp; new opportunities</span></span>
           <h1><span id="heroHi">Hi, I'm</span><span class="accent" id="heroName">Your Name</span></h1>
           <div class="hero-role"><span id="heroRole">Unity Game Developer</span><span class="cursor"></span></div>
           <p class="hero-tagline" id="heroTagline"></p>
           <div class="hero-cta">
             <a href="#work" class="btn btn-primary">Explore my work <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14m-6-6 6 6 6-6"/></svg></a>
-            <a href="#contact" class="btn">Let's talk</a>
+            <a href="#" class="btn" data-resume hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M12 18v-6m0 6-3-3m3 3 3-3"/></svg>Download Resume</a>
+            <a href="#contact" class="btn btn-ghost">Let's talk</a>
           </div>
         </div>
 
@@ -98,8 +101,10 @@
             <span class="eyebrow">About me</span>
             <h2 class="section-title">From prototype<br>to Play Store.</h2>
             <div class="facts">
-              <div class="fact"><b id="fYears">3+</b><span>Years with Unity</span></div>
-              <div class="fact"><b id="fProjects">0</b><span>Projects shipped</span></div>
+              <div class="fact"><b id="fYears">0+</b><span>Years with Unity</span></div>
+              <div class="fact"><b id="fCompanies">0</b><span>Studios worked with</span></div>
+              <div class="fact"><b id="fProjects">0</b><span>Projects in portfolio</span></div>
+              <div class="fact"><b id="fLangs">—</b><span>Languages spoken</span></div>
             </div>
           </div>
           <div class="about-text reveal" id="aboutText"></div>
@@ -121,6 +126,24 @@
             <h4>Unity Assets</h4>
             <p>Ready-to-use packages, templates and systems — drop them in and ship faster.</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE + EDUCATION -->
+    <section class="section" id="experience" style="padding-top:40px">
+      <div class="container">
+        <div class="section-head reveal">
+          <div><span class="eyebrow">Career</span><h2 class="section-title">Experience</h2></div>
+          <p class="section-sub" id="expSub"></p>
+        </div>
+        <div class="exp-grid">
+          <ol class="timeline reveal" id="timeline"></ol>
+          <aside class="edu reveal">
+            <h3 class="edu-title">Education</h3>
+            <div id="eduList"></div>
+            <a href="#" class="btn btn-primary btn-block" data-resume hidden style="margin-top:18px">Download full resume</a>
+          </aside>
         </div>
       </div>
     </section>

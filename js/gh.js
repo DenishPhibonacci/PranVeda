@@ -39,7 +39,7 @@ class GitHubRepo {
     if (status === 403 && /not accessible|permission/i.test(msg)) return 'Your access key cannot write to this repo. Give it "Contents: Read and write" permission for this repository.';
     if (status === 403 && /rate limit/i.test(msg)) return 'GitHub rate limit reached — wait a few minutes and try again.';
     if (status === 404) return 'Repository or file not found. Check owner / repo / branch in Config, and that the key has access to this repo.';
-    if (status === 409) return 'This repository has no commits yet (it is empty). Reload the page and try again — the admin will set it up automatically.';
+    if (status === 409) return 'The repository is empty or busy — try again.';
     if (status === 422 && /too large|size/i.test(msg)) return 'File is too large for GitHub (max 100 MB). Use an external link instead.';
     return `GitHub error ${status}: ${msg}`;
   }
@@ -82,33 +82,7 @@ class GitHubRepo {
    * remove: [path]             — files to delete
    * progress(step, fraction, label)
    */
-  /**
-   * A brand-new repo created without "Add a README" has no commits, and the Git Data API
-   * (blobs/trees) refuses to work on it (HTTP 409). The Contents API can create the very
-   * first commit, so we use it once to "start" the repo.
-   */
-  async ensureInitialized() {
-    if (this._ready) return;
-    try {
-      await this.req('GET', `/git/ref/heads/${encodeURIComponent(this.branch)}`);
-    } catch (e) {
-      if (e.status !== 409 && e.status !== 404) throw e;
-      if (e.status === 404) {
-        // branch missing: only safe to initialise if the repo really has no commits
-        const empty = await this.req('GET', '/commits?per_page=1').then(l => !l || !l.length, err => err.status === 409);
-        if (!empty) throw e;
-      }
-      await this.req('PUT', '/contents/README.md', {
-        message: 'Initial commit',
-        content: textToBase64(`# ${this.repo}\n`),
-        branch: this.branch
-      });
-    }
-    this._ready = true;
-  }
-
   async commit(message, files, remove = [], progress = () => {}) {
-    await this.ensureInitialized();
     const blobs = [];
     const total = files.reduce((s, f) => s + f.base64.length, 0) || 1;
     let done = 0;

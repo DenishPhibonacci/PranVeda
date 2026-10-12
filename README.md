@@ -54,6 +54,8 @@ Download counts are tracked automatically for every project.
 server.js          → the server (zero dependencies)
 lib/multipart.js   → file upload handling (streams large APKs straight to disk)
 public/            → website + admin panel (HTML/CSS/JS)
+lib/export.js      → builds the GitHub Pages version into docs/
+docs/              → the exported static website (this is what GitHub Pages shows)
 data/db.json       → all your data (created automatically)
 uploads/           → uploaded images, videos, APKs (created automatically)
 ```
@@ -63,14 +65,30 @@ They are listed in `.gitignore` so large APKs don't go into git.
 
 ---
 
-## Putting it online
+## Publishing free on GitHub Pages
 
-This site needs a Node.js server (uploads don't work on GitHub Pages or other static hosting). Options:
+GitHub Pages can't run Node.js, so the admin panel stays on **your computer** and you publish a static copy of the site:
 
-- **VPS** (DigitalOcean, Hostinger VPS, AWS Lightsail…): copy the folder, run `node server.js` (keep it running with `pm2 start server.js`), and put Nginx in front for your domain and HTTPS.
-- **Render / Railway**: deploy the repo with start command `node server.js`. Attach a **persistent disk** mounted on the project folder, otherwise uploads are lost on every redeploy.
+1. Run `start.bat`, open **Admin → GitHub Pages** and click **Export for GitHub Pages**.
+   This writes the whole website into the `docs/` folder.
+2. In **GitHub Desktop**: Commit to main → **Push origin**.
+3. One time only: on github.com go to repo → **Settings → Pages** → Branch `main`, folder **`/docs`** → **Save**.
+4. After 1–2 minutes your site is live at `https://<username>.github.io/PranVeda/`
 
-Settings (environment variables):
+Every time you add or change a project, export again, then commit and push.
+
+**APK files over 100 MB:** GitHub won't accept them in the repo. Upload the APK to **Releases**
+(repo → Releases → Draft a new release → attach the file → Publish), copy the file's link and paste it in the
+project's **External download link** field. Small APKs (under 100 MB) are copied into `docs/` automatically.
+
+On GitHub Pages:
+- the contact form opens the visitor's email app (set your email in Profile)
+- download counts are not tracked (there is no server)
+
+## Running it on a real server instead (optional)
+
+To keep the admin panel online too, host it on a VPS or Render/Railway with start command `node server.js`
+and a **persistent disk** so uploads aren't lost. Settings (environment variables):
 
 | Variable | Default | Meaning |
 |---|---|---|

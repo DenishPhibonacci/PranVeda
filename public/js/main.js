@@ -1,11 +1,13 @@
 /* Home page */
 let ALL = [];
+let PROFILE = {};
 let state = { type: 'all', q: '' };
 
 const SOCIAL_LABEL = { github: 'GitHub', linkedin: 'LinkedIn', youtube: 'YouTube', twitter: 'X / Twitter', instagram: 'Instagram', playstore: 'Google Play', assetstore: 'Unity Asset Store', itch: 'itch.io' };
 const SOCIAL_ICON = { github: 'github', linkedin: 'linkedin', youtube: 'youtube', twitter: 'twitter', instagram: 'instagram', playstore: 'googleplay', assetstore: 'unity', itch: 'itch' };
 
 function renderProfile(p) {
+  PROFILE = p;
   setBrand(p);
   document.title = `${p.name} — ${p.role || 'Unity Developer'} | ${p.brand}`;
   $('#heroName').textContent = p.name;
@@ -16,7 +18,7 @@ function renderProfile(p) {
 
   const stage = $('#avatarStage');
   const el = document.createElement(p.avatar ? 'img' : 'div');
-  if (p.avatar) { el.src = p.avatar; el.alt = p.name; } else { el.className = 'avatar-fallback'; el.textContent = (p.name || 'U').charAt(0).toUpperCase(); }
+  if (p.avatar) { el.src = asset(p.avatar); el.alt = p.name; } else { el.className = 'avatar-fallback'; el.textContent = (p.name || 'U').charAt(0).toUpperCase(); }
   stage.appendChild(el);
 
   $('#fYears').textContent = (p.experienceYears || 0) + '+';
@@ -52,8 +54,8 @@ function renderFeatured() {
   if (!f) { box.innerHTML = ''; return; }
   const color = { game: 'var(--c-game)', plugin: 'var(--c-plugin)', asset: 'var(--c-asset)' }[f.type];
   box.innerHTML = `
-    <a class="featured reveal in" href="/project/${encodeURIComponent(f.slug)}">
-      <div class="featured-media">${f.cover ? `<img src="${esc(f.cover)}" alt="">` : ''}</div>
+    <a class="featured reveal in" href="${projectHref(f.slug)}">
+      <div class="featured-media">${f.cover ? `<img src="${esc(asset(f.cover))}" alt="">` : ''}</div>
       <div class="featured-body">
         <span class="featured-label">★ Featured ${esc(TYPE_LABEL[f.type])}</span>
         <h3>${esc(f.title)}</h3>
@@ -109,9 +111,18 @@ async function init() {
   $('#contactForm').addEventListener('submit', async e => {
     e.preventDefault();
     const note = $('#formNote'), btn = e.target.querySelector('button');
+    if (STATIC) {
+      // No server on GitHub Pages: open the visitor's email app with the message filled in
+      const f = Object.fromEntries(new FormData(e.target));
+      if (!PROFILE.email) { note.className = 'form-note err'; note.textContent = 'Contact email is not set yet.'; return; }
+      const body = `${f.message}\n\n— ${f.name} (${f.email})`;
+      location.href = `mailto:${PROFILE.email}?subject=${encodeURIComponent('Portfolio enquiry from ' + f.name)}&body=${encodeURIComponent(body)}`;
+      note.className = 'form-note ok'; note.textContent = 'Your email app has opened — just press Send.';
+      return;
+    }
     btn.disabled = true; note.className = 'form-note'; note.textContent = 'Sending…';
     try {
-      const r = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(e.target))) });
+      const r = await fetch('api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(e.target))) });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error);
       note.className = 'form-note ok'; note.textContent = 'Thanks! Your message has been sent.';

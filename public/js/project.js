@@ -5,9 +5,9 @@ function mediaItems(p) {
   const items = [];
   const yt = youtubeId(p.youtubeUrl);
   if (yt) items.push({ kind: 'yt', id: yt, thumb: `https://i.ytimg.com/vi/${yt}/hqdefault.jpg` });
-  if (p.videoFile) items.push({ kind: 'video', src: p.videoFile, thumb: p.cover || (p.gallery || [])[0] || '' });
-  if (p.cover) items.push({ kind: 'img', src: p.cover });
-  (p.gallery || []).forEach(src => items.push({ kind: 'img', src }));
+  if (p.videoFile) items.push({ kind: 'video', src: asset(p.videoFile), thumb: asset(p.cover || (p.gallery || [])[0] || '') });
+  if (p.cover) items.push({ kind: 'img', src: asset(p.cover) });
+  (p.gallery || []).forEach(src => items.push({ kind: 'img', src: asset(src) }));
   return items;
 }
 
@@ -39,14 +39,14 @@ async function init() {
   const lb = $('#lightbox');
   $('.lb-close', lb).innerHTML = ICONS.close; $('.lb-prev', lb).innerHTML = ICONS.left; $('.lb-next', lb).innerHTML = ICONS.right;
 
-  const slug = decodeURIComponent(location.pathname.split('/').filter(Boolean).pop() || '');
+  const slug = new URLSearchParams(location.search).get('slug') || '';
   const app = $('#app');
   let p, profile, all;
   try {
     [p, profile, all] = await Promise.all([api('/api/projects/' + encodeURIComponent(slug)), api('/api/profile'), api('/api/projects')]);
   } catch (e) {
     api('/api/profile').then(setBrand).catch(() => {});
-    app.innerHTML = `<div class="notfound container"><h1>404</h1><p style="color:var(--muted)">This project doesn't exist or was removed.</p><a class="btn btn-primary" href="/#work">See all projects</a></div>`;
+    app.innerHTML = `<div class="notfound container"><h1>404</h1><p style="color:var(--muted)">This project doesn't exist or was removed.</p><a class="btn btn-primary" href="index.html#work">See all projects</a></div>`;
     return;
   }
   setBrand(profile);
@@ -60,14 +60,15 @@ async function init() {
   let actions = '';
   if (p.hasDownload) {
     const label = p.downloadName === 'APK' ? 'Download APK' : `Download ${p.downloadName}`;
-    actions += `<a class="btn btn-primary" href="/download/${encodeURIComponent(p.slug)}" download>${ICONS.download} ${esc(label)}</a>
-      <div class="dl-meta"><span>${esc(fmtSize(p.downloadSize))}</span><span>${fmtNum(p.downloads)} downloads</span></div>`;
+    actions += `<a class="btn btn-primary" ${downloadAttrs(p)}>${ICONS.download} ${esc(label)}</a>`;
+    const meta = [p.downloadSize ? `<span>${esc(fmtSize(p.downloadSize))}</span>` : '', !STATIC ? `<span>${fmtNum(p.downloads)} downloads</span>` : ''].join('');
+    if (meta.trim()) actions += `<div class="dl-meta">${meta}</div>`;
   }
   if (p.playStoreUrl) actions += `<a class="play-badge" href="${esc(p.playStoreUrl)}" target="_blank" rel="noopener" style="margin-top:12px">${ICONS.googleplay}<span><small>Get it on</small><b>Google Play</b></span></a>`;
   if (p.assetStoreUrl) actions += `<a class="btn" href="${esc(p.assetStoreUrl)}" target="_blank" rel="noopener" style="margin-top:10px">${ICONS.unity} Unity Asset Store</a>`;
   if (p.githubUrl) actions += `<a class="btn" href="${esc(p.githubUrl)}" target="_blank" rel="noopener" style="margin-top:10px">${ICONS.github} GitHub</a>`;
   if (p.otherUrl) actions += `<a class="btn" href="${esc(p.otherUrl)}" target="_blank" rel="noopener" style="margin-top:10px">${ICONS.ext} Visit link</a>`;
-  if (!actions) actions = `<a class="btn btn-primary" href="/#contact">Ask about this project</a>`;
+  if (!actions) actions = `<a class="btn btn-primary" href="index.html#contact">Ask about this project</a>`;
 
   const specs = [
     ['Type', TYPE_LABEL[p.type]],
@@ -82,11 +83,11 @@ async function init() {
 
   app.innerHTML = `
     <section class="p-hero">
-      <div class="p-hero-bg">${p.cover ? `<img src="${esc(p.cover)}" alt="">` : ''}</div>
+      <div class="p-hero-bg">${p.cover ? `<img src="${esc(asset(p.cover))}" alt="">` : ''}</div>
       <div class="container">
-        <a class="back" href="/#work">${ICONS.back} All projects</a>
+        <a class="back" href="index.html#work">${ICONS.back} All projects</a>
         <div class="p-head">
-          ${p.icon ? `<img class="p-icon" src="${esc(p.icon)}" alt="">` : ''}
+          ${p.icon ? `<img class="p-icon" src="${esc(asset(p.icon))}" alt="">` : ''}
           <div>
             <span class="badge" style="--c:${color}">${esc(TYPE_LABEL[p.type])}</span>
             <h1>${esc(p.title)}</h1>

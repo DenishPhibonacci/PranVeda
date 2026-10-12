@@ -7,6 +7,7 @@ const http = require('http');
 const path = require('path');
 const fs = require('fs');
 const { parseMultipart } = require('./lib/multipart');
+const { exportStatic } = require('./lib/export');
 const crypto = require('crypto');
 
 const PORT = process.env.PORT || 3000;
@@ -112,12 +113,17 @@ function removeUpload(url) {
 }
 const fileUrl = f => '/uploads/' + path.relative(UPLOAD_DIR, f.path).split(path.sep).join('/');
 
+function downloadLabel(p) {
+  if (p.downloadFile) return p.downloadFile.ext.toUpperCase().replace('.', '');
+  const m = (p.downloadUrl || '').toLowerCase().match(/\.(apk|aab|zip|unitypackage|rar|7z)(?:$|[?#])/);
+  return m ? m[1].toUpperCase() : 'Download';
+}
 function publicProject(p) {
   const { downloadFile, ...rest } = p;
   return {
     ...rest,
-    hasDownload: !!(downloadFile && downloadFile.url),
-    downloadName: downloadFile ? downloadFile.ext.toUpperCase().replace('.', '') : '',
+    hasDownload: !!((downloadFile && downloadFile.url) || p.downloadUrl),
+    downloadName: downloadLabel(p),
     downloadSize: downloadFile ? downloadFile.size : 0
   };
 }
@@ -305,7 +311,11 @@ route('GET', '/api/stats', (req, res) => {
 
 route('GET', '/download/:slug', (req, res) => {
   const p = db.projects.find(x => x.slug === req.params.slug && x.published);
-  if (!p || !p.downloadFile) return send(res, 404, 'File not found', { 'Content-Type': 'text/plain' });
+  if (!p || (!p.downloadFile && !p.downloadUrl)) return send(res, 404, 'File not found', { 'Content-Type': 'text/plain' });
+  if (!p.downloadFile) { // external link (GitHub Releases, Google Drive…)
+    p.downloads = (p.downloads || 0) + 1; saveDb();
+    return send(res, 302, null, { Location: p.downloadUrl });
+  }
   const file = path.normalize(path.join(ROOT, p.downloadFile.url));
   if (!file.startsWith(UPLOAD_DIR + path.sep) || !fs.existsSync(file)) return send(res, 404, 'File not found', { 'Content-Type': 'text/plain' });
   if (!req.headers.range) { p.downloads = (p.downloads || 0) + 1; saveDb(); }
@@ -384,6 +394,7 @@ function applyProjectFields(p, body, files) {
   p.assetStoreUrl = safeUrl(b.assetStoreUrl);
   p.githubUrl = safeUrl(b.githubUrl);
   p.otherUrl = safeUrl(b.otherUrl);
+  p.downloadUrl = safeUrl(b.downloadUrl);
   p.youtubeUrl = safeUrl(b.youtubeUrl);
   p.featured = bool(b.featured);
   p.published = b.published === undefined ? true : bool(b.published);
@@ -509,6 +520,18 @@ route('DELETE', '/api/admin/messages/:id', auth, (req, res) => {
   json(res, 200, { ok: true });
 });
 
+/* ---------- Export static site for GitHub Pages ---------- */
+route('GET', '/api/admin/export', auth, (req, res) => {
+  const info = { folder: 'docs', lastExport: db.settings.lastExport || null, exists: fs.existsSync(path.join(ROOT, 'docs', 'index.html')) };
+  json(res, 200, info);
+});
+route('POST', '/api/admin/export', auth, (req, res) => {
+  const report = exportStatic({ root: ROOT, publicDir: PUBLIC_DIR, uploadDir: UPLOAD_DIR, db, publicProject });
+  db.settings.lastExport = new Date().toISOString();
+  saveDb();
+  json(res, 200, report);
+});
+
 route('GET', '/api/admin/stats', auth, (req, res) => {
   json(res, 200, {
     total: db.projects.length,
@@ -526,7 +549,8 @@ route('GET', '/api/admin/stats', auth, (req, res) => {
 /* ---------- Pages ---------- */
 route('GET', '/', (req, res) => sendPage(req, res, 'index.html'));
 route('GET', '/admin', (req, res) => sendPage(req, res, 'admin.html'));
-route('GET', '/project/:slug', (req, res) => sendPage(req, res, 'project.html'));
+// Old-style links /project/<slug> → project.html?slug=<slug>
+route('GET', '/project/:slug', (req, res) => send(res, 302, null, { Location: '/project.html?slug=' + encodeURIComponent(req.params.slug) }));
 
 /* ------------------------------------------------------------------ */
 /* Server                                                              */

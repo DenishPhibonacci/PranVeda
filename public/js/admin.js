@@ -12,6 +12,7 @@ const I = {
   dash: '<path d="M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z"/>',
   list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
+  gh: '<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-.9-2.6c3.1-.4 6.4-1.5 6.4-7A5.4 5.4 0 0 0 20 4.8 5 5 0 0 0 19.9 1S18.7.6 16 2.5a13.4 13.4 0 0 0-7 0C6.3.6 5.1 1 5.1 1A5 5 0 0 0 5 4.8a5.4 5.4 0 0 0-1.5 3.7c0 5.5 3.3 6.6 6.4 7a3.4 3.4 0 0 0-.9 2.6V22"/>',
   mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
   user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
   lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
@@ -116,7 +117,7 @@ function route() {
   const main = $('#main');
   main.innerHTML = '';
   window.scrollTo(0, 0);
-  const views = { dashboard: viewDashboard, projects: viewProjects, new: () => viewEditor(null, arg), edit: () => viewEditor(arg), messages: viewMessages, profile: viewProfile, account: viewAccount };
+  const views = { publish: viewPublish, dashboard: viewDashboard, projects: viewProjects, new: () => viewEditor(null, arg), edit: () => viewEditor(arg), messages: viewMessages, profile: viewProfile, account: viewAccount };
   (views[view] || viewDashboard)(main);
 }
 
@@ -187,7 +188,7 @@ async function viewProjects(main) {
         <div class="acts">
           <button class="btn btn-sm icon-btn" data-act="feature" title="${p.featured ? 'Unfeature' : 'Feature on home page'}" style="${p.featured ? 'color:var(--violet)' : ''}">${ico('star', 16)}</button>
           <button class="btn btn-sm icon-btn" data-act="publish" title="${p.published ? 'Hide from website' : 'Show on website'}">${ico(p.published ? 'eye' : 'eyeOff', 16)}</button>
-          ${p.published ? `<a class="btn btn-sm icon-btn" href="/project/${encodeURIComponent(p.slug)}" target="_blank" title="Open on website">${ico('ext', 16)}</a>` : ''}
+          ${p.published ? `<a class="btn btn-sm icon-btn" href="/project.html?slug=${encodeURIComponent(p.slug)}" target="_blank" title="Open on website">${ico('ext', 16)}</a>` : ''}
           <a class="btn btn-sm" href="#edit/${p.id}">${ico('edit', 15)} Edit</a>
           <button class="btn btn-sm btn-danger icon-btn" data-act="delete" title="Delete">${ico('trash', 16)}</button>
         </div>
@@ -231,7 +232,7 @@ async function viewEditor(id, presetType) {
   const st = { cover: null, icon: null, gallery: [], removeGallery: [], videoFile: null, downloadFile: null, removeCover: false, removeIcon: false, removeVideo: false, removeDownload: false };
 
   main.innerHTML = header(id ? 'Edit project' : 'Add new project', id ? esc(p.title) : 'Upload a game, plugin or Unity asset',
-    id && p.published ? `<a class="btn" href="/project/${encodeURIComponent(p.slug)}" target="_blank">${ico('ext')} View live</a>` : '') + `
+    id && p.published ? `<a class="btn" href="/project.html?slug=${encodeURIComponent(p.slug)}" target="_blank">${ico('ext')} View live</a>` : '') + `
   <form id="editor" class="editor" novalidate>
     <div>
       <div class="panel">
@@ -283,6 +284,8 @@ async function viewEditor(id, presetType) {
         <h2>Download file</h2>
         <div id="dlBox"></div>
         <small class="hint" style="display:block;margin-top:10px">APK for games · .unitypackage / .zip for plugins &amp; assets. Visitors get a Download button.</small>
+        <div class="or">OR EXTERNAL LINK</div>
+        <div class="field" style="margin:0"><label for="downloadUrl">External download link</label><input type="url" id="downloadUrl" name="downloadUrl" value="${esc(p.downloadUrl)}" placeholder="https://github.com/…/releases/download/…/game.apk"><small>GitHub Releases / Google Drive link. Best for files over 100 MB and for GitHub Pages.</small></div>
       </div>
       <div class="panel">
         <h2>Links</h2>
@@ -380,7 +383,7 @@ async function viewEditor(id, presetType) {
 
     const fd = new FormData();
     const raw = new FormData(form);
-    ['type', 'title', 'shortDescription', 'description', 'version', 'unityVersion', 'price', 'tags', 'youtubeUrl', 'playStoreUrl', 'assetStoreUrl', 'githubUrl', 'otherUrl', 'order']
+    ['type', 'title', 'shortDescription', 'description', 'version', 'unityVersion', 'price', 'tags', 'youtubeUrl', 'playStoreUrl', 'assetStoreUrl', 'githubUrl', 'otherUrl', 'downloadUrl', 'order']
       .forEach(k => fd.append(k, raw.get(k) || ''));
     fd.append('platforms', JSON.stringify(raw.getAll('platforms')));
     fd.append('published', form.published.checked);
@@ -410,6 +413,60 @@ function bindDrop(drop, onFiles) {
   ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
   ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
   drop.addEventListener('drop', e => { if (e.dataTransfer.files.length) onFiles([...e.dataTransfer.files]); });
+}
+
+/* ---------- Publish to GitHub Pages ---------- */
+async function viewPublish(main) {
+  main.innerHTML = header('GitHub Pages', 'Publish your portfolio for free as a static website') + `
+    <div class="panel">
+      <h2>1. Export the website</h2>
+      <p style="color:var(--muted);margin:0 0 16px">Creates a <code>docs</code> folder in your project with the full website (pages, images, data and small APKs).
+      Run this again every time you add or change a project.</p>
+      <button class="btn btn-primary" id="exportBtn">${ico('upload')} Export for GitHub Pages</button>
+      <span class="hint" id="lastExport" style="margin-left:12px"></span>
+      <div id="exportResult" style="margin-top:16px"></div>
+    </div>
+    <div class="panel">
+      <h2>2. Push to GitHub</h2>
+      <ol class="steps">
+        <li>Open <b>GitHub Desktop</b> → you'll see the changed files in <code>docs/</code>.</li>
+        <li>Write a summary like <i>Update portfolio</i> → <b>Commit to main</b> → <b>Push origin</b>.</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h2>3. Set GitHub Pages to the docs folder (one time)</h2>
+      <ol class="steps">
+        <li>On github.com open your repo → <b>Settings</b> → <b>Pages</b>.</li>
+        <li>Under <b>Branch</b> keep <code>main</code>, change <code>/ (root)</code> to <code>/docs</code> → <b>Save</b>.</li>
+        <li>Wait 1–2 minutes, then open your site link.</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h2>Good to know</h2>
+      <ul class="steps">
+        <li>On GitHub Pages the <b>admin panel does not run</b> — you keep managing everything here on your computer and export again.</li>
+        <li>GitHub blocks files over <b>100 MB</b>. For big APKs: repo → <b>Releases</b> → <b>Draft a new release</b> → attach the APK → publish, then copy the file link into the project's <b>External download link</b>.</li>
+        <li>Prefer <b>YouTube links</b> for videos — they keep the repo small.</li>
+        <li>The contact form on GitHub Pages opens the visitor's email app (set your email in Profile).</li>
+      </ul>
+    </div>`;
+  const info = await req('GET', '/api/admin/export');
+  const showLast = d => { $('#lastExport').textContent = d ? 'Last export: ' + fmtDate(d) : 'Not exported yet'; };
+  showLast(info.lastExport);
+  $('#exportBtn').addEventListener('click', async e => {
+    const btn = e.currentTarget; btn.disabled = true; btn.lastChild.textContent = ' Exporting…';
+    try {
+      const r = await req('POST', '/api/admin/export');
+      $('#exportResult').innerHTML = `
+        <div class="banner" style="border-color:rgba(198,255,61,.4);background:rgba(198,255,61,.07);color:var(--lime);margin:0 0 10px">
+          <span>✓ Exported ${r.projects} project${r.projects === 1 ? '' : 's'} · ${r.files} files · ${r.sizeMB} MB into the <code>docs</code> folder. Now commit &amp; push it.</span>
+        </div>
+        ${r.warnings.map(w => `<div class="banner" style="margin:0 0 8px"><span>⚠ ${esc(w)}</span></div>`).join('')}`;
+      showLast(new Date().toISOString());
+      toast('Export complete');
+    } catch (err) { toast(err.message, 'err'); }
+    btn.disabled = false; btn.lastChild.textContent = ' Export for GitHub Pages';
+  });
 }
 
 /* ---------- Messages ---------- */

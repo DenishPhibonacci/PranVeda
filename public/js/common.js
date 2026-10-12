@@ -43,10 +43,56 @@ function miniMd(src) {
   return out.join('');
 }
 
+/* ------------------------------------------------------------------
+   Two modes:
+   - Server mode (node server.js): data comes from /api/...
+   - Static mode (GitHub Pages export): window.PV_STATIC = true and all
+     data is read from data.json that the export generated.
+   ------------------------------------------------------------------ */
+const STATIC = !!window.PV_STATIC;
+let STATIC_DATA = null;
+
+async function staticApi(url) {
+  if (!STATIC_DATA) {
+    const r = await fetch('data.json', { cache: 'no-cache' });
+    if (!r.ok) throw new Error('Could not load data.json');
+    STATIC_DATA = await r.json();
+  }
+  const d = STATIC_DATA;
+  const u = new URL(url, location.href);
+  const parts = u.pathname.split('/api/')[1].split('/');
+  if (parts[0] === 'profile') return d.profile;
+  if (parts[0] === 'stats') return d.stats;
+  if (parts[0] === 'projects' && parts[1]) {
+    const p = d.projects.find(x => x.slug === decodeURIComponent(parts[1]));
+    if (!p) throw new Error('Not found');
+    return p;
+  }
+  if (parts[0] === 'projects') {
+    const t = u.searchParams.get('type');
+    return t ? d.projects.filter(p => p.type === t) : d.projects;
+  }
+  throw new Error('Not found');
+}
+
 async function api(url) {
-  const r = await fetch(url);
+  if (STATIC) return staticApi(url);
+  const r = await fetch(url.replace(/^\//, ''));
   if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || r.statusText);
   return r.json();
+}
+
+/* Turn stored "/uploads/..." paths into relative ones so the site also works in a sub-folder */
+const asset = u => (typeof u === 'string' && u.startsWith('/uploads/') ? u.slice(1) : u || '');
+const projectHref = slug => 'project.html?slug=' + encodeURIComponent(slug);
+const isExternal = u => /^https?:\/\//i.test(u || '');
+function downloadHref(p) {
+  if (STATIC) return p.downloadHref || '';
+  return 'download/' + encodeURIComponent(p.slug);
+}
+function downloadAttrs(p) {
+  const href = downloadHref(p);
+  return isExternal(href) ? `href="${esc(href)}" target="_blank" rel="noopener"` : `href="${esc(href)}" download`;
 }
 
 const ICONS = {
@@ -101,19 +147,19 @@ function initReveal() {
 
 /* Project card used on home + related */
 function projectCard(p, i = 0) {
-  const cover = p.cover ? `<img src="${esc(p.cover)}" alt="" loading="lazy">` : `<div class="ph">${esc((p.title || '?').charAt(0))}</div>`;
+  const cover = p.cover ? `<img src="${esc(asset(p.cover))}" alt="" loading="lazy">` : `<div class="ph">${esc((p.title || '?').charAt(0))}</div>`;
   const video = p.youtubeUrl || p.videoFile ? `<span class="has-video" title="Has video">${ICONS.play}</span>` : '';
-  const icon = p.icon ? `<img class="card-icon" src="${esc(p.icon)}" alt="" loading="lazy">` : '';
+  const icon = p.icon ? `<img class="card-icon" src="${esc(asset(p.icon))}" alt="" loading="lazy">` : '';
   const tags = (p.tags || []).slice(0, 4).map(t => `<span class="tag">${esc(t)}</span>`).join('');
   const meta = [p.version && 'v' + p.version, (p.platforms || []).join(' · ')].filter(Boolean).join('  /  ');
   let actions = '';
-  if (p.hasDownload) actions += `<a class="btn btn-dl" href="/download/${encodeURIComponent(p.slug)}" download>${ICONS.download} ${esc(p.downloadName || 'Download')}</a>`;
+  if (p.hasDownload) actions += `<a class="btn btn-dl" ${downloadAttrs(p)}>${ICONS.download} ${esc(p.downloadName || 'Download')}</a>`;
   if (p.playStoreUrl) actions += `<a class="btn" href="${esc(p.playStoreUrl)}" target="_blank" rel="noopener">${ICONS.googleplay} Play Store</a>`;
   else if (p.assetStoreUrl) actions += `<a class="btn" href="${esc(p.assetStoreUrl)}" target="_blank" rel="noopener">${ICONS.unity} Asset Store</a>`;
   if (!actions) actions = `<span class="btn btn-ghost">View details ${ICONS.arrow}</span>`;
   return `
   <article class="card" data-type="${esc(p.type)}" style="animation-delay:${Math.min(i, 8) * 60}ms">
-    <a class="card-link" href="/project/${encodeURIComponent(p.slug)}" aria-label="${esc(p.title)}"></a>
+    <a class="card-link" href="${projectHref(p.slug)}" aria-label="${esc(p.title)}"></a>
     <div class="card-media">${cover}<span class="badge">${esc(TYPE_LABEL[p.type] || p.type)}</span>${video}</div>
     <div class="card-body">
       <div class="card-title">${icon}<div><h3>${esc(p.title)}</h3>${meta ? `<div class="meta">${esc(meta)}</div>` : ''}</div></div>

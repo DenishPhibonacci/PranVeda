@@ -13,10 +13,8 @@ const youtubeId = url => { const m = (url || '').match(/(?:youtu\.be\/|youtube\.
 const list = s => String(s || '').split(',').map(x => x.trim()).filter(Boolean);
 const safeUrl = s => { s = String(s || '').trim(); return !s || /^https?:\/\//i.test(s) ? s : 'https://' + s; };
 
-const TYPES = ['game', 'app', 'website', 'asset'];
-const TYPE_LABEL = { game: 'Game', app: 'Application', website: 'Website', asset: 'Unity Asset' };
-const typeOf = p => (p.type === 'plugin' ? 'asset' : TYPE_LABEL[p.type] ? p.type : 'game'); // old "plugin" items count as Unity Assets
-const PLATFORMS = ['Android', 'iOS', 'Windows', 'Mac', 'Linux', 'WebGL', 'Web'];
+const TYPE_LABEL = { game: 'Game', plugin: 'Plugin', asset: 'Unity Asset' };
+const PLATFORMS = ['Android', 'iOS', 'Windows', 'Mac', 'Linux', 'WebGL'];
 const MAX_FILE = 95 * 1024 * 1024; // GitHub's limit is 100 MB per file
 const RULES = {
   image: { dir: 'images', ext: ['jpg', 'jpeg', 'png', 'webp', 'gif'] },
@@ -47,10 +45,7 @@ const I = {
   save: '<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/>',
   game: '<path d="M6 11h4M8 9v4M15 12h.01M18 10h.01"/><path d="M17.3 5H6.7a4 4 0 0 0-4 3.6l-.7 6.3A3 3 0 0 0 5 18c1 0 2-.5 2.5-1.4L9 14h6l1.5 2.6A3 3 0 0 0 19 18a3 3 0 0 0 3-3.1l-.7-6.3a4 4 0 0 0-4-3.6z"/>',
   plugin: '<path d="M12 22v-5M9 8V2M15 8V2M18 8v5a6 6 0 0 1-12 0V8z"/>',
-  app: '<rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/>',
-  website: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20M6 6.5h.01M9 6.5h.01"/>',
   asset: '<path d="M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.7z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/>',
-  radar: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12 19 5"/><circle cx="12" cy="12" r="1" fill="currentColor"/>',
   git: '<circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="8" r="2"/><path d="M6 8v8M18 10c0 4-6 3-10 6"/>'
 };
 const ico = (n, size = 18) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${I[n] || ''}</svg>`;
@@ -96,56 +91,6 @@ function header(kicker, title, sub, right = '') {
   return `<div class="topbar"><div><div class="kicker">${kicker}</div><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ''}</div><div style="display:flex;gap:8px;flex-wrap:wrap">${right}</div></div>`;
 }
 
-/* ---------- Image optimizer: resize + WebP before upload ---------- */
-async function prepImage(file, maxDim = 1920) {
-  try {
-    if (!/^image\/(jpeg|png|webp)$/.test(file.type) || file.size < 150 * 1024) return file;
-    const bmp = await createImageBitmap(file);
-    const scale = Math.min(1, maxDim / Math.max(bmp.width, bmp.height));
-    const w = Math.round(bmp.width * scale), h = Math.round(bmp.height * scale);
-    const c = document.createElement('canvas'); c.width = w; c.height = h;
-    c.getContext('2d').drawImage(bmp, 0, 0, w, h);
-    const blob = await new Promise(r => c.toBlob(r, 'image/webp', 0.86));
-    if (!blob || blob.type !== 'image/webp' || blob.size >= file.size) return file;
-    const out = new File([blob], file.name.replace(/\.[^.]+$/, '') + '.webp', { type: 'image/webp' });
-    out.optimizedFrom = file.size;
-    return out;
-  } catch (_) { return file; }
-}
-async function prepImages(files, maxDim) { return Promise.all(files.map(f => prepImage(f, maxDim))); }
-const optNote = f => (f && f.optimizedFrom ? ` · optimized ${fmtSize(f.optimizedFrom)} → ${fmtSize(f.size)}` : '');
-
-/* ---------- Deploy watcher: tells you when GitHub Pages shows the new version ---------- */
-let deployTimer = null;
-function watchDeploy(updatedAt) {
-  clearInterval(deployTimer);
-  let chip = $('#deploy');
-  if (!chip) { chip = document.createElement('div'); chip.id = 'deploy'; chip.className = 'deploy'; document.body.appendChild(chip); }
-  chip.className = 'deploy';
-  chip.innerHTML = '<i></i><span>Deploying to GitHub Pages…</span>';
-  const started = Date.now();
-  const check = async () => {
-    try {
-      const r = await fetch('data.json?v=' + Date.now(), { cache: 'no-store' });
-      const d = r.ok ? await r.json() : null;
-      if (d && d.updatedAt >= updatedAt) {
-        clearInterval(deployTimer);
-        chip.className = 'deploy live';
-        chip.innerHTML = '<i></i><span>Live ✓ <a href="index.html" target="_blank">open site</a></span>';
-        setTimeout(() => chip.remove(), 15000);
-        return;
-      }
-    } catch (_) {}
-    if (Date.now() - started > 6 * 60 * 1000) {
-      clearInterval(deployTimer);
-      chip.innerHTML = '<i></i><span>Still deploying — check the repo\'s Actions tab</span>';
-      setTimeout(() => chip.remove(), 20000);
-    }
-  };
-  deployTimer = setInterval(check, 8000);
-  setTimeout(check, 4000);
-}
-
 /* ---------- Saving: one commit per save ---------- */
 function newPath(kind, file) {
   const rule = RULES[kind];
@@ -168,11 +113,11 @@ async function save(message, mutate, uploads = [], removes = []) {
     latest.updatedAt = new Date().toISOString();
     const files = [];
     for (const u of uploads) {
-      loading(true, 'Preparing', files.length / (uploads.length + 1), u.file ? u.file.name : u.path.split('/').pop());
-      files.push({ path: u.path, base64: u.file ? await fileToBase64(u.file) : bytesToBase64(u.bytes) });
+      loading(true, 'Preparing', 0, u.file.name);
+      files.push({ path: u.path, base64: await fileToBase64(u.file) });
     }
     files.push({ path: 'data.json', base64: textToBase64(JSON.stringify(latest, null, 2) + '\n') });
-    const totalBytes = uploads.reduce((s, u) => s + (u.file ? u.file.size : u.bytes.length), 0);
+    const totalBytes = uploads.reduce((s, u) => s + u.file.size, 0);
     await GH.commit(message, files, removes.filter(p => p && !isExternalUrl(p)), (step, frac, label) => {
       if (step === 'upload') loading(true, 'Uploading', frac, `${label.split('/').pop()} · ${fmtSize(totalBytes * frac)} / ${fmtSize(totalBytes)}`);
       else loading(true, 'Saving', 1, label);
@@ -180,8 +125,7 @@ async function save(message, mutate, uploads = [], removes = []) {
     DATA = latest;
     refreshChrome();
     loading(false);
-    toast('Saved ✓ to GitHub');
-    watchDeploy(latest.updatedAt);
+    toast('Saved ✓ — live on your site in about 1 minute');
     return latest;
   } catch (err) {
     loading(false);
@@ -235,41 +179,6 @@ function startApp() {
   $('#loginView').hidden = true; $('#appView').hidden = false;
   refreshChrome();
   route();
-  migrateCategories();
-  radarPeek();
-}
-
-/* One-time update: "Plugin" category was replaced by Application + Website */
-const OLD_WORK_TITLE = 'Games, plugins & Unity assets';
-const OLD_CONTACT = "Freelance projects, plugin requests or collaboration — send a message and I'll get back to you.";
-const OLD_ABOUT = 'and I also build plugins and Unity assets that help other developers ship faster.';
-const NEW_SERVICES = [
-  { icon: 'app', title: 'Mobile Applications', text: 'Android & iOS apps built with Unity — clean UI, smooth performance and store-ready builds.' },
-  { icon: 'website', title: 'Websites', text: 'Fast, modern websites and web apps — from landing pages to complete web platforms.' }
-];
-function needsMigration(d) {
-  return (d.site && d.site.workTitle === OLD_WORK_TITLE) ||
-    ((d.site && d.site.services) || []).some(x => x.icon === 'plugin' && x.title === 'Plugins & Tools') ||
-    (d.projects || []).some(p => p.type === 'plugin') ||
-    (d.site && d.site.contactText === OLD_CONTACT) || ((d.profile && d.profile.about) || '').includes(OLD_ABOUT);
-}
-async function migrateCategories() {
-  if (!DATA || !needsMigration(DATA)) return;
-  try {
-    await save('Update categories: Game, Application, Website, Unity Asset', d => {
-      d.site = d.site || {};
-      if (d.site.workTitle === OLD_WORK_TITLE) d.site.workTitle = 'Games, apps, websites & Unity assets';
-      if (d.site.workSub === "Play the games, download the APKs, or grab the tools I've built for other Unity developers.")
-        d.site.workSub = 'Play the games, install the apps, visit the websites, or grab the Unity assets I have built.';
-      const sv = d.site.services || [];
-      const i = sv.findIndex(x => x.icon === 'plugin' && x.title === 'Plugins & Tools');
-      if (i >= 0) sv.splice(i, 1, ...NEW_SERVICES);
-      (d.projects || []).forEach(p => { if (p.type === 'plugin') p.type = 'asset'; });
-      if (d.site.contactText === OLD_CONTACT) d.site.contactText = "Games, apps, websites or collaboration — send a message and I'll get back to you.";
-      if (d.profile && (d.profile.about || '').includes(OLD_ABOUT)) d.profile.about = d.profile.about.replace(OLD_ABOUT, 'and I also build apps, websites and Unity assets for clients and other developers.');
-    });
-    if (!dirty) route();
-  } catch (_) {}
 }
 function refreshChrome() {
   if (!DATA) return;
@@ -292,7 +201,6 @@ let dirty = false;
 window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
 
 let lastHash = '', skipRoute = false;
-let ROUTE_ID = 0; // bumps on every render, so slow (async) views can tell they are outdated
 function route() {
   if (skipRoute) { skipRoute = false; return; }
   if (dirty && !confirm('You have unsaved changes. Leave without saving?')) { skipRoute = true; location.hash = lastHash; return; }
@@ -300,16 +208,9 @@ function route() {
   const [view, arg] = (location.hash.slice(1) || 'dashboard').split('/');
   dirty = false;
   $$('.nav-item[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === view || (view === 'edit' && b.dataset.view === 'projects')));
-  if (view === 'jobs') { const pill = $('#jobsPill'); if (pill) pill.hidden = true; }
-  ROUTE_ID++;
   const main = $('#main'); main.innerHTML = ''; window.scrollTo(0, 0);
-  const views = { dashboard: viewDashboard, projects: viewProjects, new: () => viewEditor(null, arg), edit: () => viewEditor(arg), profile: viewProfile, career: viewCareer, jobs: () => viewJobs(main, arg), site: viewSite, config: viewConfig };
-  const myId = ROUTE_ID;
-  Promise.resolve((views[view] || viewDashboard)(main)).catch(err => {
-    if (myId !== ROUTE_ID) return; // page changed meanwhile — ignore errors from the old view
-    console.error(err);
-    main.insertAdjacentHTML('beforeend', `<div class="banner">${esc(err.message)}</div>`);
-  });
+  const views = { dashboard: viewDashboard, projects: viewProjects, new: () => viewEditor(null, arg), edit: () => viewEditor(arg), profile: viewProfile, career: viewCareer, site: viewSite, config: viewConfig };
+  Promise.resolve((views[view] || viewDashboard)(main)).catch(err => { main.innerHTML += `<div class="banner">${esc(err.message)}</div>`; });
 }
 
 /* =========================================================
@@ -317,11 +218,11 @@ function route() {
    ========================================================= */
 async function viewDashboard(main) {
   const p = DATA.profile || {}, projects = DATA.projects || [];
-  const count = t => projects.filter(x => typeOf(x) === t).length;
+  const count = t => projects.filter(x => x.type === t).length;
   const live = `https://${CFG.owner.toLowerCase()}.github.io/${CFG.repo.toLowerCase() === CFG.owner.toLowerCase() + '.github.io' ? '' : CFG.repo + '/'}`;
   const rank = Math.min(1, projects.length / 10);
-  main.innerHTML = header('// Player HQ', `Welcome back, ${esc((p.name || 'player').split(' ')[0])}`, 'Manage your games, apps, websites and Unity assets. Every save is committed to GitHub.',
-    `${DATA.site.goatcounter ? `<a class="btn" href="https://${esc(DATA.site.goatcounter)}.goatcounter.com" target="_blank">${ico('dash')} Analytics</a>` : ''}<a class="btn" href="${esc(live)}" target="_blank">${ico('ext')} Live site</a><a class="btn btn-primary" href="#new">${ico('plus')} Spawn new</a>`) + `
+  main.innerHTML = header('// Player HQ', `Welcome back, ${esc((p.name || 'player').split(' ')[0])}`, 'Manage your games, plugins and assets. Every save is committed to GitHub.',
+    `<a class="btn" href="${esc(live)}" target="_blank">${ico('ext')} Live site</a><a class="btn btn-primary" href="#new">${ico('plus')} Spawn new</a>`) + `
     <div class="panel player-card">
       <div class="avatar">${p.avatar ? `<img src="${esc(media(p.avatar))}" alt="">` : esc((DATA.site.initials || 'DM'))}</div>
       <div>
@@ -334,8 +235,7 @@ async function viewDashboard(main) {
     </div>
     <div class="stats">
       <div class="stat" style="--c:var(--c-game)">${ico('game')}<span>Games</span><b>${count('game')}</b></div>
-      <div class="stat" style="--c:var(--c-app)">${ico('app')}<span>Applications</span><b>${count('app')}</b></div>
-      <div class="stat" style="--c:var(--c-web)">${ico('website')}<span>Websites</span><b>${count('website')}</b></div>
+      <div class="stat" style="--c:var(--c-plugin)">${ico('plugin')}<span>Plugins</span><b>${count('plugin')}</b></div>
       <div class="stat" style="--c:var(--c-asset)">${ico('asset')}<span>Unity assets</span><b>${count('asset')}</b></div>
       <div class="stat" style="--c:var(--pink)">${ico('star')}<span>Featured</span><b>${projects.filter(x => x.featured).length}</b></div>
     </div>
@@ -343,8 +243,7 @@ async function viewDashboard(main) {
       <h2>Quick spawn</h2>
       <div class="quick">
         <button data-new="game" style="--c:var(--c-game)">${ico('game')}<b>New game</b><small>APK, Play Store link, video</small></button>
-        <button data-new="app" style="--c:var(--c-app)">${ico('app')}<b>New application</b><small>APK, Play Store, screenshots</small></button>
-        <button data-new="website" style="--c:var(--c-web)">${ico('website')}<b>New website</b><small>Live link, screenshots, tech</small></button>
+        <button data-new="plugin" style="--c:var(--c-plugin)">${ico('plugin')}<b>New plugin</b><small>Package, docs, GitHub</small></button>
         <button data-new="asset" style="--c:var(--c-asset)">${ico('asset')}<b>New Unity asset</b><small>Asset Store link, .unitypackage</small></button>
       </div>
     </div>
@@ -352,9 +251,8 @@ async function viewDashboard(main) {
   $$('[data-new]').forEach(b => b.addEventListener('click', () => (location.hash = 'new/' + b.dataset.new)));
   try {
     const commits = await GH.req('GET', `/commits?sha=${encodeURIComponent(GH.branch)}&per_page=6`);
-    if (!$('#log')) return;
     $('#log').innerHTML = commits.map(c => `<li><time>${fmtDate(c.commit.author.date)}</time><span><b>▸</b> ${esc(c.commit.message.split('\n')[0])}</span></li>`).join('') || '<li>No commits yet</li>';
-  } catch (_) { if ($('#log')) $('#log').innerHTML = '<li>Could not load history</li>'; }
+  } catch (_) { $('#log').innerHTML = '<li>Could not load history</li>'; }
 }
 
 /* =========================================================
@@ -363,17 +261,17 @@ async function viewDashboard(main) {
 function viewProjects(main) {
   main.innerHTML = header('// Inventory', 'All projects', 'Feature, hide, edit or delete your work', `<a class="btn btn-primary" href="#new">${ico('plus')} Spawn new</a>`) +
     `<div class="toolbar">
-      <div class="seg" id="seg"><button class="active" data-t="all">All</button><button data-t="game">Games</button><button data-t="app">Apps</button><button data-t="website">Websites</button><button data-t="asset">Assets</button></div>
+      <div class="seg" id="seg"><button class="active" data-t="all">All</button><button data-t="game">Games</button><button data-t="plugin">Plugins</button><button data-t="asset">Assets</button></div>
       <input type="text" id="q" placeholder="Search…">
     </div><div class="rows" id="rows"></div>`;
   let type = 'all', q = '';
   const render = () => {
-    const items = (DATA.projects || []).filter(p => (type === 'all' || typeOf(p) === type) && (!q || p.title.toLowerCase().includes(q)))
+    const items = (DATA.projects || []).filter(p => (type === 'all' || p.type === type) && (!q || p.title.toLowerCase().includes(q)))
       .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
     $('#rows').innerHTML = items.length ? items.map(p => `
-      <div class="slot" data-id="${esc(p.id)}" data-type="${typeOf(p)}">
+      <div class="slot" data-id="${esc(p.id)}" data-type="${esc(p.type)}">
         <div class="thumb">${p.cover ? `<img src="${esc(media(p.cover))}" alt="" loading="lazy">` : esc(p.title.charAt(0))}
-          <div class="chips"><span class="chip ${typeOf(p)}">${TYPE_LABEL[typeOf(p)]}</span>${p.published === false ? '<span class="chip draft">Hidden</span>' : ''}${p.featured ? '<span class="chip star">★ Featured</span>' : ''}</div></div>
+          <div class="chips"><span class="chip ${esc(p.type)}">${TYPE_LABEL[p.type]}</span>${p.published === false ? '<span class="chip draft">Hidden</span>' : ''}${p.featured ? '<span class="chip star">★ Featured</span>' : ''}</div></div>
         <div class="body">
           <h3>${esc(p.title)}</h3>
           <div class="sub">${p.version ? `<span>v${esc(p.version)}</span>` : ''}${p.download ? `<span>${esc(p.download.path.split('.').pop().toUpperCase())} · ${fmtSize(p.download.size)}</span>` : ''}${p.downloadUrl ? '<span>External download</span>' : ''}${p.playStoreUrl ? '<span>Play Store ✓</span>' : ''}</div>
@@ -385,7 +283,7 @@ function viewProjects(main) {
           </div>
         </div>
       </div>`).join('')
-      : `<div class="empty" style="grid-column:1/-1"><b>Inventory empty</b>Spawn your first game, app, website or Unity asset.<br><a class="btn btn-primary" href="#new" style="margin-top:14px">${ico('plus')} Spawn new</a></div>`;
+      : `<div class="empty" style="grid-column:1/-1"><b>Inventory empty</b>Spawn your first game, plugin or asset.<br><a class="btn btn-primary" href="#new" style="margin-top:14px">${ico('plus')} Spawn new</a></div>`;
   };
   render();
   $('#seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; type = b.dataset.t; $$('#seg button').forEach(x => x.classList.toggle('active', x === b)); render(); });
@@ -396,7 +294,7 @@ function viewProjects(main) {
     try {
       if (b.dataset.act === 'delete') {
         if (!confirm(`Delete "${p.title}"? Its images, video and download file are removed from the repo too.`)) return;
-        const files = [p.cover, p.icon, p.videoFile, ...(p.gallery || []), p.download && p.download.path, ...((p.webgl && p.webgl.files) || [])];
+        const files = [p.cover, p.icon, p.videoFile, ...(p.gallery || []), p.download && p.download.path];
         await save(`Delete project: ${p.title}`, d => { d.projects = (d.projects || []).filter(x => x.id !== id); }, [], files);
       } else if (b.dataset.act === 'publish') {
         await save(`${p.published === false ? 'Show' : 'Hide'} project: ${p.title}`, d => { const x = d.projects.find(y => y.id === id); if (x) x.published = x.published === false; });
@@ -426,44 +324,15 @@ function checkFile(kind, file) {
 }
 const objUrl = f => URL.createObjectURL(f);
 
-/** Read a Unity WebGL build zip in the browser and return its files */
-async function readWebglZip(file) {
-  if (!/\.zip$/i.test(file.name)) throw new Error('Please upload the WebGL build as a .zip file.');
-  if (typeof JSZip === 'undefined') throw new Error('Zip library failed to load — refresh the page.');
-  loading(true, 'Unzipping', 0, file.name);
-  try {
-    const zip = await JSZip.loadAsync(file);
-    const entries = Object.values(zip.files).filter(e => !e.dir && !/(^|\/)(__MACOSX|\.DS_Store|Thumbs\.db)/.test(e.name));
-    const index = entries.filter(e => /(^|\/)index\.html?$/i.test(e.name)).sort((a, b) => a.name.split('/').length - b.name.split('/').length)[0];
-    if (!index) throw new Error('No index.html found in the zip. Zip the whole WebGL build folder (it contains index.html and a Build folder).');
-    const root = index.name.slice(0, index.name.length - index.name.split('/').pop().length);
-    const inRoot = entries.filter(e => e.name.startsWith(root));
-    if (!inRoot.some(e => /\.(loader\.js|wasm|wasm\.br|wasm\.gz|wasm\.unityweb)$/i.test(e.name))) throw new Error('This zip does not look like a Unity WebGL build (no Build/*.loader.js or .wasm file).');
-    const out = []; let size = 0, i = 0;
-    for (const e of inRoot) {
-      const bytes = await e.async('uint8array');
-      if (bytes.length > MAX_FILE) throw new Error(`"${e.name.split('/').pop()}" is ${fmtSize(bytes.length)} — GitHub allows max 100 MB per file. Reduce texture/audio quality or enable compression with Decompression Fallback.`);
-      size += bytes.length;
-      out.push({ rel: e.name.slice(root.length), bytes });
-      loading(true, 'Unzipping', ++i / inRoot.length, e.name.split('/').pop());
-    }
-    const compressed = out.some(f => /\.(br|gz)$/i.test(f.rel));
-    const warn = compressed ? 'This build uses Brotli/Gzip files (.br/.gz). GitHub Pages cannot serve those directly, so the game will not start. In Unity set Compression Format to Disabled, or enable "Decompression Fallback", then rebuild and upload again.' : '';
-    return { name: file.name, files: out, size, count: out.length, warn };
-  } finally { loading(false); }
-}
-
 function viewEditor(id, presetType) {
   const main = $('#main');
-  let p = { type: TYPES.includes(presetType) ? presetType : 'game', published: true, featured: false, tags: [], platforms: [], gallery: [] };
+  let p = { type: ['game', 'plugin', 'asset'].includes(presetType) ? presetType : 'game', published: true, featured: false, tags: [], platforms: [], gallery: [] };
   if (id) {
     const found = (DATA.projects || []).find(x => x.id === id);
     if (!found) { main.innerHTML = header('// Error', 'Not found') + '<div class="empty"><b>This project does not exist.</b></div>'; return; }
     p = JSON.parse(JSON.stringify(found));
-    p.type = typeOf(p);
   }
-  const st = { cover: null, icon: null, gallery: [], removeGallery: [], videoFile: null, download: null, removeCover: false, removeIcon: false, removeVideo: false, removeDownload: false, webgl: null, removeWebgl: false };
-  const changelog = JSON.parse(JSON.stringify(p.changelog || []));
+  const st = { cover: null, icon: null, gallery: [], removeGallery: [], videoFile: null, download: null, removeCover: false, removeIcon: false, removeVideo: false, removeDownload: false };
 
   main.innerHTML = header(id ? '// Edit item' : '// Spawn new', id ? esc(p.title) : 'New project', 'Fill in the details — images, video and files are stored in your GitHub repo',
     id && p.published !== false ? `<a class="btn" href="project.html?slug=${encodeURIComponent(p.slug)}" target="_blank">${ico('ext')} View live</a>` : '') + `
@@ -472,14 +341,14 @@ function viewEditor(id, presetType) {
       <div class="panel">
         <h2>Basics</h2>
         <div class="type-pick">
-          ${TYPES.map(t => `
+          ${['game', 'plugin', 'asset'].map(t => `
           <label style="--c:var(--c-${t})"><input type="radio" name="type" value="${t}" ${p.type === t ? 'checked' : ''}>
             <span class="opt">${ico(t, 24)}<b>${TYPE_LABEL[t]}</b></span></label>`).join('')}
         </div>
         <div class="field"><label for="title">Title *</label><input type="text" id="title" name="title" maxlength="120" required value="${esc(p.title)}" placeholder="e.g. Space Runner 3D"></div>
         <div class="field"><label for="shortDescription">Short description</label><input type="text" id="shortDescription" name="shortDescription" maxlength="220" value="${esc(p.shortDescription)}" placeholder="One line shown on the card"><small><span id="sdCount">0</span>/220</small></div>
         <div class="field"><label for="description">Full details</label>
-          <textarea id="description" name="description" rows="12" class="mono-area" placeholder="Features, controls, tech stack, what you built…">${esc(p.description)}</textarea>
+          <textarea id="description" name="description" rows="12" class="mono-area" placeholder="Features, controls, how to use the plugin…">${esc(p.description)}</textarea>
           <div class="md-help"># Heading · - bullet list · **bold** · *italic* · \`code\` · [link](https://…)</div>
         </div>
         <div class="grid-3">
@@ -511,30 +380,6 @@ function viewEditor(id, presetType) {
         <div class="or">OR UPLOAD A VIDEO FILE (MAX 100 MB)</div>
         <div id="videoBox"></div>
       </div>
-
-      <div class="panel">
-        <h2>▶ Play in browser (Unity WebGL)</h2>
-        <div id="webglBox"></div>
-        <details class="help" style="margin-top:12px"><summary>How to make a WebGL build that works on GitHub Pages</summary>
-          <ol>
-            <li>Unity → <b>File → Build Settings → WebGL</b> → Switch Platform.</li>
-            <li><b>Player Settings → Publishing Settings → Compression Format: Disabled</b> (or keep Gzip/Brotli and tick <b>Decompression Fallback</b>).</li>
-            <li>Build, then right-click the build folder → <b>Send to → Compressed (zipped) folder</b>, and upload that zip here.</li>
-          </ol></details>
-      </div>
-
-      <div class="panel">
-        <h2>Documentation</h2>
-        <div class="field" style="margin:0"><label for="docs">Docs tab on the project page (setup, API, FAQ)</label>
-          <textarea id="docs" name="docs" rows="10" class="mono-area" placeholder="# Setup&#10;1. Import the package&#10;- Drag the prefab into your scene&#10;&#10;\`\`\`csharp&#10;Pool.Spawn(prefab);&#10;\`\`\`">${esc(p.docs)}</textarea>
-          <div class="md-help"># Heading · - list · **bold** · \`code\` · \`\`\` code block \`\`\` · [link](https://…)</div></div>
-      </div>
-
-      <div class="panel">
-        <h2>Changelog <button type="button" class="btn btn-sm" id="addLog">${ico('plus', 14)} Add version</button></h2>
-        <p class="hint" style="margin:-8px 0 14px">Newest first. Shows as a "Changelog" tab on the project page.</p>
-        <div class="rep-list" id="logList"></div>
-      </div>
     </div>
 
     <div class="editor-side">
@@ -549,7 +394,7 @@ function viewEditor(id, presetType) {
         <div class="field"><label for="playStoreUrl">Google Play Store</label><input type="url" id="playStoreUrl" name="playStoreUrl" value="${esc(p.playStoreUrl)}" placeholder="https://play.google.com/store/apps/details?id=…"></div>
         <div class="field"><label for="assetStoreUrl">Unity Asset Store</label><input type="url" id="assetStoreUrl" name="assetStoreUrl" value="${esc(p.assetStoreUrl)}" placeholder="https://assetstore.unity.com/…"></div>
         <div class="field"><label for="githubUrl">GitHub</label><input type="url" id="githubUrl" name="githubUrl" value="${esc(p.githubUrl)}" placeholder="https://github.com/…"></div>
-        <div class="field" style="margin:0"><label for="otherUrl">Live website / other link (itch.io…)</label><input type="url" id="otherUrl" name="otherUrl" value="${esc(p.otherUrl)}" placeholder="https://…"></div>
+        <div class="field" style="margin:0"><label for="otherUrl">Other (itch.io, website…)</label><input type="url" id="otherUrl" name="otherUrl" value="${esc(p.otherUrl)}" placeholder="https://…"></div>
       </div>
       <div class="panel">
         <h2>Visibility</h2>
@@ -578,17 +423,13 @@ function viewEditor(id, presetType) {
         $('.x-btn', box).addEventListener('click', e => { e.preventDefault(); if (file) st[key] = null; else st[rmKey] = true; dirty = true; draw(); });
       } else {
         box.innerHTML = `<div class="drop">${ico('upload')}<b>${label}</b><small>${sub}</small><input type="file" accept="${accept}"></div>`;
-        bindDrop($('.drop', box), async files => {
-          let f = files[0];
-          if (kind === 'image') f = await prepImage(f, key === 'icon' ? 512 : 1920);
-          if (checkFile(kind, f)) { st[key] = f; dirty = true; draw(); }
-        });
+        bindDrop($('.drop', box), files => { if (checkFile(kind, files[0])) { st[key] = files[0]; dirty = true; draw(); } });
       }
     };
     draw();
   }
   singleBox($('#coverBox'), { key: 'cover', rmKey: 'removeCover', kind: 'image', accept: 'image/*', label: 'Upload cover', sub: '1280×720 recommended', current: () => p.cover,
-    render: (f, ex) => `<div class="preview-cover"><button class="x-btn" title="Remove">${ico('x')}</button><img src="${f ? objUrl(f) : esc(media(ex))}" alt=""></div>${f && f.optimizedFrom ? `<div class="hint-opt">✓${optNote(f)}</div>` : ''}` });
+    render: (f, ex) => `<div class="preview-cover"><button class="x-btn" title="Remove">${ico('x')}</button><img src="${f ? objUrl(f) : esc(media(ex))}" alt=""></div>` });
   singleBox($('#iconBox'), { key: 'icon', rmKey: 'removeIcon', kind: 'image', accept: 'image/*', label: 'Upload icon', sub: '512×512', current: () => p.icon,
     render: (f, ex) => `<div class="preview-icon"><button class="x-btn" title="Remove">${ico('x')}</button><img src="${f ? objUrl(f) : esc(media(ex))}" alt=""></div>` });
   singleBox($('#videoBox'), { key: 'videoFile', rmKey: 'removeVideo', kind: 'video', accept: 'video/mp4,video/webm,video/quicktime', label: 'Upload gameplay video', sub: 'MP4 / WEBM / MOV · max 100 MB', current: () => p.videoFile,
@@ -598,34 +439,6 @@ function viewEditor(id, presetType) {
       const name = f ? f.name : (ex.name || ex.path.split('/').pop()), size = f ? f.size : ex.size, ext = (name.split('.').pop() || '').toUpperCase();
       return `<div class="file-pill"><span class="ext">${esc(ext)}</span><span class="info"><b>${esc(name)}</b><small>${fmtSize(size)}${f ? ' · will upload on save' : ''}</small></span><button class="x-btn" style="position:static" title="Remove">${ico('x')}</button></div>`;
     } });
-
-  // --- WebGL build (zip → unzipped in the browser → committed to games/<name>/)
-  const drawWebgl = () => {
-    const box = $('#webglBox');
-    const cur = st.webgl || (!st.removeWebgl && p.webgl);
-    if (cur) {
-      const isNew = !!st.webgl;
-      box.innerHTML = `<div class="file-pill"><span class="ext">WEBGL</span><span class="info"><b>${isNew ? esc(st.webgl.name) : 'Playable build online'}</b>
-        <small>${cur.count} files · ${fmtSize(cur.size)}${isNew ? ' · will upload on save' : ''}</small></span>
-        ${!isNew && p.webgl ? `<a class="btn btn-sm" href="${esc(p.webgl.entry)}" target="_blank">Test</a>` : ''}
-        <button type="button" class="x-btn" style="position:static" title="Remove">${ico('x')}</button></div>
-        ${isNew && st.webgl.warn ? `<div class="banner" style="margin:10px 0 0">${esc(st.webgl.warn)}</div>` : ''}`;
-      $('.x-btn', box).onclick = e => { e.preventDefault(); if (st.webgl) st.webgl = null; else st.removeWebgl = true; dirty = true; drawWebgl(); };
-    } else {
-      box.innerHTML = `<div class="drop">${ico('upload')}<b>Upload WebGL build (.zip)</b><small>The zipped Unity WebGL build folder · each file max 100 MB</small><input type="file" accept=".zip"></div>`;
-      bindDrop($('.drop', box), async files => {
-        try { st.webgl = await readWebglZip(files[0]); st.removeWebgl = false; dirty = true; drawWebgl(); }
-        catch (err) { toast(err.message, 'err'); }
-      });
-    }
-  };
-  drawWebgl();
-
-  const addLog = repeater($('#logList'), changelog, [
-    { k: 'version', label: 'Version', ph: '1.2.0' }, { k: 'date', label: 'Date', ph: 'Oct 2026' },
-    { k: 'notes', label: 'What changed', ph: '- New levels\n- Fixed crash on Android 14', type: 'area' }
-  ], { version: '', date: '', notes: '' }, () => (dirty = true));
-  $('#addLog').onclick = () => addLog(true);
 
   const drawGallery = () => {
     const existing = (p.gallery || []).filter(u => !st.removeGallery.includes(u));
@@ -638,12 +451,7 @@ function viewEditor(id, presetType) {
     if (b.dataset.old) st.removeGallery.push(b.dataset.old); else st.gallery.splice(+b.dataset.new, 1);
     dirty = true; drawGallery();
   });
-  bindDrop($('#galleryDrop'), async files => {
-    const imgs = await prepImages(files, 1920);
-    st.gallery.push(...imgs.filter(f => checkFile('image', f))); dirty = true; drawGallery();
-    const saved = imgs.reduce((s, f) => s + (f.optimizedFrom ? f.optimizedFrom - f.size : 0), 0);
-    if (saved > 0) toast(`Screenshots optimized — saved ${fmtSize(saved)}`);
-  });
+  bindDrop($('#galleryDrop'), files => { st.gallery.push(...files.filter(f => checkFile('image', f))); dirty = true; drawGallery(); });
   drawGallery();
 
   const yt = $('#youtubeUrl');
@@ -670,12 +478,6 @@ function viewEditor(id, presetType) {
       if (st.removeDownload || st.download) { if (p.download) removes.push(p.download.path); next.download = null; }
       if (st.download) next.download = { path: put('file', st.download), name: st.download.name, size: st.download.size };
       removes.push(...st.removeGallery);
-      if ((st.removeWebgl || st.webgl) && p.webgl) { removes.push(...p.webgl.files); next.webgl = null; }
-      if (st.webgl) {
-        const base = `games/${slugify(title).slice(0, 40)}-${Date.now().toString(36)}/`;
-        const paths = st.webgl.files.map(f => { const path = base + f.rel; uploads.push({ path, bytes: f.bytes }); return path; });
-        next.webgl = { entry: base + 'index.html', files: paths, size: st.webgl.size, count: st.webgl.count };
-      }
       next.gallery = [...(p.gallery || []).filter(u => !st.removeGallery.includes(u)), ...st.gallery.map(file => put('image', file))];
     } catch (err) { $('#formError').textContent = err.message; return; }
 
@@ -685,8 +487,6 @@ function viewEditor(id, presetType) {
       title,
       shortDescription: String(f.get('shortDescription') || '').trim(),
       description: String(f.get('description') || ''),
-      docs: String(f.get('docs') || ''),
-      changelog: changelog.filter(c => c.version || c.notes),
       version: String(f.get('version') || '').trim(),
       unityVersion: String(f.get('unityVersion') || '').trim(),
       price: String(f.get('price') || '').trim(),
@@ -759,9 +559,7 @@ function repeater(listEl, items, fields, blank, onChange = () => {}) {
     onChange(); draw();
   });
   draw();
-  const add = (atTop = false) => { atTop ? items.unshift({ ...blank }) : items.push({ ...blank }); onChange(); draw(); const inputs = $$('input,textarea', listEl); (atTop ? inputs[0] : inputs[inputs.length - fields.filter(f => f.type !== 'check' && f.type !== 'select').length])?.focus(); };
-  add.redraw = draw;
-  return add;
+  return (atTop = false) => { atTop ? items.unshift({ ...blank }) : items.push({ ...blank }); onChange(); draw(); const inputs = $$('input,textarea', listEl); (atTop ? inputs[0] : inputs[inputs.length - fields.filter(f => f.type !== 'check' && f.type !== 'select').length])?.focus(); };
 }
 
 /* =========================================================
@@ -838,7 +636,7 @@ function viewProfile(main) {
     $('#avPrev').innerHTML = src ? `<img src="${esc(src)}" alt="">` : esc((pr.name || 'U').charAt(0));
   };
   drawAv();
-  $('#avInput').addEventListener('change', async e => { let f = e.target.files[0]; if (!f) return; f = await prepImage(f, 800); if (checkFile('image', f)) { avatarFile = f; removeAvatar = false; dirty = true; drawAv(); } });
+  $('#avInput').addEventListener('change', e => { const f = e.target.files[0]; if (f && checkFile('image', f)) { avatarFile = f; removeAvatar = false; dirty = true; drawAv(); } });
   $('#avRemove').addEventListener('click', () => { avatarFile = null; removeAvatar = true; dirty = true; drawAv(); });
 
   const drawResume = () => {
@@ -939,9 +737,6 @@ function viewCareer(main) {
 function viewSite(main) {
   const s = JSON.parse(JSON.stringify(DATA.site || {}));
   const services = s.services || [];
-  const testimonials = s.testimonials || [];
-  const faq = s.faq || [];
-  const ghFromSocial = ((DATA.profile.socials || {}).github || '').replace(/^https?:\/\/(www\.)?github\.com\//i, '').split('/')[0];
   main.innerHTML = header('// World', 'World settings', 'Site name, logo letters and the texts on the home page') + `
   <form id="sf">
     <div class="panel">
@@ -968,73 +763,20 @@ function viewSite(main) {
       <h2>Services (3 cards under About) <button type="button" class="btn btn-sm" id="addSvc">${ico('plus', 14)} Add</button></h2>
       <div class="rep-list" id="svcList"></div>
     </div>
-    <div class="panel">
-      <h2>Contact page</h2>
-      <div class="grid-2">
-        <div class="field"><label>Reply time note</label><input type="text" name="replyTime" value="${esc(s.replyTime || 'Usually replies within 24 hours')}"></div>
-        <div class="field"><label>Your time zone</label><input type="text" name="timezone" value="${esc(s.timezone || 'Asia/Kolkata')}" placeholder="Asia/Kolkata"><small>Shows your live local time on the contact page</small></div>
-      </div>
-      <h2 style="margin-top:12px">FAQ <span style="display:flex;gap:6px"><button type="button" class="btn btn-sm" id="faqSuggest">Add suggested</button><button type="button" class="btn btn-sm" id="addFaq">${ico('plus', 14)} Add</button></span></h2>
-      <div class="rep-list" id="faqList"></div>
-    </div>
-    <div class="panel">
-      <h2>Testimonials <button type="button" class="btn btn-sm" id="addTesti">${ico('plus', 14)} Add</button></h2>
-      <p class="hint" style="margin:-8px 0 14px">Only add real feedback from real people (with their permission). Section is hidden when empty.</p>
-      <div class="rep-list" id="testiList"></div>
-    </div>
-    <div class="panel">
-      <h2>Open-source repos (GitHub)</h2>
-      <label class="toggle"><span><b>Show my public GitHub repos</b><small>Loaded live from GitHub on the home page</small></span><span class="switch"><input type="checkbox" name="showRepos" ${s.showRepos !== false ? 'checked' : ''}><span></span></span></label>
-      <div class="grid-2" style="margin-top:8px">
-        <div class="field"><label>GitHub username</label><input type="text" name="githubUser" value="${esc(s.githubUser || ghFromSocial)}" placeholder="DenishPhibonacci"></div>
-        <div class="field"><label>Hide these repos</label><input type="text" name="hideRepos" value="${esc((s.hideRepos || []).join(', '))}" placeholder="PranVeda, old-test"><small>Separate with commas</small></div>
-      </div>
-    </div>
-    <div class="panel">
-      <h2>Integrations (free)</h2>
-      <div class="field"><label>Contact form → email (Web3Forms access key)</label><input type="text" name="web3formsKey" value="${esc(s.web3formsKey)}" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
-        <small>Get a free key at <a href="https://web3forms.com" target="_blank" rel="noopener" style="color:var(--cyan)">web3forms.com</a> → enter your email → copy the Access Key. Messages then arrive in your inbox. Empty = form opens the visitor's email app.</small></div>
-      <div class="field" style="margin:0"><label>Visitor analytics (GoatCounter code)</label><input type="text" name="goatcounter" value="${esc(s.goatcounter)}" placeholder="denishmakadiya">
-        <small>Create a free account at <a href="https://www.goatcounter.com" target="_blank" rel="noopener" style="color:var(--cyan)">goatcounter.com</a>. If your dashboard is <code>denishmakadiya.goatcounter.com</code>, enter <code>denishmakadiya</code>. Counts visits, APK downloads and "Play" clicks.</small></div>
-    </div>
     <div class="save-bar"><button class="btn btn-primary" type="submit">${ico('save')} Save world</button></div>
   </form>`;
   const form = $('#sf');
   form.addEventListener('input', () => (dirty = true));
   const addSvc = repeater($('#svcList'), services, [
-    { k: 'icon', label: 'Icon', type: 'select', options: [['game', 'Game controller'], ['app', 'Mobile app'], ['website', 'Website'], ['asset', 'Asset box'], ['plugin', 'Plugin']] },
+    { k: 'icon', label: 'Icon', type: 'select', options: [['game', 'Game controller'], ['plugin', 'Plugin'], ['asset', 'Asset box']] },
     { k: 'title', label: 'Title', ph: 'Game Development' },
     { k: 'text', label: 'Text', ph: 'Short description', type: 'area' }
   ], { icon: 'game', title: '', text: '' }, () => (dirty = true));
   $('#addSvc').onclick = () => addSvc();
-  const addTesti = repeater($('#testiList'), testimonials, [
-    { k: 'name', label: 'Name', ph: 'Rahul Shah' }, { k: 'role', label: 'Role & company', ph: 'Product Manager, AIS Technolabs' },
-    { k: 'text', label: 'What they said', ph: 'Denish delivered…', type: 'area' }
-  ], { name: '', role: '', text: '' }, () => (dirty = true));
-  $('#addTesti').onclick = () => addTesti();
-  const addFaq = repeater($('#faqList'), faq, [
-    { k: 'q', label: 'Question', ph: 'Do you take freelance projects?', wide: true },
-    { k: 'a', label: 'Answer', ph: 'Yes — …', type: 'area' }
-  ], { q: '', a: '' }, () => (dirty = true));
-  $('#addFaq').onclick = () => addFaq();
-  $('#faqSuggest').onclick = () => {
-    const sug = [
-      { q: 'Do you take freelance projects?', a: 'Yes — games, mobile apps, websites and Unity tools. Share your idea with the form and I will reply with questions and an estimate.' },
-      { q: 'Which platforms do you build for?', a: 'Android, iOS, PC and WebGL with Unity, plus websites and web apps.' },
-      { q: 'How do you charge?', a: 'Fixed price for well-defined projects, or hourly / monthly for ongoing work. You get a clear estimate before we start.' },
-      { q: 'Are you open to full-time roles?', a: 'I am open to the right opportunity — choose "Job offer" in the form and tell me about the role.' }
-    ].filter(x => !faq.some(f => f.q === x.q));
-    if (!sug.length) return toast('Suggested questions are already added');
-    faq.push(...sug); dirty = true; addFaq.redraw();
-  };
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const f = Object.fromEntries(new FormData(form));
-    const next = { ...f, available: form.available.checked, initials: (f.initials || '').toUpperCase(), services: services.filter(x => x.title),
-      faq: faq.filter(x => x.q && x.a), replyTime: (f.replyTime || '').trim(), timezone: (f.timezone || 'Asia/Kolkata').trim(),
-      testimonials: testimonials.filter(x => x.name && x.text), showRepos: form.showRepos.checked,
-      githubUser: (f.githubUser || '').trim().replace(/^@/, ''), hideRepos: list(f.hideRepos),
-      web3formsKey: (f.web3formsKey || '').trim(), goatcounter: (f.goatcounter || '').trim().replace(/^https?:\/\//, '').replace(/\.goatcounter\.com.*$/, '') };
+    const next = { ...f, available: form.available.checked, initials: (f.initials || '').toUpperCase(), services: services.filter(x => x.title) };
     try { await save('Update site settings', d => { d.site = { ...(d.site || {}), ...next }; }); dirty = false; viewSite(main); } catch (_) {}
   });
 }
@@ -1060,14 +802,6 @@ function viewConfig(main) {
     <h2>Access key</h2>
     <p class="hint" style="margin:0 0 12px">Your key is stored only in this browser. If it expires, create a new one (Settings → Developer settings → Fine-grained tokens, Contents: Read and write) and log in again.</p>
     <button class="btn btn-danger" id="forget">${ico('logout')} Forget key on this device</button>
-  </div>
-  <div class="panel" style="max-width:640px">
-    <h2>Backup &amp; restore</h2>
-    <p class="hint" style="margin:0 0 12px">Downloads all your texts, profile, career and project details as one file. Images and APKs stay safe in the repo (and in its history).</p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn btn-primary" id="backupBtn">${ico('save')} Download backup</button>
-      <label class="btn" style="position:relative;overflow:hidden">${ico('upload')} Restore from backup<input type="file" id="restoreInput" accept=".json,application/json" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>
-    </div>
   </div>`;
   $('#cf').addEventListener('submit', async e => {
     e.preventDefault();
@@ -1080,27 +814,6 @@ function viewConfig(main) {
   });
   $('#resetCfg').onclick = () => { store.del('pv_cfg'); location.reload(); };
   $('#forget').onclick = () => { store.del('pv_token'); location.reload(); };
-  $('#backupBtn').onclick = async () => {
-    try {
-      const d = await GH.readJson('data.json');
-      const blob = new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `portfolio-backup-${new Date().toISOString().slice(0, 10)}.json`;
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-      toast('Backup downloaded');
-    } catch (err) { toast(err.message, 'err'); }
-  };
-  $('#restoreInput').onchange = async e => {
-    const f = e.target.files[0]; e.target.value = '';
-    if (!f) return;
-    let d;
-    try { d = JSON.parse(await f.text()); } catch (_) { return toast('That file is not a valid backup (.json).', 'err'); }
-    if (!d || typeof d !== 'object' || !d.profile || !Array.isArray(d.projects)) return toast('This does not look like a portfolio backup.', 'err');
-    if (!confirm(`Restore this backup? It replaces your current profile, career, texts and ${d.projects.length} project(s).`)) return;
-    try { await save('Restore from backup', cur => { Object.keys(cur).forEach(k => delete cur[k]); Object.assign(cur, d); }); route(); } catch (_) {}
-  };
 }
 
 boot();

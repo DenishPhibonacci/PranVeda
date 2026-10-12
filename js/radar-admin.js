@@ -135,6 +135,7 @@ function quickLinks(cfg) {
    View
    ========================================================= */
 async function viewJobs(main, tab = 'list') {
+  const myId = ROUTE_ID;
   main.innerHTML = header('// Quest board', 'Job Radar', 'Finds jobs that match your profile every 6 hours and pings you on Telegram',
     `<a class="btn" href="#jobs/settings">${ico('gear')} Search profile</a>`) +
     `<div class="seg radar-tabs" id="rtabs">
@@ -143,8 +144,9 @@ async function viewJobs(main, tab = 'list') {
     <div id="rbody"><div class="panel"><div class="hint">Loading radar…</div></div></div>`;
   $$('#rtabs button').forEach(b => { b.classList.toggle('active', b.dataset.t === tab); b.onclick = () => (location.hash = 'jobs/' + b.dataset.t); });
   const body = $('#rbody');
-  try { await loadRadar(); }
+  try { await loadRadar(); if (myId !== ROUTE_ID) return; }
   catch (err) {
+    if (myId !== ROUTE_ID) return; // user already moved to another page
     RS.error = err.status === 404
       ? `Private repo "${CFG.owner}/${CFG.radarRepo || RADAR_REPO_DEFAULT}" not found, or your access key can't see it yet.`
       : err.message;

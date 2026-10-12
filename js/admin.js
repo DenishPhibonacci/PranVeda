@@ -268,7 +268,7 @@ async function migrateCategories() {
       if (d.site.contactText === OLD_CONTACT) d.site.contactText = "Games, apps, websites or collaboration — send a message and I'll get back to you.";
       if (d.profile && (d.profile.about || '').includes(OLD_ABOUT)) d.profile.about = d.profile.about.replace(OLD_ABOUT, 'and I also build apps, websites and Unity assets for clients and other developers.');
     });
-    route();
+    if (!dirty) route();
   } catch (_) {}
 }
 function refreshChrome() {
@@ -292,6 +292,7 @@ let dirty = false;
 window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
 
 let lastHash = '', skipRoute = false;
+let ROUTE_ID = 0; // bumps on every render, so slow (async) views can tell they are outdated
 function route() {
   if (skipRoute) { skipRoute = false; return; }
   if (dirty && !confirm('You have unsaved changes. Leave without saving?')) { skipRoute = true; location.hash = lastHash; return; }
@@ -300,9 +301,15 @@ function route() {
   dirty = false;
   $$('.nav-item[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === view || (view === 'edit' && b.dataset.view === 'projects')));
   if (view === 'jobs') { const pill = $('#jobsPill'); if (pill) pill.hidden = true; }
+  ROUTE_ID++;
   const main = $('#main'); main.innerHTML = ''; window.scrollTo(0, 0);
   const views = { dashboard: viewDashboard, projects: viewProjects, new: () => viewEditor(null, arg), edit: () => viewEditor(arg), profile: viewProfile, career: viewCareer, jobs: () => viewJobs(main, arg), site: viewSite, config: viewConfig };
-  Promise.resolve((views[view] || viewDashboard)(main)).catch(err => { main.innerHTML += `<div class="banner">${esc(err.message)}</div>`; });
+  const myId = ROUTE_ID;
+  Promise.resolve((views[view] || viewDashboard)(main)).catch(err => {
+    if (myId !== ROUTE_ID) return; // page changed meanwhile — ignore errors from the old view
+    console.error(err);
+    main.insertAdjacentHTML('beforeend', `<div class="banner">${esc(err.message)}</div>`);
+  });
 }
 
 /* =========================================================
@@ -345,8 +352,9 @@ async function viewDashboard(main) {
   $$('[data-new]').forEach(b => b.addEventListener('click', () => (location.hash = 'new/' + b.dataset.new)));
   try {
     const commits = await GH.req('GET', `/commits?sha=${encodeURIComponent(GH.branch)}&per_page=6`);
+    if (!$('#log')) return;
     $('#log').innerHTML = commits.map(c => `<li><time>${fmtDate(c.commit.author.date)}</time><span><b>▸</b> ${esc(c.commit.message.split('\n')[0])}</span></li>`).join('') || '<li>No commits yet</li>';
-  } catch (_) { $('#log').innerHTML = '<li>Could not load history</li>'; }
+  } catch (_) { if ($('#log')) $('#log').innerHTML = '<li>Could not load history</li>'; }
 }
 
 /* =========================================================

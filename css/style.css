@@ -544,3 +544,21 @@ button { font: inherit; cursor: pointer; }
   .now { background: #333 !important; color: #fff !important; }
   .pf-block, .tl-item, .pf-edu-item { break-inside: avoid; }
 }
+
+/* Mobile: tidy hero buttons into a grid */
+.hero-cta { flex-wrap: wrap; }
+@media (max-width: 600px) {
+  .hero-cta .btn { flex: 1 1 calc(50% - 6px); padding-left: 14px; padding-right: 14px; }
+  .hero-cta .btn-primary { flex-basis: 100%; }
+}
+
+/* Respect "reduce motion" */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .marquee-track { animation: none; }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* Keyboard focus */
+.btn:focus-visible, .tab:focus-visible, .nav-links a:focus-visible, .socials a:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }

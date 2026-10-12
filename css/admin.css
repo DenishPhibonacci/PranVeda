@@ -270,3 +270,25 @@ code { font-family: var(--font-mono); font-size: .88em; background: var(--bg); b
 .toast { padding: 12px 16px; background: var(--panel-2); border: 1px solid var(--line-2); border-left: 3px solid var(--lime); box-shadow: 0 10px 30px -10px #000; font-weight: 600; font-size: 14px; animation: tin .25s ease; max-width: 360px; }
 .toast.err { border-left-color: var(--red); color: #ffb3bf; }
 @keyframes tin { from { opacity: 0; transform: translateX(20px); } }
+
+/* Mobile dashboard tweaks */
+@media (max-width: 600px) {
+  .topbar h1 { font-size: 24px; }
+  .player-card { grid-template-columns: 72px 1fr; gap: 16px; }
+  .player-card .avatar { width: 72px; height: 72px; font-size: 26px; }
+  .player-card h3 { font-size: 22px; }
+  .player-card .btns { flex-direction: row !important; }
+  .player-card .btns .btn { flex: 1; }
+  .stat b { font-size: 30px; }
+}
+
+/* Deploy status chip */
+.deploy { position: fixed; right: 20px; bottom: 20px; z-index: 95; display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--panel-2); border: 1px solid var(--line-2);
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; clip-path: var(--cut); box-shadow: 0 10px 30px -10px #000; }
+.deploy i { width: 9px; height: 9px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 10px var(--amber); animation: pulse 1s ease-in-out infinite; }
+.deploy.live i { background: var(--lime); box-shadow: 0 0 10px var(--lime); animation: none; }
+.deploy.live { color: var(--lime); }
+.deploy a { color: var(--cyan); text-decoration: underline; }
+@keyframes pulse { 50% { opacity: .35; } }
+.toasts { bottom: 74px; }
+.hint-opt { font-family: var(--font-mono); font-size: 11px; color: var(--lime); margin-top: 6px; }

@@ -91,6 +91,56 @@ function header(kicker, title, sub, right = '') {
   return `<div class="topbar"><div><div class="kicker">${kicker}</div><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ''}</div><div style="display:flex;gap:8px;flex-wrap:wrap">${right}</div></div>`;
 }
 
+/* ---------- Image optimizer: resize + WebP before upload ---------- */
+async function prepImage(file, maxDim = 1920) {
+  try {
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type) || file.size < 150 * 1024) return file;
+    const bmp = await createImageBitmap(file);
+    const scale = Math.min(1, maxDim / Math.max(bmp.width, bmp.height));
+    const w = Math.round(bmp.width * scale), h = Math.round(bmp.height * scale);
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    c.getContext('2d').drawImage(bmp, 0, 0, w, h);
+    const blob = await new Promise(r => c.toBlob(r, 'image/webp', 0.86));
+    if (!blob || blob.type !== 'image/webp' || blob.size >= file.size) return file;
+    const out = new File([blob], file.name.replace(/\.[^.]+$/, '') + '.webp', { type: 'image/webp' });
+    out.optimizedFrom = file.size;
+    return out;
+  } catch (_) { return file; }
+}
+async function prepImages(files, maxDim) { return Promise.all(files.map(f => prepImage(f, maxDim))); }
+const optNote = f => (f && f.optimizedFrom ? ` · optimized ${fmtSize(f.optimizedFrom)} → ${fmtSize(f.size)}` : '');
+
+/* ---------- Deploy watcher: tells you when GitHub Pages shows the new version ---------- */
+let deployTimer = null;
+function watchDeploy(updatedAt) {
+  clearInterval(deployTimer);
+  let chip = $('#deploy');
+  if (!chip) { chip = document.createElement('div'); chip.id = 'deploy'; chip.className = 'deploy'; document.body.appendChild(chip); }
+  chip.className = 'deploy';
+  chip.innerHTML = '<i></i><span>Deploying to GitHub Pages…</span>';
+  const started = Date.now();
+  const check = async () => {
+    try {
+      const r = await fetch('data.json?v=' + Date.now(), { cache: 'no-store' });
+      const d = r.ok ? await r.json() : null;
+      if (d && d.updatedAt >= updatedAt) {
+        clearInterval(deployTimer);
+        chip.className = 'deploy live';
+        chip.innerHTML = '<i></i><span>Live ✓ <a href="index.html" target="_blank">open site</a></span>';
+        setTimeout(() => chip.remove(), 15000);
+        return;
+      }
+    } catch (_) {}
+    if (Date.now() - started > 6 * 60 * 1000) {
+      clearInterval(deployTimer);
+      chip.innerHTML = '<i></i><span>Still deploying — check the repo\'s Actions tab</span>';
+      setTimeout(() => chip.remove(), 20000);
+    }
+  };
+  deployTimer = setInterval(check, 8000);
+  setTimeout(check, 4000);
+}
+
 /* ---------- Saving: one commit per save ---------- */
 function newPath(kind, file) {
   const rule = RULES[kind];
@@ -125,7 +175,8 @@ async function save(message, mutate, uploads = [], removes = []) {
     DATA = latest;
     refreshChrome();
     loading(false);
-    toast('Saved ✓ — live on your site in about 1 minute');
+    toast('Saved ✓ to GitHub');
+    watchDeploy(latest.updatedAt);
     return latest;
   } catch (err) {
     loading(false);
@@ -423,13 +474,17 @@ function viewEditor(id, presetType) {
         $('.x-btn', box).addEventListener('click', e => { e.preventDefault(); if (file) st[key] = null; else st[rmKey] = true; dirty = true; draw(); });
       } else {
         box.innerHTML = `<div class="drop">${ico('upload')}<b>${label}</b><small>${sub}</small><input type="file" accept="${accept}"></div>`;
-        bindDrop($('.drop', box), files => { if (checkFile(kind, files[0])) { st[key] = files[0]; dirty = true; draw(); } });
+        bindDrop($('.drop', box), async files => {
+          let f = files[0];
+          if (kind === 'image') f = await prepImage(f, key === 'icon' ? 512 : 1920);
+          if (checkFile(kind, f)) { st[key] = f; dirty = true; draw(); }
+        });
       }
     };
     draw();
   }
   singleBox($('#coverBox'), { key: 'cover', rmKey: 'removeCover', kind: 'image', accept: 'image/*', label: 'Upload cover', sub: '1280×720 recommended', current: () => p.cover,
-    render: (f, ex) => `<div class="preview-cover"><button class="x-btn" title="Remove">${ico('x')}</button><img src="${f ? objUrl(f) : esc(media(ex))}" alt=""></div>` });
+    render: (f, ex) => `<div class="preview-cover"><button class="x-btn" title="Remove">${ico('x')}</button><img src="${f ? objUrl(f) : esc(media(ex))}" alt=""></div>${f && f.optimizedFrom ? `<div class="hint-opt">✓${optNote(f)}</div>` : ''}` });
   singleBox($('#iconBox'), { key: 'icon', rmKey: 'removeIcon', kind: 'image', accept: 'image/*', label: 'Upload icon', sub: '512×512', current: () => p.icon,
     render: (f, ex) => `<div class="preview-icon"><button class="x-btn" title="Remove">${ico('x')}</button><img src="${f ? objUrl(f) : esc(media(ex))}" alt=""></div>` });
   singleBox($('#videoBox'), { key: 'videoFile', rmKey: 'removeVideo', kind: 'video', accept: 'video/mp4,video/webm,video/quicktime', label: 'Upload gameplay video', sub: 'MP4 / WEBM / MOV · max 100 MB', current: () => p.videoFile,
@@ -451,7 +506,12 @@ function viewEditor(id, presetType) {
     if (b.dataset.old) st.removeGallery.push(b.dataset.old); else st.gallery.splice(+b.dataset.new, 1);
     dirty = true; drawGallery();
   });
-  bindDrop($('#galleryDrop'), files => { st.gallery.push(...files.filter(f => checkFile('image', f))); dirty = true; drawGallery(); });
+  bindDrop($('#galleryDrop'), async files => {
+    const imgs = await prepImages(files, 1920);
+    st.gallery.push(...imgs.filter(f => checkFile('image', f))); dirty = true; drawGallery();
+    const saved = imgs.reduce((s, f) => s + (f.optimizedFrom ? f.optimizedFrom - f.size : 0), 0);
+    if (saved > 0) toast(`Screenshots optimized — saved ${fmtSize(saved)}`);
+  });
   drawGallery();
 
   const yt = $('#youtubeUrl');
@@ -636,7 +696,7 @@ function viewProfile(main) {
     $('#avPrev').innerHTML = src ? `<img src="${esc(src)}" alt="">` : esc((pr.name || 'U').charAt(0));
   };
   drawAv();
-  $('#avInput').addEventListener('change', e => { const f = e.target.files[0]; if (f && checkFile('image', f)) { avatarFile = f; removeAvatar = false; dirty = true; drawAv(); } });
+  $('#avInput').addEventListener('change', async e => { let f = e.target.files[0]; if (!f) return; f = await prepImage(f, 800); if (checkFile('image', f)) { avatarFile = f; removeAvatar = false; dirty = true; drawAv(); } });
   $('#avRemove').addEventListener('click', () => { avatarFile = null; removeAvatar = true; dirty = true; drawAv(); });
 
   const drawResume = () => {

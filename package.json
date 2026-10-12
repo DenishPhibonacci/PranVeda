@@ -1,0 +1,15 @@
+{
+  "name": "pranveda-portfolio",
+  "version": "1.0.0",
+  "description": "Unity developer portfolio with admin panel for games, plugins and Unity assets",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}

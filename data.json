@@ -187,7 +187,7 @@
   "projects": [
     {
       "type": "game",
-      "published": true,
+      "published": false,
       "featured": false,
       "tags": [
         "sdf"
@@ -216,5 +216,5 @@
       "slug": "dfsf"
     }
   ],
-  "updatedAt": "2026-10-12T06:27:01.672Z"
+  "updatedAt": "2026-10-12T06:27:36.819Z"
 }

@@ -61,6 +61,11 @@ Everything is stored in a separate **private** repo (`job-radar`), so nobody can
 4. Fill **Search profile**: titles, skills, cities/countries, job types, and a free Adzuna key for India/city search.
 5. Set up **Telegram**: create a bot with @BotFather, paste the token, find your chat ID, then send a test message.
 
+**My applications** (Job Radar tab) tracks every job you applied to: status (Saved → Applied → Interview → Offer / Rejected / Withdrawn),
+next step with a date (overdue ones turn orange), notes, and a cover letter made from your profile.
+Click **✓ Applied** on a radar job to add it, or **Add application** for jobs from LinkedIn, Naukri or referrals.
+Marking a job as applied only records it — nothing is sent. Apply on the company's site with **Open ↗**.
+
 Sources: Adzuna (19 countries incl. India, by city), Remotive, Remote OK, Himalayas, Arbeitnow.
 LinkedIn, Naukri and Indeed don't allow automatic reading, so the Jobs tab gives one-click searches for them.
 

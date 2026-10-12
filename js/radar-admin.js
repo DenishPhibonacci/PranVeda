@@ -47,6 +47,7 @@ function defaultRadarConfig() {
 }
 async function loadRadar() {
   RS.error = '';
+  await flushStatus();
   await radarClient();
   const [cfg, jobs, status] = await Promise.all([readOr('config.json', null), readOr('jobs.json', null), readOr('status.json', null)]);
   RS.exists.config = !!cfg;
@@ -55,7 +56,14 @@ async function loadRadar() {
   RS.cfg.telegram = { ...defaultRadarConfig().telegram, ...((cfg && cfg.telegram) || {}) };
   RS.cfg.adzuna = { ...defaultRadarConfig().adzuna, ...((cfg && cfg.adzuna) || {}) };
   RS.jobs = jobs || { jobs: [], lastRun: null };
-  RS.status = { saved: [], applied: {}, hidden: [], ...(status || {}) };
+  RS.status = { saved: [], applied: {}, hidden: [], apps: [], ...(status || {}) };
+  if (!Array.isArray(RS.status.apps)) RS.status.apps = [];
+  // jobs marked "Applied" before the tracker existed → create tracker entries
+  Object.entries(RS.status.applied || {}).forEach(([jobId, when]) => {
+    if (RS.status.apps.some(a => a.jobId === jobId)) return;
+    const j = (RS.jobs.jobs || []).find(x => x.id === jobId);
+    RS.status.apps.push(appFromJob(j || { id: jobId, title: 'Job', company: '' }, when));
+  });
 }
 
 /* ---------- writing to the private repo ---------- */
@@ -66,11 +74,20 @@ async function radarCommit(message, files, quiet = false) {
     if (!quiet) { loading(false); toast('Saved ✓'); }
   } catch (err) { loading(false); toast(err.message, 'err'); throw err; }
 }
-let statusTimer = null;
+let statusTimer = null, statusSaving = null;
 function saveStatusSoon() {
   clearTimeout(statusTimer);
-  statusTimer = setTimeout(() => radarCommit('Job radar: update my job list', [{ path: 'status.json', content: RS.status }], true).catch(() => {}), 1500);
+  statusTimer = setTimeout(flushStatus, 1500);
 }
+/* Save a waiting status change now (before re-reading the repo, so nothing is lost) */
+function flushStatus() {
+  if (statusTimer) { clearTimeout(statusTimer); statusTimer = null;
+    statusSaving = radarCommit('Job radar: update my job list', [{ path: 'status.json', content: RS.status }], true)
+      .catch(() => {}).finally(() => { statusSaving = null; });
+  }
+  return statusSaving || Promise.resolve();
+}
+window.addEventListener('beforeunload', e => { if (statusTimer || statusSaving) { flushStatus(); e.preventDefault(); e.returnValue = ''; } });
 async function dispatchRadar(mode = 'search') {
   await RADAR.req('POST', '/actions/workflows/radar.yml/dispatches', { ref: RADAR.branch, inputs: { mode } });
 }
@@ -131,6 +148,84 @@ function quickLinks(cfg) {
   return out;
 }
 
+/* ---------- Application tracker helpers ---------- */
+const APP_STATUSES = [
+  ['saved', 'Saved', 'draft'], ['applied', 'Applied', 'app'], ['interview', 'Interview', 'star'],
+  ['offer', 'Offer', 'game'], ['rejected', 'Rejected', 'danger'], ['withdrawn', 'Withdrawn', 'draft']
+];
+const statusLabel = k => (APP_STATUSES.find(x => x[0] === k) || APP_STATUSES[1])[1];
+const statusChip = k => (APP_STATUSES.find(x => x[0] === k) || APP_STATUSES[1])[2];
+const todayIso = () => new Date().toISOString().slice(0, 10);
+function appFromJob(j, when) {
+  return {
+    id: 'app_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    jobId: j.id || '', title: j.title || '', company: j.company || '', location: j.location || '', source: j.source || '',
+    url: j.url || '', appliedOn: (when ? new Date(when) : new Date()).toISOString().slice(0, 10),
+    status: 'applied', nextStep: '', nextDate: '', notes: '', letter: '', updatedAt: new Date().toISOString()
+  };
+}
+const findApp = jobId => RS.status.apps.find(a => a.jobId && a.jobId === jobId);
+function portfolioUrl() { return location.href.replace(/admin\.html.*$/, '').replace(/#.*$/, ''); }
+function coverLetter(app, job) {
+  const p = DATA.profile || {};
+  const current = (p.experience || []).find(e => e.current);
+  const skills = (job && job.matched && job.matched.length ? job.matched : (p.skills || []).slice(0, 4)).slice(0, 5);
+  const skillText = skills.length > 1 ? skills.slice(0, -1).join(', ') + ' and ' + skills[skills.length - 1] : (skills[0] || 'Unity and C#');
+  const studios = new Set((p.experience || []).map(e => (e.company || '').toLowerCase()).filter(Boolean)).size;
+  const contact = [p.email, p.phone, (p.socials || {}).linkedin].filter(Boolean).join(' · ');
+  return `Dear Hiring Team${app.company ? ' at ' + app.company : ''},
+
+I'm writing to apply for the ${app.title || 'open'} position. I'm a ${p.role || 'Unity Developer'} with ${p.experienceYears || 0}+ years of experience building mobile games and applications with Unity${current ? `, currently at ${current.company}` : ''}.
+
+Your role is a strong match for my work with ${skillText}. Over my career I have worked with ${studios || 'several'} studios, taking games and apps from first prototype to store release — gameplay systems, UI, performance on low-end devices, and SDK integrations.
+
+You can see my games, apps and Unity assets here: ${portfolioUrl()}
+My resume is attached.
+
+I would be glad to talk about how I can help ${app.company || 'your team'}.
+
+Best regards,
+${p.name || ''}
+${contact}`;
+}
+
+/* Small modal used for the cover letter and the add/edit form */
+function openModal(title, html, onReady) {
+  closeModal();
+  const m = document.createElement('div');
+  m.className = 'modal-wrap'; m.id = 'modal';
+  m.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+    <div class="modal-head"><h2>${esc(title)}</h2><button type="button" class="btn btn-sm icon-btn" id="modalX" aria-label="Close">${ico('x', 15)}</button></div>
+    <div class="modal-body">${html}</div></div>`;
+  document.body.appendChild(m);
+  m.addEventListener('click', e => { if (e.target === m) closeModal(); });
+  $('#modalX').onclick = closeModal;
+  document.addEventListener('keydown', modalKey);
+  onReady && onReady(m);
+}
+function modalKey(e) { if (e.key === 'Escape') closeModal(); }
+function closeModal() { const m = $('#modal'); if (m) m.remove(); document.removeEventListener('keydown', modalKey); }
+
+function showLetter(app, job, onSave) {
+  const text = app.letter || coverLetter(app, job);
+  openModal(`Cover letter — ${app.company || app.title}`, `
+    <p class="hint" style="margin:0 0 10px">Made from your profile. Edit it, then copy it into the application form or email.</p>
+    <textarea id="letterText" rows="16" class="mono-area" style="font-family:var(--font-body);font-size:14px">${esc(text)}</textarea>
+    <div class="modal-acts">
+      <button type="button" class="btn" id="letterReset">↺ Regenerate</button>
+      ${onSave ? '<button type="button" class="btn" id="letterSave">Save with application</button>' : ''}
+      <button type="button" class="btn btn-primary" id="letterCopy">Copy</button>
+    </div>`, () => {
+    $('#letterCopy').onclick = async () => {
+      const t = $('#letterText');
+      try { await navigator.clipboard.writeText(t.value); toast('Cover letter copied'); }
+      catch (_) { t.select(); toast('Press Ctrl+C to copy'); }
+    };
+    $('#letterReset').onclick = () => { $('#letterText').value = coverLetter(app, job); };
+    if (onSave) $('#letterSave').onclick = () => { onSave($('#letterText').value); closeModal(); };
+  });
+}
+
 /* =========================================================
    View
    ========================================================= */
@@ -139,12 +234,13 @@ async function viewJobs(main, tab = 'list') {
   main.innerHTML = header('// Quest board', 'Job Radar', 'Finds jobs that match your profile every 6 hours and pings you on Telegram',
     `<a class="btn" href="#jobs/settings">${ico('gear')} Search profile</a>`) +
     `<div class="seg radar-tabs" id="rtabs">
-      <button data-t="list">${ico('radar', 14)} Jobs</button><button data-t="settings">Search profile</button>
+      <button data-t="list">${ico('radar', 14)} Jobs</button><button data-t="apps">My applications</button><button data-t="settings">Search profile</button>
       <button data-t="telegram">Telegram</button><button data-t="setup">Setup</button></div>
     <div id="rbody"><div class="panel"><div class="hint">Loading radar…</div></div></div>`;
   $$('#rtabs button').forEach(b => { b.classList.toggle('active', b.dataset.t === tab); b.onclick = () => (location.hash = 'jobs/' + b.dataset.t); });
   const body = $('#rbody');
-  try { await loadRadar(); if (myId !== ROUTE_ID) return; }
+  const fresh = RS.loadedAt && Date.now() - RS.loadedAt < 2 * 60 * 1000 && !RS.error;
+  try { if (!fresh) { await loadRadar(); RS.loadedAt = Date.now(); } if (myId !== ROUTE_ID) return; }
   catch (err) {
     if (myId !== ROUTE_ID) return; // user already moved to another page
     RS.error = err.status === 404
@@ -153,7 +249,7 @@ async function viewJobs(main, tab = 'list') {
     markTab('setup'); return radarSetup(body);
   }
   if (!RS.exists.script && tab === 'list') { markTab('setup'); return radarSetup(body); }
-  ({ list: radarList, settings: radarSettings, telegram: radarTelegram, setup: radarSetup }[tab] || radarList)(body);
+  ({ list: radarList, apps: radarApps, settings: radarSettings, telegram: radarTelegram, setup: radarSetup }[tab] || radarList)(body);
 }
 
 function markTab(t) { $$('#rtabs button').forEach(b => b.classList.toggle('active', b.dataset.t === t)); }
@@ -190,6 +286,7 @@ function radarList(body) {
       <select id="jcountry"><option value="any">Any country</option>${countries.map(c => `<option>${esc(c)}</option>`).join('')}<option value="__remote">Remote only</option></select>
       <select id="jsort"><option value="score">Best match</option><option value="date">Newest</option></select>
     </div>
+    <p class="hint btn-help"><b>Open ↗</b> apply on the company's site (upload your resume there) · <b>✓ Applied</b> adds the job to <a href="#jobs/apps" style="color:var(--cyan)">My applications</a> — nothing is sent · <b>✉ Letter</b> ready cover letter to copy · <b>Hide</b> removes it from the list</p>
     <div id="jlist" class="job-list"></div>
     <div class="panel" style="margin-top:18px">
       <h2>Search on job sites</h2>
@@ -205,7 +302,7 @@ function radarList(body) {
       if (f.view === 'hidden') return hidden;
       if (hidden) return false;
       if (f.view === 'saved' && !st.saved.includes(j.id)) return false;
-      if (f.view === 'applied' && !st.applied[j.id]) return false;
+      if (f.view === 'applied' && !findApp(j.id)) return false;
       if (f.view === 'new' && !isNew(j)) return false;
       if (f.type === 'remote' && !j.remote) return false;
       if (f.type === 'contract' && !['contract', 'freelance'].includes(j.type)) return false;
@@ -217,11 +314,11 @@ function radarList(body) {
     });
     items.sort(f.sort === 'date' ? (a, b) => String(b.posted).localeCompare(String(a.posted)) : (a, b) => b.score - a.score || String(b.posted).localeCompare(String(a.posted)));
     $('#jlist').innerHTML = items.length ? items.map(j => {
-      const saved = st.saved.includes(j.id), applied = st.applied[j.id];
+      const saved = st.saved.includes(j.id), app = findApp(j.id), applied = !!app;
       return `<article class="job${isNew(j) ? ' is-new' : ''}${applied ? ' is-applied' : ''}" data-id="${esc(j.id)}">
         <div class="score" style="--p:${j.score}"><b>${j.score}</b><small>% match</small></div>
         <div class="job-main">
-          <div class="job-top"><h3>${esc(j.title)}</h3>${isNew(j) ? '<span class="chip star">NEW</span>' : ''}${applied ? `<span class="chip game">Applied ${esc(new Date(applied).toLocaleDateString())}</span>` : ''}</div>
+          <div class="job-top"><h3>${esc(j.title)}</h3>${isNew(j) ? '<span class="chip star">NEW</span>' : ''}${app ? `<span class="chip ${statusChip(app.status)}">${esc(statusLabel(app.status))} · ${esc(new Date(app.appliedOn).toLocaleDateString())}</span>` : ''}</div>
           <div class="job-co"><b>${esc(j.company || 'Company')}</b> · ${esc(j.location || '')} · ${esc(ago(j.posted))}</div>
           <div class="job-tags">
             <span class="chip ${j.type === 'full-time' ? 'app' : 'asset'}">${esc(j.type)}</span>${j.remote ? '<span class="chip website">Remote</span>' : ''}
@@ -231,10 +328,11 @@ function radarList(body) {
           ${(j.matched || []).length ? `<div class="job-skills">${j.matched.map(s => `<span>✓ ${esc(s)}</span>`).join('')}</div>` : ''}
         </div>
         <div class="job-acts">
-          <a class="btn btn-primary btn-sm" href="${esc(j.url)}" target="_blank" rel="noopener">Open ↗</a>
-          <button class="btn btn-sm" data-a="save" title="Save">${saved ? '★ Saved' : '☆ Save'}</button>
-          <button class="btn btn-sm" data-a="applied">${applied ? '↺ Not applied' : '✓ Applied'}</button>
-          <button class="btn btn-sm btn-danger" data-a="hide">${st.hidden.includes(j.id) ? 'Unhide' : 'Hide'}</button>
+          <a class="btn btn-primary btn-sm" href="${esc(j.url)}" target="_blank" rel="noopener" title="Open the job on ${esc(j.source)} and apply there">Open ↗</a>
+          <button class="btn btn-sm" data-a="save" title="Keep this job in your Saved list">${saved ? '★ Saved' : '☆ Save'}</button>
+          ${applied ? `<a class="btn btn-sm" href="#jobs/apps" title="See it in My applications">📋 Track</a>` : `<button class="btn btn-sm" data-a="applied" title="Add to My applications (does not send anything)">✓ Applied</button>`}
+          <button class="btn btn-sm" data-a="letter" title="Ready cover letter for this job">✉ Letter</button>
+          <button class="btn btn-sm btn-danger" data-a="hide" title="Remove from this list">${st.hidden.includes(j.id) ? 'Unhide' : 'Hide'}</button>
         </div>
       </article>`;
     }).join('') : `<div class="empty"><b>${(data.jobs || []).length ? 'No jobs match these filters' : 'No jobs yet'}</b>${(data.jobs || []).length ? 'Try "All" or another filter.' : 'Run a scan, or widen your search profile (more keywords, more locations, lower minimum match).'}</div>`;
@@ -249,7 +347,16 @@ function radarList(body) {
     const b = e.target.closest('[data-a]'); if (!b) return;
     const id = b.closest('.job').dataset.id;
     if (b.dataset.a === 'save') st.saved = st.saved.includes(id) ? st.saved.filter(x => x !== id) : [...st.saved, id];
-    if (b.dataset.a === 'applied') { if (st.applied[id]) delete st.applied[id]; else st.applied[id] = new Date().toISOString(); }
+    const job = (data.jobs || []).find(x => x.id === id);
+    if (b.dataset.a === 'letter') {
+      const app = findApp(id) || appFromJob(job);
+      return showLetter(app, job, findApp(id) ? text => { app.letter = text; app.updatedAt = new Date().toISOString(); saveStatusSoon(); toast('Letter saved'); } : null);
+    }
+    if (b.dataset.a === 'applied') {
+      st.applied[id] = new Date().toISOString();
+      if (!findApp(id)) st.apps.unshift(appFromJob(job));
+      toast('Added to My applications ✓');
+    }
     if (b.dataset.a === 'hide') st.hidden = st.hidden.includes(id) ? st.hidden.filter(x => x !== id) : [...st.hidden, id];
     render(); saveStatusSoon();
   };
@@ -265,6 +372,119 @@ function radarList(body) {
       else toast('Scan is taking long — refresh in a minute', 'err');
     } catch (err) { toast(err.status === 403 ? 'Your access key needs "Actions: Read and write" for the job-radar repo (see Setup).' : err.message, 'err'); }
     btn.disabled = false; btn.lastChild.textContent = ' Scan now';
+  };
+}
+
+/* ---------- My applications (tracker) ---------- */
+function radarApps(body) {
+  const st = RS.status;
+  const f = { status: 'all', q: '' };
+  const counts = () => Object.fromEntries(APP_STATUSES.map(([k]) => [k, st.apps.filter(a => a.status === k).length]));
+  body.innerHTML = `
+    <div class="pipeline" id="pipe"></div>
+    <div class="toolbar">
+      <input type="text" id="aq" placeholder="Search company, role, notes…">
+      <div class="seg" id="aseg"><button class="active" data-s="all">All</button>${APP_STATUSES.map(([k, l]) => `<button data-s="${k}">${l}</button>`).join('')}</div>
+      <button class="btn btn-primary" id="addApp">${ico('plus')} Add application</button>
+    </div>
+    <p class="hint btn-help">Track every job you applied to — from Job Radar or anywhere else (LinkedIn, Naukri, referrals). Change the status as you hear back, and set a next step with a date so nothing slips.</p>
+    <div id="alist" class="app-list"></div>`;
+
+  const drawPipe = () => {
+    const c = counts();
+    $('#pipe').innerHTML = APP_STATUSES.map(([k, l, chip]) => `<button type="button" class="pipe-step ${chip}${f.status === k ? ' on' : ''}" data-s="${k}"><b>${c[k]}</b><span>${l}</span></button>`).join('');
+  };
+  const render = () => {
+    drawPipe();
+    const q = f.q.toLowerCase(), today = todayIso();
+    const items = st.apps.filter(a => (f.status === 'all' || a.status === f.status) &&
+      (!q || `${a.company} ${a.title} ${a.notes} ${a.nextStep} ${a.location}`.toLowerCase().includes(q)))
+      .sort((a, b) => {
+        const da = a.nextDate && !['rejected', 'withdrawn'].includes(a.status) ? a.nextDate : '9999', db = b.nextDate && !['rejected', 'withdrawn'].includes(b.status) ? b.nextDate : '9999';
+        return da.localeCompare(db) || String(b.appliedOn).localeCompare(String(a.appliedOn));
+      });
+    $('#alist').innerHTML = items.length ? items.map(a => {
+      const active = !['rejected', 'withdrawn'].includes(a.status);
+      const due = active && a.nextDate && a.nextDate <= today;
+      return `<article class="app-row ${a.status}" data-id="${esc(a.id)}">
+        <div class="app-main">
+          <div class="job-top"><h3>${esc(a.title || 'Untitled role')}</h3>${a.letter ? '<span class="chip draft">✉ letter saved</span>' : ''}</div>
+          <div class="job-co"><b>${esc(a.company || 'Company')}</b>${a.location ? ' · ' + esc(a.location) : ''}${a.source ? ' · via ' + esc(a.source) : ''} · applied ${esc(a.appliedOn ? new Date(a.appliedOn).toLocaleDateString() : '—')}</div>
+          ${a.nextStep || a.nextDate ? `<div class="app-next${due ? ' due' : ''}">${due ? '⏰ ' : '→ '}<b>${esc(a.nextStep || 'Next step')}</b>${a.nextDate ? ` · ${esc(new Date(a.nextDate).toLocaleDateString())}${due ? ' (due)' : ''}` : ''}</div>` : ''}
+          ${a.notes ? `<p class="job-sum">${esc(a.notes)}</p>` : ''}
+        </div>
+        <div class="app-acts">
+          <select class="app-status" aria-label="Status">${APP_STATUSES.map(([k, l]) => `<option value="${k}" ${a.status === k ? 'selected' : ''}>${l}</option>`).join('')}</select>
+          <div class="app-btns">
+            ${a.url ? `<a class="btn btn-sm" href="${esc(a.url)}" target="_blank" rel="noopener" title="Open job page">↗</a>` : ''}
+            <button class="btn btn-sm" data-a="edit">${ico('edit', 14)} Edit</button>
+            <button class="btn btn-sm" data-a="letter" title="Cover letter">✉</button>
+            <button class="btn btn-sm btn-danger icon-btn" data-a="del" title="Delete">${ico('trash', 14)}</button>
+          </div>
+        </div>
+      </article>`;
+    }).join('') : `<div class="empty"><b>${st.apps.length ? 'Nothing in this status' : 'No applications yet'}</b>${st.apps.length ? 'Pick another status above.' : 'Click "✓ Applied" on a job in the Jobs tab, or add one you applied to elsewhere.'}</div>`;
+  };
+
+  const editForm = (a, isNew) => openModal(isNew ? 'Add application' : 'Edit application', `
+    <form id="appForm" class="app-form">
+      <div class="grid-2">
+        <div class="field"><label for="afTitle">Job title *</label><input type="text" id="afTitle" name="title" value="${esc(a.title)}" required></div>
+        <div class="field"><label for="afCompany">Company *</label><input type="text" id="afCompany" name="company" value="${esc(a.company)}" required></div>
+        <div class="field"><label for="afLoc">Location</label><input type="text" id="afLoc" name="location" value="${esc(a.location)}" placeholder="Ahmedabad / Remote"></div>
+        <div class="field"><label for="afSrc">Where you applied</label><input type="text" id="afSrc" name="source" value="${esc(a.source)}" placeholder="LinkedIn, Naukri, referral…"></div>
+        <div class="field"><label for="afUrl">Job link</label><input type="url" id="afUrl" name="url" value="${esc(a.url)}" placeholder="https://…"></div>
+        <div class="field"><label for="afDate">Applied on</label><input type="date" id="afDate" name="appliedOn" value="${esc(a.appliedOn)}"></div>
+        <div class="field"><label for="afStatus">Status</label><select id="afStatus" name="status">${APP_STATUSES.map(([k, l]) => `<option value="${k}" ${a.status === k ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+        <div class="field"><label for="afNextDate">Next step date</label><input type="date" id="afNextDate" name="nextDate" value="${esc(a.nextDate)}"></div>
+      </div>
+      <div class="field"><label for="afNext">Next step</label><input type="text" id="afNext" name="nextStep" value="${esc(a.nextStep)}" placeholder="Follow up with HR / Technical round / Send test task"></div>
+      <div class="field"><label for="afNotes">Notes</label><textarea id="afNotes" name="notes" rows="4" placeholder="Salary discussed, interviewer names, questions asked…">${esc(a.notes)}</textarea></div>
+      <div class="modal-acts"><button type="button" class="btn" id="afCancel">Cancel</button><button class="btn btn-primary" type="submit">${ico('save')} Save</button></div>
+    </form>`, () => {
+    $('#afCancel').onclick = closeModal;
+    $('#appForm').onsubmit = e => {
+      e.preventDefault();
+      const d = Object.fromEntries(new FormData(e.target));
+      if (!d.title.trim() || !d.company.trim()) return toast('Add the job title and company', 'err');
+      Object.assign(a, { title: d.title.trim(), company: d.company.trim(), location: d.location.trim(), source: d.source.trim(), url: safeUrl(d.url),
+        appliedOn: d.appliedOn || todayIso(), status: d.status, nextDate: d.nextDate, nextStep: d.nextStep.trim(), notes: d.notes.trim(), updatedAt: new Date().toISOString() });
+      if (isNew) st.apps.unshift(a);
+      closeModal(); render(); saveStatusSoon(); toast(isNew ? 'Application added' : 'Saved');
+    };
+    setTimeout(() => $('#afTitle').focus(), 30);
+  });
+
+  render();
+  $('#aq').oninput = e => { f.q = e.target.value.trim(); render(); };
+  const setStatus = s => { f.status = s; $$('#aseg button').forEach(x => x.classList.toggle('active', x.dataset.s === s)); render(); };
+  $('#aseg').onclick = e => { const b = e.target.closest('button'); if (b) setStatus(b.dataset.s); };
+  $('#pipe').onclick = e => { const b = e.target.closest('[data-s]'); if (b) setStatus(f.status === b.dataset.s ? 'all' : b.dataset.s); };
+  $('#addApp').onclick = () => editForm({ ...appFromJob({ source: '' }), status: 'applied' }, true);
+  $('#alist').onchange = e => {
+    if (!e.target.matches('.app-status')) return;
+    const a = st.apps.find(x => x.id === e.target.closest('.app-row').dataset.id);
+    a.status = e.target.value; a.updatedAt = new Date().toISOString();
+    render(); saveStatusSoon(); toast(`Status: ${statusLabel(a.status)}`);
+  };
+  $('#alist').onclick = e => {
+    const b = e.target.closest('[data-a]'); if (!b) return;
+    const row = b.closest('.app-row'); const a = st.apps.find(x => x.id === row.dataset.id);
+    if (b.dataset.a === 'edit') editForm(a, false);
+    if (b.dataset.a === 'letter') {
+      const job = (RS.jobs.jobs || []).find(x => x.id === a.jobId);
+      showLetter(a, job, text => { a.letter = text; a.updatedAt = new Date().toISOString(); render(); saveStatusSoon(); toast('Letter saved'); });
+    }
+    if (b.dataset.a === 'del') {
+      if (row.classList.contains('confirm')) {
+        st.apps = st.apps.filter(x => x.id !== a.id);
+        if (a.jobId) delete st.applied[a.jobId];
+        render(); saveStatusSoon(); toast('Deleted');
+      } else {
+        row.classList.add('confirm'); b.innerHTML = 'Delete?'; b.classList.remove('icon-btn');
+        setTimeout(() => { if (document.body.contains(row)) render(); }, 3500);
+      }
+    }
   };
 }
 
@@ -439,8 +659,8 @@ function radarSetup(body) {
         <li>LinkedIn, Naukri and Indeed can't be read automatically (they don't allow it) — the Jobs tab gives you one-click searches for them.</li>
       </ul>
     </div>`;
-  $('#recheck').onclick = () => viewJobs($('#main'), 'setup');
-  $('#saveRepo').onclick = () => { CFG.radarRepo = $('#rrepo').value.trim() || RADAR_REPO_DEFAULT; store.set('pv_cfg', JSON.stringify(CFG)); RADAR = null; viewJobs($('#main'), 'setup'); };
+  $('#recheck').onclick = () => { RS.loadedAt = 0; viewJobs($('#main'), 'setup'); };
+  $('#saveRepo').onclick = () => { CFG.radarRepo = $('#rrepo').value.trim() || RADAR_REPO_DEFAULT; store.set('pv_cfg', JSON.stringify(CFG)); RADAR = null; RS.loadedAt = 0; viewJobs($('#main'), 'setup'); };
   $('#installBtn').onclick = async () => {
     try {
       loading(true, 'Installing', .3, 'Downloading radar files');
@@ -453,6 +673,7 @@ function radarSetup(body) {
       if (!RS.exists.config) files.push({ path: 'config.json', content: { ...RS.cfg, version: RADAR_VERSION } });
       files.push({ path: 'status.json', content: RS.status });
       await radarCommit(RS.exists.script ? 'Job radar: update' : 'Job radar: install', files);
+      RS.exists.script = RS.exists.config = true;
       toast('Radar installed ✓ — now fill Search profile and Telegram');
       location.hash = 'jobs/settings';
     } catch (err) {

@@ -31,7 +31,13 @@
         "title": "Unity Assets",
         "text": "Ready-to-use packages, templates and systems — drop them in and ship faster."
       }
-    ]
+    ],
+    "showRepos": true,
+    "githubUser": "DenishPhibonacci",
+    "hideRepos": [],
+    "web3formsKey": "d0d824a0-d2b3-4e84-8291-fe6a1ae047d9",
+    "goatcounter": "",
+    "testimonials": []
   },
   "profile": {
     "name": "Denish Makadiya",
@@ -221,5 +227,5 @@
       "slug": "dfsf"
     }
   ],
-  "updatedAt": "2026-10-12T06:57:36.638Z"
+  "updatedAt": "2026-10-12T06:58:31.320Z"
 }

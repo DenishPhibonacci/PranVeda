@@ -195,37 +195,6 @@
       "itch": ""
     }
   },
-  "projects": [
-    {
-      "type": "game",
-      "published": false,
-      "featured": false,
-      "tags": [
-        "sdf"
-      ],
-      "platforms": [
-        "iOS",
-        "Windows"
-      ],
-      "gallery": [],
-      "id": "d1061ba9-1cd7-463e-b57d-1b489e2c33fd",
-      "title": "dfsf",
-      "shortDescription": "sdfsd",
-      "description": "sdfsdfsdf",
-      "version": "",
-      "unityVersion": "",
-      "price": "",
-      "youtubeUrl": "",
-      "downloadUrl": "",
-      "playStoreUrl": "",
-      "assetStoreUrl": "",
-      "githubUrl": "",
-      "otherUrl": "",
-      "order": 0,
-      "createdAt": "2026-10-12T06:27:01.172Z",
-      "updatedAt": "2026-10-12T06:27:01.172Z",
-      "slug": "dfsf"
-    }
-  ],
-  "updatedAt": "2026-10-12T06:58:31.320Z"
+  "projects": [],
+  "updatedAt": "2026-10-12T10:48:52.709Z"
 }

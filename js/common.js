@@ -110,6 +110,9 @@ function downloadAttrs(d) {
 }
 
 const ICONS = {
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  reply: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+  copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
   app: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>',
   website: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20M6 6.5h.01M9 6.5h.01"/></svg>',
   gamepad: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 11h4M8 9v4M15 12h.01M18 10h.01"/><path d="M17.3 5H6.7a4 4 0 0 0-4 3.6l-.7 6.3A3 3 0 0 0 5 18c1 0 2-.5 2.5-1.4L9 14h6l1.5 2.6A3 3 0 0 0 19 18a3 3 0 0 0 3-3.1l-.7-6.3a4 4 0 0 0-4-3.6z"/></svg>',
@@ -172,11 +175,70 @@ function initReveal() {
   $$('.reveal').forEach(el => io.observe(el));
 }
 
+/* Contact form: Web3Forms (message goes straight to the inbox) or fallback to the visitor's email app */
+function bindContactForm(form, note, getData) {
+  if (!form) return;
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const { site = {}, profile = {} } = getData() || {};
+    const btn = form.querySelector('button[type=submit]');
+    const f = Object.fromEntries(new FormData(form));
+    if (f.botcheck) return; // spam bot
+    const topic = f.topic ? ` — ${f.topic}` : '';
+    const subject = `Portfolio enquiry from ${f.name}${topic}`;
+    const extra = [f.topic && `Topic: ${f.topic}`, f.budget && `Budget / timeline: ${f.budget}`, f.company && `Company: ${f.company}`].filter(Boolean).join('\n');
+    if (site.web3formsKey) {
+      btn.disabled = true; note.className = 'form-note'; note.textContent = 'Sending…';
+      try {
+        const r = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ access_key: site.web3formsKey, subject, from_name: 'Portfolio website', name: f.name, email: f.email, company: f.company || undefined, topic: f.topic || undefined, budget: f.budget || undefined, message: f.message })
+        });
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok || d.success === false) throw new Error(d.message || 'Could not send');
+        note.className = 'form-note ok'; note.textContent = "Thanks! Your message has been sent — I'll reply soon.";
+        track('contact/sent', 'Contact form sent');
+        form.reset();
+      } catch (err) {
+        note.className = 'form-note err';
+        note.innerHTML = `Couldn't send right now. Please email me at <a href="mailto:${esc(profile.email)}">${esc(profile.email)}</a>.`;
+      }
+      btn.disabled = false;
+      return;
+    }
+    if (!profile.email) { note.className = 'form-note err'; note.textContent = 'Contact email is not set yet.'; return; }
+    const body = `${extra ? extra + '\n\n' : ''}${f.message}\n\n— ${f.name} (${f.email})`;
+    location.href = `mailto:${profile.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    note.className = 'form-note ok'; note.textContent = 'Your email app has opened — just press Send.';
+  });
+}
+
 function setResumeLinks(profile) {
   $$('[data-resume]').forEach(a => {
     a.hidden = !(profile.resume && profile.resume.path);
     if (!a.hidden) { a.href = asset(profile.resume.path); a.target = '_blank'; a.rel = 'noopener'; }
   });
+}
+
+/* ---------- Contact form sending (shared by home + contact page) ----------
+   Web3Forms key set in admin → message goes straight to the inbox; otherwise opens the visitor's email app. */
+async function sendContact(fields, site, profile) {
+  if (fields.botcheck) return { ok: true }; // spam bot
+  const subject = `${fields.topic ? fields.topic + ' enquiry' : 'Portfolio enquiry'} from ${fields.name}`;
+  if (site.web3formsKey) {
+    const payload = { access_key: site.web3formsKey, subject, from_name: 'Portfolio website', replyto: fields.email };
+    Object.entries(fields).forEach(([k, v]) => { if (k !== 'botcheck' && v) payload[k] = v; });
+    const r = await fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(payload) });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || d.success === false) throw new Error(d.message || 'Could not send');
+    track('contact/sent', 'Contact form sent');
+    return { ok: true, sent: true };
+  }
+  if (!profile.email) throw new Error('Contact email is not set yet.');
+  const extra = ['company', 'topic', 'budget', 'timeline'].filter(k => fields[k]).map(k => `${k[0].toUpperCase() + k.slice(1)}: ${fields[k]}`).join('\n');
+  const body = `${fields.message}\n\n${extra ? extra + '\n' : ''}— ${fields.name} (${fields.email})`;
+  location.href = `mailto:${profile.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  return { ok: true, mailto: true };
 }
 
 /* Project card used on home + related */

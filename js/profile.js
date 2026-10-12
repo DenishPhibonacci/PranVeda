@@ -63,7 +63,7 @@ async function init() {
       <div class="pf-actions no-print">
         ${hasResume ? `<a class="btn btn-primary" href="${esc(asset(p.resume.path))}" target="_blank" rel="noopener">${ICONS.file} Download Resume</a>` : ''}
         <button class="btn" id="printBtn" type="button">${ICONS.print} Print / Save PDF</button>
-        <a class="btn btn-ghost" href="index.html#contact">${ICONS.mail} Contact me</a>
+        <a class="btn btn-ghost" href="contact.html">${ICONS.mail} Contact me</a>
       </div>
     </section>
 

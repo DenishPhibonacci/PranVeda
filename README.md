@@ -44,6 +44,26 @@ The key is stored only in your browser. Never share it or put it in a file in th
 | GitHub repos section | World settings → Open-source repos |
 | Backup / restore | Config → Backup & restore |
 
+## Contact page
+
+`contact.html` has a project form (type, budget, timeline), contact cards with copy-email, your live local time,
+a "how we'll work" section and an FAQ. Set the reply-time note, time zone and FAQ in **World settings**.
+Messages go to your inbox through Web3Forms (key in World settings → Integrations).
+
+## Job Radar (private)
+
+Admin → **Job Radar** finds jobs that match your profile every 6 hours and sends new ones to Telegram.
+Everything is stored in a separate **private** repo (`job-radar`), so nobody can see your job search.
+
+1. Create a private repo `job-radar` (tick *Add a README file*).
+2. Edit your fine-grained access key: add the `job-radar` repo with **Contents**, **Workflows** and **Actions** set to *Read and write*.
+3. Admin → Job Radar → **Setup** → *Install radar*.
+4. Fill **Search profile**: titles, skills, cities/countries, job types, and a free Adzuna key for India/city search.
+5. Set up **Telegram**: create a bot with @BotFather, paste the token, find your chat ID, then send a test message.
+
+Sources: Adzuna (19 countries incl. India, by city), Remotive, Remote OK, Himalayas, Arbeitnow.
+LinkedIn, Naukri and Indeed don't allow automatic reading, so the Jobs tab gives one-click searches for them.
+
 ## Limits
 
 - GitHub accepts files up to **100 MB**. For a bigger APK:

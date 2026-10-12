@@ -101,7 +101,7 @@ async function init() {
   if (p.assetStoreUrl) actions += `<a class="btn" href="${esc(p.assetStoreUrl)}" target="_blank" rel="noopener" style="margin-top:10px" data-track="assetstore/${esc(p.slug)}">${ICONS.unity} Unity Asset Store</a>`;
   if (p.githubUrl) actions += `<a class="btn" href="${esc(p.githubUrl)}" target="_blank" rel="noopener" style="margin-top:10px">${ICONS.github} GitHub</a>`;
   if (p.otherUrl && p.type !== 'website') actions += `<a class="btn" href="${esc(p.otherUrl)}" target="_blank" rel="noopener" style="margin-top:10px">${ICONS.ext} Visit link</a>`;
-  if (!actions) actions = `<a class="btn btn-primary" href="index.html#contact">Ask about this project</a>`;
+  if (!actions) actions = `<a class="btn btn-primary" href="contact.html?about=${encodeURIComponent(p.title)}">Ask about this project</a>`;
 
   // QR code so desktop visitors can install the APK on their phone
   let qr = '';

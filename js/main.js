@@ -191,37 +191,8 @@ async function init() {
   $('#search').addEventListener('input', e => { clearTimeout(tm); tm = setTimeout(() => { state.q = e.target.value.trim(); renderGrid(); }, 150); });
 
   let PROFILE = {};
-  // Contact form: Web3Forms (message goes straight to the inbox) or fallback to the visitor's email app
   let SITE = {};
-  $('#contactForm').addEventListener('submit', async e => {
-    e.preventDefault();
-    const note = $('#formNote'), btn = e.target.querySelector('button[type=submit]');
-    const f = Object.fromEntries(new FormData(e.target));
-    if (f.botcheck) return; // spam bot
-    if (SITE.web3formsKey) {
-      btn.disabled = true; note.className = 'form-note'; note.textContent = 'Sending…';
-      try {
-        const r = await fetch('https://api.web3forms.com/submit', {
-          method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({ access_key: SITE.web3formsKey, subject: `Portfolio enquiry from ${f.name}`, from_name: 'Portfolio website', name: f.name, email: f.email, message: f.message })
-        });
-        const d = await r.json().catch(() => ({}));
-        if (!r.ok || d.success === false) throw new Error(d.message || 'Could not send');
-        note.className = 'form-note ok'; note.textContent = "Thanks! Your message has been sent — I'll reply soon.";
-        track('contact/sent', 'Contact form sent');
-        e.target.reset();
-      } catch (err) {
-        note.className = 'form-note err';
-        note.innerHTML = `Couldn't send right now. Please email me at <a href="mailto:${esc(PROFILE.email)}">${esc(PROFILE.email)}</a>.`;
-      }
-      btn.disabled = false;
-      return;
-    }
-    if (!PROFILE.email) { note.className = 'form-note err'; note.textContent = 'Contact email is not set yet.'; return; }
-    const body = `${f.message}\n\n— ${f.name} (${f.email})`;
-    location.href = `mailto:${PROFILE.email}?subject=${encodeURIComponent('Portfolio enquiry from ' + f.name)}&body=${encodeURIComponent(body)}`;
-    note.className = 'form-note ok'; note.textContent = 'Your email app has opened — just press Send.';
-  });
+  bindContactForm($('#contactForm'), $('#formNote'), () => ({ site: SITE, profile: PROFILE }));
 
   try {
     const data = await loadData();

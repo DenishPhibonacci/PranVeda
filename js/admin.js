@@ -50,6 +50,7 @@ const I = {
   app: '<rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/>',
   website: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20M6 6.5h.01M9 6.5h.01"/>',
   asset: '<path d="M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.7z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/>',
+  radar: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12 19 5"/><circle cx="12" cy="12" r="1" fill="currentColor"/>',
   git: '<circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="8" r="2"/><path d="M6 8v8M18 10c0 4-6 3-10 6"/>'
 };
 const ico = (n, size = 18) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${I[n] || ''}</svg>`;
@@ -235,6 +236,7 @@ function startApp() {
   refreshChrome();
   route();
   migrateCategories();
+  radarPeek();
 }
 
 /* One-time update: "Plugin" category was replaced by Application + Website */
@@ -297,8 +299,9 @@ function route() {
   const [view, arg] = (location.hash.slice(1) || 'dashboard').split('/');
   dirty = false;
   $$('.nav-item[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === view || (view === 'edit' && b.dataset.view === 'projects')));
+  if (view === 'jobs') { const pill = $('#jobsPill'); if (pill) pill.hidden = true; }
   const main = $('#main'); main.innerHTML = ''; window.scrollTo(0, 0);
-  const views = { dashboard: viewDashboard, projects: viewProjects, new: () => viewEditor(null, arg), edit: () => viewEditor(arg), profile: viewProfile, career: viewCareer, site: viewSite, config: viewConfig };
+  const views = { dashboard: viewDashboard, projects: viewProjects, new: () => viewEditor(null, arg), edit: () => viewEditor(arg), profile: viewProfile, career: viewCareer, jobs: () => viewJobs(main, arg), site: viewSite, config: viewConfig };
   Promise.resolve((views[view] || viewDashboard)(main)).catch(err => { main.innerHTML += `<div class="banner">${esc(err.message)}</div>`; });
 }
 
@@ -748,7 +751,9 @@ function repeater(listEl, items, fields, blank, onChange = () => {}) {
     onChange(); draw();
   });
   draw();
-  return (atTop = false) => { atTop ? items.unshift({ ...blank }) : items.push({ ...blank }); onChange(); draw(); const inputs = $$('input,textarea', listEl); (atTop ? inputs[0] : inputs[inputs.length - fields.filter(f => f.type !== 'check' && f.type !== 'select').length])?.focus(); };
+  const add = (atTop = false) => { atTop ? items.unshift({ ...blank }) : items.push({ ...blank }); onChange(); draw(); const inputs = $$('input,textarea', listEl); (atTop ? inputs[0] : inputs[inputs.length - fields.filter(f => f.type !== 'check' && f.type !== 'select').length])?.focus(); };
+  add.redraw = draw;
+  return add;
 }
 
 /* =========================================================
@@ -927,6 +932,7 @@ function viewSite(main) {
   const s = JSON.parse(JSON.stringify(DATA.site || {}));
   const services = s.services || [];
   const testimonials = s.testimonials || [];
+  const faq = s.faq || [];
   const ghFromSocial = ((DATA.profile.socials || {}).github || '').replace(/^https?:\/\/(www\.)?github\.com\//i, '').split('/')[0];
   main.innerHTML = header('// World', 'World settings', 'Site name, logo letters and the texts on the home page') + `
   <form id="sf">
@@ -953,6 +959,15 @@ function viewSite(main) {
     <div class="panel">
       <h2>Services (3 cards under About) <button type="button" class="btn btn-sm" id="addSvc">${ico('plus', 14)} Add</button></h2>
       <div class="rep-list" id="svcList"></div>
+    </div>
+    <div class="panel">
+      <h2>Contact page</h2>
+      <div class="grid-2">
+        <div class="field"><label>Reply time note</label><input type="text" name="replyTime" value="${esc(s.replyTime || 'Usually replies within 24 hours')}"></div>
+        <div class="field"><label>Your time zone</label><input type="text" name="timezone" value="${esc(s.timezone || 'Asia/Kolkata')}" placeholder="Asia/Kolkata"><small>Shows your live local time on the contact page</small></div>
+      </div>
+      <h2 style="margin-top:12px">FAQ <span style="display:flex;gap:6px"><button type="button" class="btn btn-sm" id="faqSuggest">Add suggested</button><button type="button" class="btn btn-sm" id="addFaq">${ico('plus', 14)} Add</button></span></h2>
+      <div class="rep-list" id="faqList"></div>
     </div>
     <div class="panel">
       <h2>Testimonials <button type="button" class="btn btn-sm" id="addTesti">${ico('plus', 14)} Add</button></h2>
@@ -989,10 +1004,26 @@ function viewSite(main) {
     { k: 'text', label: 'What they said', ph: 'Denish delivered…', type: 'area' }
   ], { name: '', role: '', text: '' }, () => (dirty = true));
   $('#addTesti').onclick = () => addTesti();
+  const addFaq = repeater($('#faqList'), faq, [
+    { k: 'q', label: 'Question', ph: 'Do you take freelance projects?', wide: true },
+    { k: 'a', label: 'Answer', ph: 'Yes — …', type: 'area' }
+  ], { q: '', a: '' }, () => (dirty = true));
+  $('#addFaq').onclick = () => addFaq();
+  $('#faqSuggest').onclick = () => {
+    const sug = [
+      { q: 'Do you take freelance projects?', a: 'Yes — games, mobile apps, websites and Unity tools. Share your idea with the form and I will reply with questions and an estimate.' },
+      { q: 'Which platforms do you build for?', a: 'Android, iOS, PC and WebGL with Unity, plus websites and web apps.' },
+      { q: 'How do you charge?', a: 'Fixed price for well-defined projects, or hourly / monthly for ongoing work. You get a clear estimate before we start.' },
+      { q: 'Are you open to full-time roles?', a: 'I am open to the right opportunity — choose "Job offer" in the form and tell me about the role.' }
+    ].filter(x => !faq.some(f => f.q === x.q));
+    if (!sug.length) return toast('Suggested questions are already added');
+    faq.push(...sug); dirty = true; addFaq.redraw();
+  };
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const f = Object.fromEntries(new FormData(form));
     const next = { ...f, available: form.available.checked, initials: (f.initials || '').toUpperCase(), services: services.filter(x => x.title),
+      faq: faq.filter(x => x.q && x.a), replyTime: (f.replyTime || '').trim(), timezone: (f.timezone || 'Asia/Kolkata').trim(),
       testimonials: testimonials.filter(x => x.name && x.text), showRepos: form.showRepos.checked,
       githubUser: (f.githubUser || '').trim().replace(/^@/, ''), hideRepos: list(f.hideRepos),
       web3formsKey: (f.web3formsKey || '').trim(), goatcounter: (f.goatcounter || '').trim().replace(/^https?:\/\//, '').replace(/\.goatcounter\.com.*$/, '') };

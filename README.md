@@ -31,6 +31,19 @@ GitHub Pages then rebuilds the site, which takes about 1 minute.
 
 The key is stored only in your browser. Never share it or put it in a file in this repo.
 
+## Extra features (all free)
+
+| Feature | Where to set it up in the admin |
+|---|---|
+| ▶ Play in browser (Unity WebGL) | Project editor → *Play in browser*: upload the zipped WebGL build (Compression Format: **Disabled**, or Decompression Fallback on) |
+| QR code for APK download | Automatic on project pages (desktop) when a download is set |
+| Contact form → your inbox | World settings → Integrations → Web3Forms access key (free at web3forms.com) |
+| Visitor analytics | World settings → Integrations → GoatCounter code (free at goatcounter.com); counts visits, downloads and plays |
+| Docs & Changelog tabs | Project editor → *Documentation* / *Changelog* |
+| Testimonials | World settings → Testimonials (real feedback only) |
+| GitHub repos section | World settings → Open-source repos |
+| Backup / restore | Config → Backup & restore |
+
 ## Limits
 
 - GitHub accepts files up to **100 MB**. For a bigger APK:

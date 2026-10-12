@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Denish Makadiya — Sr. Unity Developer</title>
-  <meta name="description" content="Portfolio of Denish Makadiya, Senior Unity Developer — games, Unity plugins and Unity assets.">
+  <meta name="description" content="Portfolio of Denish Makadiya, Senior Unity Developer — games, apps, websites and Unity assets.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Denish Makadiya — Sr. Unity Developer">
-  <meta property="og:description" content="Games, Unity plugins and Unity assets by Denish Makadiya, Senior Unity Developer (9+ years, Ahmedabad).">
+  <meta property="og:description" content="Games, apps, websites and Unity assets by Denish Makadiya, Senior Unity Developer (9+ years, Ahmedabad).">
   <meta property="og:url" content="https://denishphibonacci.github.io/PranVeda/">
   <meta property="og:image" content="https://denishphibonacci.github.io/PranVeda/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -63,7 +63,8 @@
           </div>
           <div class="hud">
             <div class="g"><b id="sGames">0</b><span>Games</span></div>
-            <div class="p"><b id="sPlugins">0</b><span>Plugins</span></div>
+            <div class="p"><b id="sApps">0</b><span>Apps</span></div>
+            <div class="w"><b id="sWebsites">0</b><span>Web</span></div>
             <div class="a"><b id="sAssets">0</b><span>Assets</span></div>
             <div><b id="sYears">0</b><span>Years XP</span></div>
           </div>
@@ -79,7 +80,7 @@
         <div class="section-head reveal">
           <div>
             <span class="eyebrow">Portfolio</span>
-            <h2 class="section-title" id="workTitle">Games, plugins &amp; Unity assets</h2>
+            <h2 class="section-title" id="workTitle">Games, apps, websites &amp; Unity assets</h2>
           </div>
           <p class="section-sub" id="workSub"></p>
         </div>
@@ -90,7 +91,8 @@
           <div class="tabs" role="tablist">
             <button class="tab active" data-type="all">All <span class="count" id="cAll">0</span></button>
             <button class="tab" data-type="game">Games <span class="count" id="cGame">0</span></button>
-            <button class="tab" data-type="plugin">Plugins <span class="count" id="cPlugin">0</span></button>
+            <button class="tab" data-type="app">Applications <span class="count" id="cApp">0</span></button>
+            <button class="tab" data-type="website">Websites <span class="count" id="cWebsite">0</span></button>
             <button class="tab" data-type="asset">Unity Assets <span class="count" id="cAsset">0</span></button>
           </div>
           <label class="search"><span id="searchIcon"></span><input id="search" type="search" placeholder="Search projects, tags…" aria-label="Search projects"></label>
@@ -143,6 +145,25 @@
       </div>
     </section>
 
+    <!-- TESTIMONIALS -->
+    <section class="section" id="testimonials" hidden style="padding-top:20px">
+      <div class="container">
+        <div class="section-head reveal"><div><span class="eyebrow">Kind words</span><h2 class="section-title">What people say</h2></div></div>
+        <div class="testi-grid" id="testiGrid"></div>
+      </div>
+    </section>
+
+    <!-- OPEN SOURCE -->
+    <section class="section" id="repos" hidden style="padding-top:20px">
+      <div class="container">
+        <div class="section-head reveal">
+          <div><span class="eyebrow">Open source</span><h2 class="section-title">On GitHub</h2></div>
+          <a class="btn" id="ghProfile" href="#" target="_blank" rel="noopener"><span data-icon="github"></span>View GitHub profile</a>
+        </div>
+        <div class="repo-grid" id="repoGrid"></div>
+      </div>
+    </section>
+
     <!-- SKILLS -->
     <section class="section" id="skills" style="padding-top:20px">
       <div class="container">
@@ -170,6 +191,7 @@
               <div class="field"><label for="cEmail">Email</label><input id="cEmail" name="email" type="email" required maxlength="150"></div>
             </div>
             <div class="field"><label for="cMsg">Message</label><textarea id="cMsg" name="message" rows="6" required maxlength="4000" placeholder="Tell me about your project…"></textarea></div>
+            <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
             <button class="btn btn-primary" type="submit">Send message</button>
             <p class="form-note" id="formNote"></p>
           </form>

@@ -4,7 +4,10 @@ const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-const TYPE_LABEL = { game: 'Game', plugin: 'Plugin', asset: 'Unity Asset' };
+const TYPES = ['game', 'app', 'website', 'asset'];
+const TYPE_LABEL = { game: 'Game', app: 'Application', website: 'Website', asset: 'Unity Asset' };
+const TYPE_PLURAL = { game: 'Games', app: 'Applications', website: 'Websites', asset: 'Unity Assets' };
+const TYPE_COLOR = { game: 'var(--c-game)', app: 'var(--c-app)', website: 'var(--c-web)', asset: 'var(--c-asset)' };
 
 function fmtSize(b) {
   if (!b) return '';
@@ -21,27 +24,54 @@ function youtubeId(url) {
   return m ? m[1] : null;
 }
 
-/* Tiny safe markdown: escapes first, then **bold**, *italic*, `code`, [text](url), # headings, - lists */
+/* Tiny safe markdown: escapes first, then ``` code blocks, # headings, - / 1. lists, **bold**, *italic*, `code`, [text](url) */
 function miniMd(src) {
   const inline = t => esc(t)
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    .replace(/(^|[^*])\*([^*\s][^*]*)\*/g, '$1<em>$2</em>')
     .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
-  const out = []; let listOpen = false; let para = [];
+  const out = []; let list = null; let para = []; let code = null;
   const flushPara = () => { if (para.length) { out.push('<p>' + para.map(inline).join('<br>') + '</p>'); para = []; } };
-  const closeList = () => { if (listOpen) { out.push('</ul>'); listOpen = false; } };
+  const closeList = () => { if (list) { out.push(`</${list}>`); list = null; } };
+  const openList = t => { if (list !== t) { closeList(); out.push(`<${t}>`); list = t; } };
   String(src || '').split(/\r?\n/).forEach(line => {
+    if (code !== null) {
+      if (/^\s*```/.test(line)) { out.push(`<pre><code>${esc(code.join('\n'))}</code></pre>`); code = null; }
+      else code.push(line);
+      return;
+    }
+    if (/^\s*```/.test(line)) { flushPara(); closeList(); code = []; return; }
     const l = line.trim();
     if (!l) { flushPara(); closeList(); return; }
     let m;
     if ((m = l.match(/^(#{1,3})\s+(.*)/))) { flushPara(); closeList(); const h = m[1].length === 1 ? 'h2' : 'h3'; out.push(`<${h}>${inline(m[2])}</${h}>`); return; }
-    if ((m = l.match(/^[-*•]\s+(.*)/))) { flushPara(); if (!listOpen) { out.push('<ul>'); listOpen = true; } out.push('<li>' + inline(m[1]) + '</li>'); return; }
+    if ((m = l.match(/^[-*•]\s+(.*)/))) { flushPara(); openList('ul'); out.push('<li>' + inline(m[1]) + '</li>'); return; }
+    if ((m = l.match(/^\d+[.)]\s+(.*)/))) { flushPara(); openList('ol'); out.push('<li>' + inline(m[1]) + '</li>'); return; }
     closeList(); para.push(l);
   });
+  if (code !== null) out.push(`<pre><code>${esc(code.join('\n'))}</code></pre>`);
   flushPara(); closeList();
   return out.join('');
 }
+
+/* ---------- Analytics (GoatCounter, optional) ---------- */
+function initAnalytics(site) {
+  const code = (site && site.goatcounter || '').replace(/[^\w-]/g, '');
+  if (!code || window.__gcInit) return;
+  window.__gcInit = true;
+  const sc = document.createElement('script');
+  sc.async = true; sc.src = 'https://gc.zgo.at/count.js';
+  sc.dataset.goatcounter = `https://${code}.goatcounter.com/count`;
+  document.head.appendChild(sc);
+}
+function track(name, title) {
+  try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: name, title: title || name, event: true }); } catch (_) {}
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest('[data-track]');
+  if (a) track(a.dataset.track, a.dataset.trackTitle);
+});
 
 /* ---------- Data ---------- */
 let DATA = null;
@@ -51,8 +81,10 @@ async function loadData() {
   if (!r.ok) throw new Error('Could not load data.json');
   DATA = await r.json();
   DATA.site = DATA.site || {};
+  initAnalytics(DATA.site);
   DATA.profile = DATA.profile || {};
   DATA.projects = (DATA.projects || [])
+    .map(p => (p.type === 'plugin' || !TYPE_LABEL[p.type] ? { ...p, type: p.type === 'plugin' ? 'asset' : 'game' } : p)) // old "plugin" items show as Unity Assets
     .filter(p => p.published !== false)
     .sort((a, b) => (!!b.featured - !!a.featured) || (b.order || 0) - (a.order || 0) || String(b.createdAt).localeCompare(String(a.createdAt)));
   return DATA;
@@ -78,6 +110,13 @@ function downloadAttrs(d) {
 }
 
 const ICONS = {
+  app: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>',
+  website: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20M6 6.5h.01M9 6.5h.01"/></svg>',
+  gamepad: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 11h4M8 9v4M15 12h.01M18 10h.01"/><path d="M17.3 5H6.7a4 4 0 0 0-4 3.6l-.7 6.3A3 3 0 0 0 5 18c1 0 2-.5 2.5-1.4L9 14h6l1.5 2.6A3 3 0 0 0 19 18a3 3 0 0 0 3-3.1l-.7-6.3a4 4 0 0 0-4-3.6z"/></svg>',
+  expand: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>',
+  star2: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>',
+  fork: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="5" r="2"/><circle cx="18" cy="5" r="2"/><circle cx="12" cy="19" r="2"/><path d="M6 7v2a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V7M12 12v5"/></svg>',
+  quote: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 6C6 7.3 4 10 4 13.6V18h6v-6H7c0-2.4 1.3-4 3.4-4.8zM19.5 6C16 7.3 14 10 14 13.6V18h6v-6h-3c0-2.4 1.3-4 3.4-4.8z"/></svg>',
   user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
   print: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>',
   file: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M12 18v-6m0 6-3-3m3 3 3-3"/></svg>',
@@ -149,14 +188,15 @@ function projectCard(p, i = 0) {
   const meta = [p.version && 'v' + p.version, (p.platforms || []).join(' · ')].filter(Boolean).join('  /  ');
   const dl = downloadInfo(p);
   let actions = '';
-  if (dl) actions += `<a class="btn btn-dl" ${downloadAttrs(dl)}>${ICONS.download} ${esc(dl.name)}</a>`;
-  if (p.playStoreUrl) actions += `<a class="btn" href="${esc(p.playStoreUrl)}" target="_blank" rel="noopener">${ICONS.googleplay} Play Store</a>`;
+  if (dl) actions += `<a class="btn btn-dl" ${downloadAttrs(dl)} data-track="download/${esc(p.slug)}" data-track-title="Download ${esc(p.title)}">${ICONS.download} ${esc(dl.name)}</a>`;
+  if (p.type === 'website' && p.otherUrl) actions += `<a class="btn" href="${esc(p.otherUrl)}" target="_blank" rel="noopener" data-track="visit/${esc(p.slug)}">${ICONS.ext} Visit site</a>`;
+  else if (p.playStoreUrl) actions += `<a class="btn" href="${esc(p.playStoreUrl)}" target="_blank" rel="noopener">${ICONS.googleplay} Play Store</a>`;
   else if (p.assetStoreUrl) actions += `<a class="btn" href="${esc(p.assetStoreUrl)}" target="_blank" rel="noopener">${ICONS.unity} Asset Store</a>`;
   if (!actions) actions = `<span class="btn btn-ghost">View details ${ICONS.arrow}</span>`;
   return `
   <article class="card" data-type="${esc(p.type)}" style="animation-delay:${Math.min(i, 8) * 60}ms">
     <a class="card-link" href="${projectHref(p.slug)}" aria-label="${esc(p.title)}"></a>
-    <div class="card-media">${cover}<span class="badge">${esc(TYPE_LABEL[p.type] || p.type)}</span>${video}</div>
+    <div class="card-media">${cover}<span class="badge">${esc(TYPE_LABEL[p.type] || p.type)}</span>${video}${p.webgl ? '<span class="playable">▶ PLAYABLE</span>' : ''}</div>
     <div class="card-body">
       <div class="card-title">${icon}<div><h3>${esc(p.title)}</h3>${meta ? `<div class="meta">${esc(meta)}</div>` : ''}</div></div>
       ${p.shortDescription ? `<p>${esc(p.shortDescription)}</p>` : ''}
